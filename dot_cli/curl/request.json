@@ -1,0 +1,58 @@
+{
+  "from": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "bool": {
+                        "must": [
+                          {
+                            "multi_match": {
+                              "query": "장관",
+                              "fields": [
+                                "korn_nm"
+                              ],
+                              "type": "phrase"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "must": [
+                          {
+                            "has_child": {
+                              "query": {
+                                "multi_match": {
+                                  "query": "장관",
+                                  "fields": [
+                                    "page_cn"
+                                  ],
+                                  "type": "phrase"
+                                }
+                              },
+                              "type": "child"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "size": 3
+}

@@ -1,0 +1,21 @@
+# "\C-a": beginning-of-line           # Ctrl-A: move to the first of line(^)
+# "\C-e": backward-delete-char        # Ctrl-E: move to the end of line($)
+# "\C-u": unix-line-discard           # Ctrl-U: delete ahead of cursor(d0)
+# "\C-k": kill-line                   # Ctrl-K: delete behind of cursor(d$)
+# "\C-y": yank                        # Ctrl-Y: paste currnt buffer \
+                                      # buffer can be managed by <C-u>, <C-k>
+"\C-f": forward-word                  # Ctrl-F: Move to the next word(w)
+"\C-b": backward-word                 # Ctrl-B: Move to the previous word(e)
+"\C-l": delete-char                   # Ctrl-L: Delete next character(x) \
+                                      # it overrides default action: clear
+# "\C-h": backward-delete-char        # Ctrl-H: Delete next character(i <C-h>)
+
+###############################################################
+# all other commands can be found by
+# 1. bind -p | grep -v "^#" | cut -d":" -f2 | sort | uniq
+# 2. bind -p | grep -- (backward-delete-char / delete-char / beginning-of-line etc)
+# 3. bind -p | grep "C-l"
+# step 1: see all commands available
+# stpe 2: if you find a command, check it is already bind to other key
+# stpe 3: if you want to bind specific key, check it is already bind to command
+

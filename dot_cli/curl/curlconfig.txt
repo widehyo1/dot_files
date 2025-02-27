@@ -1,0 +1,20 @@
+# Include the HTTP response headers in the output
+include
+
+# Specify the HTTP request method as POST
+request = "POST"
+
+# Set the URL to the value of the environment variable $URL
+url = "$ELASTIC_SEARCH/$INDEX/_search?pretty"
+
+# Set a custom User-Agent
+user-agent = "Mozilla/5.0 (compatible; MyCurl/1.0)"
+
+# Add the Content-Type header for JSON data
+header = "Content-Type: application/json"
+
+# Provide the JSON data to be sent with the POST request
+data = "@$HOME/request.json"
+
+# Direct the output to a file named result.txt
+# output = "curlresult.txt"

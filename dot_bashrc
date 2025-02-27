@@ -1,0 +1,74 @@
+# history
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+shopt -s histappend                      # append to history, don't overwrite it
+# Save and reload the history after each command finishes
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# git shortcut
+export GTOKEN=""
+alias catg="echo $GTOKEN"
+export GITDIR="$HOME/gitclone"
+alias cdg="cd $GITDIR"
+export PLAYDIR="$GITDIR/playground"
+alias cdplay="cd $PLAYDIR"
+export BLOGDIR="$GITDIR/widehyo1.github.io"
+alias cdblog="cd $BLOGDIR"
+export TODAY="$PLAYDIR/`date '+%Y'`/`date '+%m'`/`date '+%d'`"
+alias cdtoday="cd $TODAY"
+alias startwork="mkdir -p $TODAY/ && touch $TODAY/`date '+%Y%m%d'`.md"
+
+# git command
+alias ginfo='git branch -avv'
+alias glog='git log --oneline --name-status --pretty=format:"%h|%ad|%s|by %an" --date=short'
+alias glogabbr='git log --oneline --pretty=format:"%h|%ad|%s|by %an" --date=short'
+alias glogall='~/.cli/git/git_commit_hist.sh | less'
+alias glogalltime='~/.cli/git/git_commit_hist.sh | sed -n "/|/p" | sort -t "|" -k2 -r | less'
+alias glast='git diff --name-only HEAD..HEAD~'
+alias gdiff='git difftool'
+
+# rc
+alias brc='source ~/.bashrc'
+alias catrc='cat ~/.bashrc'
+alias virc='vi ~/.bashrc'
+
+# find/grep
+alias findfile='find . -type f -name'
+alias searchcontent='grep -Ir -C 5'
+alias searchfile='grep -Irl'
+alias greppy='grep -Ir -n --include=*.py'
+alias grepjava='grep -Ir -n --include=*.java'
+alias grepjs='grep -Ir -n --include=*.js'
+alias grephtml='grep -Ir -n --include=*.html'
+alias grepweb='grep -Ir -n --include=*.{html,js}'
+
+# tar
+alias tarc='tar -czvf'
+alias tarx='tar -xzvf'
+
+# awk, jq, curl
+alias awktest='awk -f ~/script.awk ~/temp.txt'
+alias jqtest='jq -r -f ~/script.jq ~/temp.json'
+alias curltest='curl --config ~/curlconfig.txt'
+
+# ctags, difft
+alias difft="difft --skip-unchanged"
+alias pyctags='ctags -R --languages=Python -f .tags .'
+
+# nvim(toggle terminal-nvim)
+bind '"\C-x\C-x": "fg\n"'
+export HISTIGNORE="fg:"
+
+# misc
+alias python='python3'
+alias catetc="cat /mnt/c/Windows/System32/drivers/etc/hosts"
+
+# nvm(for mermaid)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# startship
+eval "$(starship init bash)"
+# for difft
+source "$HOME/.cargo/env"

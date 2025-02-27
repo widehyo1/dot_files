@@ -1,0 +1,125 @@
+" Vundle
+set nocompatible              " be iMproved, required
+filetype off                  " required
+"git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tpope/vim-fugitive'
+Plugin 'majutsushi/tagbar'
+
+call vundle#end()            " required
+filetype plugin indent on     " required!
+
+" mapleader
+let mapleader=","
+
+" jellybeans
+set t_Co=256
+colorscheme jellybeans
+
+" nerdtree
+autocmd VimEnter * NERDTree | wincmd p
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+nnoremap <leader>. :NERDTreeFind<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+" ctags
+nnoremap <C-]> <C-]>zz
+set tags=./.tags;/
+
+" tagbar
+" autocmd FileType c call tagbar#autoopen(0)
+" autocmd FileType python call tagbar#autoopen(0)
+" set laststatus=2
+" set statusline=%{FugitiveStatusline()}
+
+" load custom script
+source ~/.vim/util/common.vim
+nnoremap <leader>pp :call CopyPwd()<CR>
+
+" basic config
+set number
+set showmatch
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set noswapfile
+set clipboard=unnamedplus
+set nohlsearch
+set splitright
+set splitbelow
+set showcmd
+set autoread
+set cursorline
+set gdefault
+" print whitespace
+set list
+set listchars=tab:>-,trail:-
+
+" rc
+nnoremap <leader>rc :e ~/.vimrc<CR>
+nnoremap <leader>brc :e ~/.bashrc<CR>
+
+" awk
+nnoremap <leader>as :e ~/script.awk<CR>
+nnoremap <leader>at :e ~/temp.txt<CR>
+nnoremap <leader>ay :let @+ = system('awk -f ~/script.awk ~/temp.txt')<CR>
+vnoremap <leader>ay :call AwkYankVisual()<CR>
+nnoremap <leader>ap :r ! awk -f ~/script.awk ~/temp.txt<CR>
+vnoremap <leader>ap :! awk -f ~/script.awk<CR>
+
+" jq
+nnoremap <leader>js :e ~/script.jq<CR>
+nnoremap <leader>jt :e ~/temp.json<CR>
+nnoremap <leader>jy :let @+ = system('jq -f ~/script.jq ~/temp.json')<CR>
+vnoremap <leader>jy :call JqYankVisual()<CR>
+nnoremap <leader>jp :r ! jq -f ~/script.jq ~/temp.json<CR>
+vnoremap <leader>jp :! jq -f ~/script.jq<CR>
+
+vnoremap <leader>jf :! jq .<CR>
+
+" curl
+nnoremap <leader>cs :e ~/curlconfig.txt<CR>
+nnoremap <leader>ct :e ~/request.json<CR>
+nnoremap <leader>cy :let @+ = system('curl --config curlconfig.txt')<CR>
+nnoremap <leader>cp :r ! curl --config curlconfig.txt<CR>
+
+" line
+nnoremap <C-Up> :m .-2<CR>==
+nnoremap <C-Down> :m .+1<CR>==
+
+" buffer
+nnoremap L :bn!<CR>
+nnoremap H :bp!<CR>
+nnoremap <leader>q :bp<bar>bd #<CR>
+nnoremap <leader>ls :ls<CR>
+
+" window
+nnoremap <C-H> <C-W>h
+nnoremap <C-L> <C-W>l
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+
+" esc
+imap jj <ESC>
+imap JJ <ESC>
+
+" toggle terminal-vim
+nnoremap <C-D> :sh<CR>
+
+" remove (carriage return) character
+nnoremap <leader>d :%s/\r//g<CR>
+
+" netrw
+let g:netrw_browse_split=2
+let g:netrw_liststyle=3
+" gh toggles dot files hide/show
+" nnoremap <leader>n :20Lex<CR>
+

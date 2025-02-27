@@ -1,0 +1,27 @@
+[user]
+	name = 
+	email = 
+[init]
+	defaultBranch = master
+[alias]
+	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+	lg = lg1
+    st = status --no-renames
+    info = branch -avv
+    logfile = log --name-status --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
+    logabbr = log --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
+[http]
+	sslVerify = false
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+	trustExitCode = true
+[difftool "vimdiff"]
+	cmd = vimdiff \"$LOCAL\" \"$REMOTE\"
+[core]
+	autocrlf = true
+	fscache = true
+	preloadindex = true
+
