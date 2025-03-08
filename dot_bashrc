@@ -15,8 +15,9 @@ alias cdplay="cd $PLAYDIR"
 export BLOGDIR="$GITDIR/widehyo1.github.io"
 alias cdblog="cd $BLOGDIR"
 export TODAY="$PLAYDIR/`date '+%Y'`/`date '+%m'`/`date '+%d'`"
+export TODAYMD="$TODAY/`date '+%Y%m%d'`.md"
 alias cdtoday="cd $TODAY"
-alias startwork="mkdir -p $TODAY/ && touch $TODAY/`date '+%Y%m%d'`.md"
+alias startplay="mkdir -p $TODAY/ && touch $TODAYMD"
 
 # git command
 alias ginfo='git branch -avv'
@@ -37,6 +38,7 @@ alias findfile='find . -type f -name'
 alias searchcontent='grep -Ir -C 5'
 alias searchfile='grep -Irl'
 alias greppy='grep -Ir -n --include=*.py'
+alias grepmd='grep -Ir -n --include=*.md'
 alias grepjava='grep -Ir -n --include=*.java'
 alias grepjs='grep -Ir -n --include=*.js'
 alias grephtml='grep -Ir -n --include=*.html'
@@ -47,9 +49,9 @@ alias tarc='tar -czvf'
 alias tarx='tar -xzvf'
 
 # awk, jq, curl
-alias awktest='awk -f ~/script.awk ~/temp.txt'
-alias jqtest='jq -r -f ~/script.jq ~/temp.json'
-alias curltest='curl --config ~/curlconfig.txt'
+alias runawk='awk -f ~/script.awk ~/temp.txt'
+alias runjq='jq -f ~/script.jq ~/temp.json'
+alias runcurl='curl --config ~/script.curl'
 
 # ctags, difft
 alias difft="difft --skip-unchanged"

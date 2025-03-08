@@ -58,7 +58,7 @@ set splitbelow
 set showcmd
 set autoread
 set cursorline
-set gdefault
+" set gdefault
 " print whitespace
 set list
 set listchars=tab:>-,trail:-
@@ -66,6 +66,11 @@ set listchars=tab:>-,trail:-
 " rc
 nnoremap <leader>rc :e ~/.vimrc<CR>
 nnoremap <leader>brc :e ~/.bashrc<CR>
+nnoremap <leader>md :e $TODAYMD<CR>
+
+" misc
+nnoremap <leader>h :noh<CR><ESC>
+nnoremap <leader><C-D> <C-D>
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
@@ -86,10 +91,10 @@ vnoremap <leader>jp :! jq -f ~/script.jq<CR>
 vnoremap <leader>jf :! jq .<CR>
 
 " curl
-nnoremap <leader>cs :e ~/curlconfig.txt<CR>
+nnoremap <leader>cs :e ~/script.curl<CR>
 nnoremap <leader>ct :e ~/request.json<CR>
-nnoremap <leader>cy :let @+ = system('curl --config curlconfig.txt')<CR>
-nnoremap <leader>cp :r ! curl --config curlconfig.txt<CR>
+nnoremap <leader>cy :let @+ = system('curl --config script.curl')<CR>
+nnoremap <leader>cp :r ! curl --config script.curl<CR>
 
 " line
 nnoremap <C-Up> :m .-2<CR>==
@@ -106,6 +111,19 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-L> <C-W>l
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
+
+" window split
+nnoremap <leader>ws <C-W><C-S>
+nnoremap <leader>wv <C-W><C-V>
+
+" window split new
+nnoremap <leader>wns :new<CR>
+nnoremap <leader>wnv :vnew<CR>
+
+" window resize
+nnoremap <leader>wwr <C-W>=
+nnoremap <leader>wwv <C-W>_
+nnoremap <leader>wwh <C-W><bar>
 
 " esc
 imap jj <ESC>

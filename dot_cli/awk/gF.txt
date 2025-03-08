@@ -1,0 +1,1 @@
+  File "/mnt/d/gitclone/ai_agent/api_service/api_service/app/common/exception/custom_exception.py", line 26, in load_inventory
