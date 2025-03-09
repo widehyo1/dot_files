@@ -82,6 +82,7 @@ nnoremap <leader>h :noh<CR><ESC>
 nnoremap <leader><C-D> <C-D>
 nnoremap <leader>H H
 nnoremap <leader>L L
+nnoremap <F5> :call ToggleSnakeCamel()<CR>
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
