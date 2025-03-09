@@ -29,6 +29,14 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 nnoremap <leader>. :NERDTreeFind<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" * enable/disable searchcount integration >
+let g:airline#extensions#searchcount#enabled = 1
+" * enable/disable displaying search term >
+let g:airline#extensions#searchcount#show_search_term = 1
+
 " ctags
 nnoremap <C-]> <C-]>zz
 set tags=./.tags;/
@@ -61,7 +69,8 @@ set cursorline
 " set gdefault
 " print whitespace
 set list
-set listchars=tab:>-,trail:-
+set listchars=tab:>-,trail:«,space:•,lead:»
+" set foldmethod=syntax
 
 " rc
 nnoremap <leader>rc :e ~/.vimrc<CR>
@@ -71,6 +80,8 @@ nnoremap <leader>md :e $TODAYMD<CR>
 " misc
 nnoremap <leader>h :noh<CR><ESC>
 nnoremap <leader><C-D> <C-D>
+nnoremap <leader>H H
+nnoremap <leader>L L
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
@@ -131,13 +142,19 @@ imap JJ <ESC>
 
 " toggle terminal-vim
 nnoremap <C-D> :sh<CR>
+" maniging help file
+autocmd WinEnter * if &filetype == 'help' |unmap <C-D>| endif
+autocmd WinLeave * if &filetype == 'help' |nnoremap <C-D> :sh<CR>| endif
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
 
+" change directory :pwd to the direcotry which current buffer file located
+nnoremap <leader>cd :execute 'cd ' . fnamemodify(expand('%'), ':p:h')<bar>pwd<CR>
+
 " netrw
-let g:netrw_browse_split=2
-let g:netrw_liststyle=3
+" let g:netrw_browse_split=2
+" let g:netrw_liststyle=3
 " gh toggles dot files hide/show
 " nnoremap <leader>n :20Lex<CR>
 
