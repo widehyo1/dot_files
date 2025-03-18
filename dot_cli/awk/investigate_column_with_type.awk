@@ -4,6 +4,7 @@ function strip(str) {
 }
 BEGIN {
     FS = "|"
+    OFS = "|"
     table_count = 0
     split("", meta_arr, "")
     for (idx in meta_arr) {
@@ -29,6 +30,6 @@ NF == 9 && !/Column/{
 END {
     for (index_ in col_info_arr) {
         split(index_, key_arr, SUBSEP)
-        print "["key_arr[1]"("key_arr[2]")]"col_info_arr[index_]
+        # print "["key_arr[1]"("key_arr[2]")]",col_info_arr[index_]
     }
 }

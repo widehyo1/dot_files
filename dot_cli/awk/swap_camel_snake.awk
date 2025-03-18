@@ -15,12 +15,13 @@ function camel_to_snake(text, result) {
   return result
 }
 {
-  gsub(/^_+/, "", $0)
-  if (match($0, "_")) {
-    print snake_to_camel($0)
-  } else if (match($0, /[A-Z]/) > 1) {
-    print camel_to_snake($0)
+  split("|",arr,$0)
+  gsub(/^_+/, "", arr[0])
+  if (match(arr[0], "_")) {
+    print snake_to_camel(arr[0])
+  } else if (match(arr[0], /[A-Z]/) > 1) {
+    print camel_to_snake(arr[0])
   } else {
-    print $0
+    print arr[0]
   }
 }

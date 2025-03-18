@@ -23,8 +23,8 @@ alias startplay="mkdir -p $TODAY/ && touch $TODAYMD"
 alias ginfo='git branch -avv'
 alias glog='git log --oneline --name-status --pretty=format:"%h|%ad|%s|by %an" --date=short'
 alias glogabbr='git log --oneline --pretty=format:"%h|%ad|%s|by %an" --date=short'
-alias glogall='~/.cli/git/git_commit_hist.sh | less'
-alias glogalltime='~/.cli/git/git_commit_hist.sh | sed -n "/|/p" | sort -t "|" -k2 -r | less'
+alias glogall='~/.cli/shell/git_commit_hist.sh | less'
+alias glogalltime='~/.cli/shell/git_commit_hist.sh | sed -n "/|/p" | sort -t "|" -k2 -r | less'
 alias glast='git diff --name-only HEAD..HEAD~'
 alias gdiff='git difftool'
 
@@ -74,3 +74,8 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(starship init bash)"
 # for difft
 source "$HOME/.cargo/env"
+
+# custom commands
+alias gitcheck='~/.cli/shell/gitcheck.sh'
+alias makecompare='~/.cli/shell/makecompare.sh'
+alias makesavepoint='~/.cli/shell/makesavepoint.sh'
