@@ -49,6 +49,7 @@ set tags=./.tags;/
 
 " load custom script
 source ~/.vim/util/common.vim
+source ~/.vim/util/buffer_fzf.vim
 nnoremap <leader>pp :call CopyPwd()<CR>
 
 " basic config
@@ -84,6 +85,7 @@ nnoremap <leader>H H
 nnoremap <leader>L L
 nnoremap <F5> :call ToggleSnakeCamel()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
+nnoremap <leader><leader>s :call PopupBuffer()<CR>
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
@@ -144,9 +146,6 @@ imap JJ <ESC>
 
 " toggle terminal-vim
 nnoremap <C-D> :sh<CR>
-" maniging help file
-autocmd WinEnter * if &filetype == 'help' |unmap <C-D>| endif
-autocmd WinLeave * if &filetype == 'help' |nnoremap <C-D> :sh<CR>| endif
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>

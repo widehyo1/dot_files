@@ -53,6 +53,11 @@ alias runawk='awk -f ~/script.awk ~/temp.txt'
 alias runjq='jq -f ~/script.jq ~/temp.json'
 alias runcurl='curl --config ~/script.curl'
 
+# kotlin
+alias runjar='java -jar'
+alias runkt='$HOME/.cli/shell/runkt.sh'
+alias ktc='$HOME/.cli/shell/ktc.sh'
+
 # ctags, difft
 alias difft="difft --skip-unchanged"
 alias pyctags='ctags -R --languages=Python -f .tags .'
