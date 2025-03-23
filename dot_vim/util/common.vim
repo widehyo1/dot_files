@@ -69,28 +69,33 @@ function! ToggleSnakeCamel()
   call ReplaceCursorWord(l:result)
 endfunction
 
-function BufferMenu()
+function! BufferMenu(search_text = '')
   " show loaded buffers on popup menu and open selected buffer
-  function! LoadBuffer(id, result) closure
-    " callback function for buffer menu with free variables:
-    " buf_name_list, buf_dict
-    let l:idx = a:result - 1
-    let l:traget_buffer_name = l:buf_name_list[l:idx]
-    let l:target_buffer_number = l:buf_dict[l:traget_buffer_name]
-    execute string(l:target_buffer_number) . 'buffer!'
-  endfunction
+  let s:buf_dict = map(filter(getbufinfo(), 'v:val.listed'), '#{
+        \ bufnr: v:val.bufnr,
+        \ text: fnamemodify(expand(v:val.name), ":.:~")
+        \ }')
+  if len(a:search_text)
+    " filter buf_dict text with search_text
+    call filter(s:buf_dict, 'v:val.text =~ a:search_text')
+    if len(s:buf_dict) == 0
+      let popup_config = #{
+      \   time: 3000,
+      \   highlight: 'WarningMsg'
+      \ }
+      let empty_msg = 'there is no buffer with name matching ' . a:search_text
+      call popup_menu(empty_msg, popup_config)
+      return
+    endif
+  endif
 
-  let l:buf_number_list = range(1, bufnr('$'))
-        \ ->filter('buflisted(v:val)')
-  let l:buf_dict = {}
-  for l:buf_number in l:buf_number_list
-    let l:buf_dict[bufname(l:buf_number)] = l:buf_number
-  endfor
-  let l:buf_name_list = keys(l:buf_dict)
-
-  let l:popup_config = {
-  \   'callback': 'LoadBuffer'
+  let popup_config = #{
+  \   callback: 'LoadBuffer'
   \ }
-  let l:pm = popup_menu(l:buf_name_list, l:popup_config)
+  call popup_menu(s:buf_dict, popup_config)
 endfunction
 
+function! LoadBuffer(id, result)
+  let target_buffer = s:buf_dict[a:result - 1]
+  execute 'buffer! ' . target_buffer.bufnr
+endfunction
