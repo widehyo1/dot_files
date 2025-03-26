@@ -112,6 +112,12 @@ nnoremap <leader>ct :e ~/request.json<CR>
 nnoremap <leader>cy :let @+ = system('curl --config script.curl')<CR>
 nnoremap <leader>cp :r ! curl --config script.curl<CR>
 
+" sql (pip install sqlparse)
+vnoremap <leader>sf :! sqlformat --reindent --keywords upper --identifiers lower --comma_first true -<CR> " format sql file
+
+" python (pip install black)
+nnoremap <leader>pf :! black %<CR> " format python file
+
 " line
 nnoremap <C-Up> :m .-2<CR>==
 nnoremap <C-Down> :m .+1<CR>==
