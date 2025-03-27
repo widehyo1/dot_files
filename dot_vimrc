@@ -85,8 +85,8 @@ nnoremap <leader>H H
 nnoremap <leader>L L
 nnoremap <F5> :call ToggleSnakeCamel()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
-nnoremap <leader><leader>s :call BufferMenu('')<left><left>
-" nnoremap <leader><leader>s :call PopupBuffer()<CR>
+command -nargs=1 Buff :call BufferMenu(<f-args>)
+nnoremap <leader><leader>s :Buff 
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
