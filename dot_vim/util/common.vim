@@ -31,13 +31,8 @@ function! SnakeToCamel(text)
 endfunction
 
 function! ReplaceCursorWord(target)
-  let l:line = line('.')
-  let l:col = col('.')
-  let l:line_text = getline(l:line)
-  let l:word = expand('<cword>')
-  " replace the result in the buffer
-  let l:new_line = substitute(l:line_text, '\<' . l:word . '\>', a:target, '')
-  call setline(l:line, l:new_line)
+  let @+=a:target
+  normal viwp
 endfunction
 
 " Main function to toggle between snake_case and CamelCase
