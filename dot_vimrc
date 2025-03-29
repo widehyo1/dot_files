@@ -92,12 +92,26 @@ nnoremap <leader><leader>s :BufferMenu
 
 " surround
 nnoremap <space>( :call ToggleRoundBraket()<CR>
+nnoremap <space>a( :call SurrondRoundBraket()<CR>
+nnoremap <space>d( :call UnSurrondRoundBraket()<CR>
 nnoremap <space>[ :call ToggleSquareBraket()<CR>
+nnoremap <space>a[ :call SurrondSquareBraket()<CR>
+nnoremap <space>d[ :call UnSurrondSquareBraket()<CR>
 nnoremap <space>{ :call ToggleCurlyBraket()<CR>
+nnoremap <space>a{ :call SurrondCurlyBraket()<CR>
+nnoremap <space>d{ :call UnSurrondCurlyBraket()<CR>
 nnoremap <space>< :call ToggleAngleBraket()<CR>
+nnoremap <space>a< :call SurrondAngleBraket()<CR>
+nnoremap <space>d< :call UnSurrondAngleBraket()<CR>
 nnoremap <space>' :call ToggleQuote()<CR>
+nnoremap <space>a' :call SurrondQuote()<CR>
+nnoremap <space>d' :call UnSurrondQuote()<CR>
 nnoremap <space>" :call ToggleDoubleQuote()<CR>
+nnoremap <space>a" :call SurrondDoubleQuote()<CR>
+nnoremap <space>d" :call UnSurrondDoubleQuote()<CR>
 nnoremap <space>` :call ToggleBackTick()<CR>
+nnoremap <space>a` :call SurrondBackTick()<CR>
+nnoremap <space>d` :call UnSurrondBackTick()<CR>
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>

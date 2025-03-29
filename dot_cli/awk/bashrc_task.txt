@@ -1,0 +1,10 @@
+" surround
+nnoremap <space>( :call ToggleRoundBraket()<CR>
+nnoremap <space>[ :call ToggleSquareBraket()<CR>
+nnoremap <space>{ :call ToggleCurlyBraket()<CR>
+nnoremap <space>< :call ToggleAngleBraket()<CR>
+nnoremap <space>' :call ToggleQuote()<CR>
+nnoremap <space>" :call ToggleDoubleQuote()<CR>
+nnoremap <space>` :call ToggleBackTick()<CR>
+nnoremap <space>a` :call SurrondBackTick()<CR>
+nnoremap <space>d` :call UnSurrondBackTick()<CR>
