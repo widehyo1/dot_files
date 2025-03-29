@@ -32,7 +32,7 @@ endfunction
 
 function! ReplaceCursorWord(target)
   let @+=a:target
-  normal viwp
+  normal viwpbT 
 endfunction
 
 " Main function to toggle between snake_case and CamelCase

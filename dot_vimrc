@@ -49,6 +49,7 @@ set tags=./.tags;/
 
 " load custom script
 source ~/.vim/util/common.vim
+source ~/.vim/util/surround.vim
 source ~/.vim/util/buffer_fzf.vim
 nnoremap <leader>pp :call CopyPwd()<CR>
 
@@ -79,14 +80,24 @@ nnoremap <leader>brc :e ~/.bashrc<CR>
 nnoremap <leader>md :e $TODAYMD<CR>
 
 " misc
+nnoremap <leader><leader>p :call CopyPwd()<CR>
 nnoremap <leader>h :noh<CR><ESC>
 nnoremap <leader><C-D> <C-D>
 nnoremap <leader>H H
 nnoremap <leader>L L
 nnoremap <F5> :call ToggleSnakeCamel()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
-command -nargs=1 Buff :call BufferMenu(<f-args>)
-nnoremap <leader><leader>s :Buff 
+command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
+nnoremap <leader><leader>s :BufferMenu 
+
+" surround
+nnoremap <space>( :call ToggleRoundBraket()<CR>
+nnoremap <space>[ :call ToggleSquareBraket()<CR>
+nnoremap <space>{ :call ToggleCurlyBraket()<CR>
+nnoremap <space>< :call ToggleAngleBraket()<CR>
+nnoremap <space>' :call ToggleQuote()<CR>
+nnoremap <space>" :call ToggleDoubleQuote()<CR>
+nnoremap <space>` :call ToggleBackTick()<CR>
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
