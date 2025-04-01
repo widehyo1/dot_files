@@ -89,6 +89,8 @@ nnoremap <F5> :call ToggleSnakeCamel()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
 command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
+command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
+nnoremap <C-S-F> :SearchAcrossFiles 
 
 " surround
 nnoremap <space>( :call ToggleRoundBraket()<CR>
