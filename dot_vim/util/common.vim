@@ -98,6 +98,15 @@ endfunction
 function! SearchAcrossFiles(search_text)
   let grep_result = system('grep -Irn ' . a:search_text)
   let search_results = grep_result->split('\n')
+  if len(search_results) == 0
+    let popup_config = #{
+    \   time: 3000,
+    \   highlight: 'WarningMsg'
+    \ }
+    let empty_msg = 'there is no buffer with name matching ' . a:search_text
+    call popup_menu(empty_msg, popup_config)
+    return
+  endif
   let s:search_info_list = []
   for search_result in search_results
     let info_dict = {}
