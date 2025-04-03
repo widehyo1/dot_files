@@ -158,6 +158,11 @@ nnoremap L :bn!<CR>
 nnoremap H :bp!<CR>
 nnoremap <leader>q :bp<bar>bd #<CR>
 nnoremap <leader>ls :ls<CR>
+nnoremap <leader>bf :bf<CR>
+nnoremap <leader>bl :bl<CR>
+nnoremap <leader>bdf :1,.-1bd<CR>
+nnoremap <leader>bdl :.+1,$bd<CR>
+nnoremap <leader>bonly :1,.-1bd<Bar>.+1,$bd<CR>
 
 " window
 nnoremap <C-H> <C-W>h
