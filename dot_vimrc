@@ -51,7 +51,6 @@ set tags=./.tags;/
 source ~/.vim/util/common.vim
 source ~/.vim/util/surround.vim
 source ~/.vim/util/buffer_fzf.vim
-nnoremap <leader>pp :call CopyPwd()<CR>
 
 " basic config
 set number
@@ -80,7 +79,6 @@ nnoremap <leader>brc :e ~/.bashrc<CR>
 nnoremap <leader>md :e $TODAYMD<CR>
 
 " misc
-nnoremap <leader><leader>p :call CopyPwd()<CR>
 nnoremap <leader>h :noh<CR><ESC>
 nnoremap <leader><C-D> <C-D>
 nnoremap <leader>H H
@@ -90,7 +88,20 @@ nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
 command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
 command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
-nnoremap <C-S-F> :SearchAcrossFiles 
+nnoremap <leader><leader><C-F> :SearchAcrossFiles 
+nnoremap <leader>cd :cd %:h<bar>pwd<CR>
+nnoremap <leader><leader>g :echo expand('%:p:h')<CR>
+nnoremap <leader><leader>p :let @+ = expand('%:p:h')<CR>
+" nnoremap <leader><leader>p :call CopyPwd()<CR>
+" nnoremap <leader>pp :call CopyPwd()<CR>
+
+" netrw
+" let g:netrw_browse_split=2
+" let g:netrw_liststyle=3
+" gh toggles dot files hide/show
+" nnoremap <leader>n :20Lex<CR>
+nnoremap <leader>. :e %:h<CR>
+
 
 " surround
 nnoremap <space>( :call ToggleRoundBraket()<CR>
@@ -148,7 +159,6 @@ vnoremap <leader>plf :! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>
 command -nargs=1 PyGrep :read ! grep -Ir -n --include=*.py <q-args>
 nnoremap <leader>pg :PyGrep 
 
-
 " line
 nnoremap <C-Up> :m .-2<CR>==
 nnoremap <C-Down> :m .+1<CR>==
@@ -192,21 +202,3 @@ nnoremap <C-D> :sh<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
-
-" change directory :pwd to the direcotry which current buffer file located
-nnoremap <leader>cd :cd %:h<bar>pwd<CR>
-nnoremap <leader>g :echo expand('%:p:h')<CR>
-
-" netrw
-" let g:netrw_browse_split=2
-" let g:netrw_liststyle=3
-" gh toggles dot files hide/show
-" nnoremap <leader>n :20Lex<CR>
-nnoremap <leader>. :e %:h<CR>
-
-" netrw
-" let g:netrw_browse_split=2
-" let g:netrw_liststyle=3
-" gh toggles dot files hide/show
-" nnoremap <leader>n :20Lex<CR>
-
