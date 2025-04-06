@@ -90,8 +90,8 @@ nnoremap <leader><leader>s :BufferMenu
 command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossFiles 
 nnoremap <leader>cd :cd %:h<bar>pwd<CR>
-nnoremap <leader><leader>g :echo expand('%:p:h')<CR>
-nnoremap <leader><leader>p :let @+ = expand('%:p:h')<CR>
+nnoremap <leader><leader>g :echo expand('%:p')<CR>
+nnoremap <leader><leader>p :let @+ = expand('%:p')<bar>echo @+<CR>
 " nnoremap <leader><leader>p :call CopyPwd()<CR>
 " nnoremap <leader>pp :call CopyPwd()<CR>
 
