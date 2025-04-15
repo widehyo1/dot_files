@@ -152,6 +152,24 @@ function! PopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! G")
     elseif a:key ==# "g"
         call win_execute(a:winid, "normal! gg")
+    elseif a:key ==# "1"
+        call win_execute(a:winid, "normal! 10%")
+    elseif a:key ==# "2"
+        call win_execute(a:winid, "normal! 20%")
+    elseif a:key ==# "3"
+        call win_execute(a:winid, "normal! 30%")
+    elseif a:key ==# "4"
+        call win_execute(a:winid, "normal! 40%")
+    elseif a:key ==# "5"
+        call win_execute(a:winid, "normal! 50%")
+    elseif a:key ==# "6"
+        call win_execute(a:winid, "normal! 60%")
+    elseif a:key ==# "7"
+        call win_execute(a:winid, "normal! 70%")
+    elseif a:key ==# "8"
+        call win_execute(a:winid, "normal! 80%")
+    elseif a:key ==# "9"
+        call win_execute(a:winid, "normal! 90%")
     elseif a:key ==# 'q'
         call popup_close(a:winid)
     else
@@ -159,3 +177,29 @@ function! PopupFilter(winid, key) abort
     endif
     return v:true
 endfunction
+
+function! ListToString(list, sep=' ', start='[', end=']')
+  return a:start .. ' ' .. join(a:list, a:sep) .. ' ' .. a:end
+endfunction
+
+function! DictToString(dict, sep=', ')
+  return '{ ' .. copy(a:dict)->map(' v:key .. ": " .. v:val ')->values()->join(a:sep) .. ' }'
+endfunction
+
+function! DictListToString(list, sep=' ')
+  return ListToString(a:list->map('DictToString(v:val)'), a:sep)
+endfunction
+
+" call range(100)
+"         \ ->map('string(v:val)')
+"         \ ->popup_create({
+"         \   'border': [],
+"         \   'moved': 'any',
+"         \   'minwidth': 60,
+"         \   'maxwidth': 60,
+"         \   'minheight': 10,
+"         \   'maxheight': 10,
+"         \   'filter': funcref('PopupFilter'),
+"         \   'filtermode': 'n',
+"         \   'mapping': v:false
+"       \ })
