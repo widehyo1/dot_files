@@ -134,3 +134,28 @@ function! GoSelectedFile(id, result)
   execute target_dict['cmd']
   normal zz
 endfunction
+
+function! PopupFilter(winid, key) abort
+    if a:key ==# "j"
+        call win_execute(a:winid, "normal! \<c-e>")
+    elseif a:key ==# "k"
+        call win_execute(a:winid, "normal! \<c-y>")
+    elseif a:key ==# "\<c-d>"
+        call win_execute(a:winid, "normal! \<c-d>")
+    elseif a:key ==# "\<c-u>"
+        call win_execute(a:winid, "normal! \<c-u>")
+    elseif a:key ==# "\<c-f>"
+        call win_execute(a:winid, "normal! \<c-f>")
+    elseif a:key ==# "\<c-b>"
+        call win_execute(a:winid, "normal! \<c-b>")
+    elseif a:key ==# "G"
+        call win_execute(a:winid, "normal! G")
+    elseif a:key ==# "g"
+        call win_execute(a:winid, "normal! gg")
+    elseif a:key ==# 'q'
+        call popup_close(a:winid)
+    else
+        return v:false
+    endif
+    return v:true
+endfunction
