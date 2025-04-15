@@ -179,7 +179,7 @@ function! PopupFilter(winid, key) abort
 endfunction
 
 function! ListToString(list, sep=' ', start='[', end=']')
-  return a:start .. ' ' .. join(a:list, a:sep) .. ' ' .. a:end
+  return a:start .. ' ' .. join(copy(a:list), a:sep) .. ' ' .. a:end
 endfunction
 
 function! DictToString(dict, sep=', ')
@@ -187,7 +187,7 @@ function! DictToString(dict, sep=', ')
 endfunction
 
 function! DictListToString(list, sep=' ')
-  return ListToString(a:list->map('DictToString(v:val)'), a:sep)
+  return ListToString(copy(a:list)->map('DictToString(v:val)'), a:sep)
 endfunction
 
 " call range(100)
