@@ -32,7 +32,7 @@ endfunction
 
 function! ReplaceCursorWord(target)
   let @+=a:target
-  normal viwpbT 
+  normal viwp
 endfunction
 
 " Main function to toggle between snake_case and CamelCase
@@ -60,7 +60,6 @@ function! ToggleSnakeCamel()
     let l:result = l:word
   endif
 
-  " replace the result in the buffer
   call ReplaceCursorWord(l:result)
 endfunction
 
@@ -96,7 +95,7 @@ function! LoadBuffer(id, result)
 endfunction
 
 function! SearchAcrossFiles(search_text)
-  let grep_result = system('grep -Irn ' . a:search_text)
+  let grep_result = system('grep -Irn --include=*.py --exclude-dir=.venv ' . a:search_text)
   let search_results = grep_result->split('\n')
   if len(search_results) == 0
     let popup_config = #{
@@ -135,7 +134,19 @@ function! GoSelectedFile(id, result)
   normal zz
 endfunction
 
-function! PopupFilter(winid, key) abort
+function! ListToString(list, sep=' ', start='[', end=']')
+  return a:start .. ' ' .. join(copy(a:list), a:sep) .. ' ' .. a:end
+endfunction
+
+function! DictToString(dict, sep=', ')
+  return '{ ' .. copy(a:dict)->map(' v:key .. ": " .. v:val ')->values()->join(a:sep) .. ' }'
+endfunction
+
+function! DictListToString(list, sep=' ')
+  return ListToString(copy(a:list)->map('DictToString(v:val)'), a:sep)
+endfunction
+
+function! ScrollPopupFilter(winid, key) abort
     if a:key ==# "j"
         call win_execute(a:winid, "normal! \<c-e>")
     elseif a:key ==# "k"
@@ -164,7 +175,7 @@ function! PopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! 50%")
     elseif a:key ==# "6"
         call win_execute(a:winid, "normal! 60%")
-    elseif a:key ==# "7"
+    eelseif a:key ==# "7"
         call win_execute(a:winid, "normal! 70%")
     elseif a:key ==# "8"
         call win_execute(a:winid, "normal! 80%")
@@ -178,28 +189,11 @@ function! PopupFilter(winid, key) abort
     return v:true
 endfunction
 
-function! ListToString(list, sep=' ', start='[', end=']')
-  return a:start .. ' ' .. join(copy(a:list), a:sep) .. ' ' .. a:end
+function! PopupFilter(winid, key) abort
+    if a:key ==# 'q'
+        call popup_close(a:winid)
+    else
+        return v:false
+    endif
+    return v:true
 endfunction
-
-function! DictToString(dict, sep=', ')
-  return '{ ' .. copy(a:dict)->map(' v:key .. ": " .. v:val ')->values()->join(a:sep) .. ' }'
-endfunction
-
-function! DictListToString(list, sep=' ')
-  return ListToString(copy(a:list)->map('DictToString(v:val)'), a:sep)
-endfunction
-
-" call range(100)
-"         \ ->map('string(v:val)')
-"         \ ->popup_create({
-"         \   'border': [],
-"         \   'moved': 'any',
-"         \   'minwidth': 60,
-"         \   'maxwidth': 60,
-"         \   'minheight': 10,
-"         \   'maxheight': 10,
-"         \   'filter': funcref('PopupFilter'),
-"         \   'filtermode': 'n',
-"         \   'mapping': v:false
-"       \ })
