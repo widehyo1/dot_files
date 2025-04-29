@@ -95,6 +95,7 @@ nnoremap <leader><leader>g :echo expand('%:p')<CR>
 nnoremap <leader><leader>p :let @+ = expand('%:p')<bar>echo @+<CR>
 " nnoremap <leader><leader>p :call CopyPwd()<CR>
 " nnoremap <leader>pp :call CopyPwd()<CR>
+nnoremap <leader>`v /`/-1<CR>V?`?+1
 
 " netrw
 " let g:netrw_browse_split=2
