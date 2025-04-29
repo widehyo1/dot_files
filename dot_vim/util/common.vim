@@ -175,7 +175,7 @@ function! ScrollPopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! 50%")
     elseif a:key ==# "6"
         call win_execute(a:winid, "normal! 60%")
-    eelseif a:key ==# "7"
+    elseif a:key ==# "7"
         call win_execute(a:winid, "normal! 70%")
     elseif a:key ==# "8"
         call win_execute(a:winid, "normal! 80%")

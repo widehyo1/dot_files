@@ -7,20 +7,26 @@ def process_imports(file_path):
 
     tree = ast.parse(code)
     import_fullnames = []
+    importas_dict = {}
 
     # Visit Import and ImportFrom nodes in the AST
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
                 fullname = alias.name
+                if alias.asname:
+                    importas_dict[alias.asname] = fullname
                 import_fullnames.append(fullname)
         elif isinstance(node, ast.ImportFrom):
             module = node.module
             for alias in node.names:
                 fullname = f"{module}.{alias.name}"
+                if alias.asname:
+                    importas_dict[alias.asname] = fullname
                 import_fullnames.append(fullname)
 
     print("\n".join(import_fullnames))
+    print("|".join([f"{key}:{value}" for key, value in importas_dict.items()]))
 
 
 if __name__ == "__main__":
@@ -30,6 +36,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     file_path = sys.argv[1]
-
+    
     process_imports(file_path)
-

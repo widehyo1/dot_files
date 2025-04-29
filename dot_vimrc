@@ -159,7 +159,7 @@ nnoremap <leader>pf :! black %<CR> " format python file
 vnoremap <leader>plf :! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>
 command -nargs=1 PyGrep :read ! grep -Ir -n --include=*.py <q-args>
 nnoremap <leader>pg :PyGrep 
-nnoremap <leader>ph :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
+nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
 
 " line
 nnoremap <C-Up> :m .-2<CR>==

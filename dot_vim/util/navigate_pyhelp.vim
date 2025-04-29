@@ -37,7 +37,24 @@ function! PoetryHelpPopup()
   let tags_file = project_root .. "/.tags"
 
   " Use the Python script to process imports
-  let imports = system('python3 ' .. expand('~/.vim/util/process_imports.py') .. ' ' .. current_file)
+  let ast_result = system('python3 ' .. expand('~/.vim/util/process_imports.py') .. ' ' .. current_file)
+
+  let import_infos = ast_result->split('\n')
+
+  let help_target = expand('<cword>')
+
+  " construct import as converter
+  if len(import_infos[-1]) > 0
+    let converter = {}
+    for element in copy(import_infos[-1])->split("|")
+      let [key, value] = element->split(":")
+      let converter[key] = value
+    endfor
+    let help_target = get(converter, help_target, help_target)
+    let help_target = help_target->matchstr('[^\.]*$')
+  endif
+
+  let imports = slice(import_infos, 0, -1)
 
   " Process the .tags file with awk to generate class, method, and function names
   let awk_command = 'awk -f ~/.vim/util/ctags_to_fullnames.awk ' .. tags_file
@@ -49,7 +66,7 @@ function! PoetryHelpPopup()
   let seen = {}
 
   " uniquely concat
-  for full_name in split(imports, '\n') + split(tags_fullnames, '\n')
+  for full_name in imports + split(tags_fullnames, '\n')
     if !has_key(seen, full_name)
       let seen[full_name] = 1
       call add(full_names, full_name)
@@ -57,8 +74,8 @@ function! PoetryHelpPopup()
   endfor
 
   " set target to last element which splited by . is same as <cword>
-  for full_name in filter(full_names, { _, val -> val =~ expand('<cword>') .. '$' })
-    if expand('<cword>') != full_name->matchstr('[^\.]*$')
+  for full_name in filter(full_names, { _, val -> val =~ help_target .. '$' })
+    if help_target != full_name->matchstr('[^\.]*$')
       continue
     endif
     let pyhelp_dict = {}
@@ -68,12 +85,25 @@ function! PoetryHelpPopup()
     call add(s:pyhelp_dict_list, pyhelp_dict)
   endfor
 
+  " no result
+  if len(s:pyhelp_dict_list) == 0
+    let popup_config = {
+    \   'time': 3000,
+    \   'cursorline': 0,
+    \   'highlight': 'WarningMsg'
+    \ }
+    let empty_msg = 'there is no help for ' . expand('<cword>')
+    call timer_start(10, {-> popup_menu(empty_msg, popup_config) })
+    return
+  endif
+
   " only one candidate
   if len(s:pyhelp_dict_list) == 1
     call OpenPydocPopup(s:pyhelp_dict_list[0])
     return
   endif
 
+  " multiple resutls, select with popup
   call ShowPydocPopup()
 endfunction
 
@@ -93,21 +123,16 @@ function! OpenPydocPopup(target_dict)
   let width  = float2nr(&columns * 0.8)
   let height = float2nr(&lines * 0.8)
 
-  let start_row  = float2nr(&lines * 0.1)
-  let start_col = float2nr(&columns* 0.1)
-
   " Set default popup options (scrollbar is active)
   let opts = {
         \ 'minwidth': width,
-        \ 'minheight': height,
         \ 'maxwidth': width,
         \ 'maxheight': height,
         \ 'scrollbar': 1,
         \ 'border': [],
         \ 'padding': [0,1,0,1],
-        \ 'filter': funcref('ScrollPopupFilter'),
+        \ 'filter': funcref('s:scroll_popup_filter'),
         \ 'filtermode': 'n',
-        \ 'highlight': 'Normal',
         \ 'mapping': v:false
         \ }
 
@@ -115,11 +140,12 @@ function! OpenPydocPopup(target_dict)
   " apply only q to quit
   if len(popup_content) <= height
     let opts['scrollbar'] = 0
-    let opts['filter'] = funcref('PopupFilter')
+    let opts['cursorline'] = 0
+    let opts['filter'] = funcref('s:popup_filter')
   endif
 
   " Create and show the popup window.
-  call popup_create(popup_content, opts)
+  call timer_start(10, {-> popup_menu(popup_content, opts) })
 endfunction
 
 function! ShowPydocPopup()
@@ -129,20 +155,70 @@ function! ShowPydocPopup()
 
   let opts = {
         \ 'minwidth': width,
-        \ 'minheight': height,
         \ 'maxwidth': width,
         \ 'maxheight': height,
         \ 'cursorline': 1,
         \ 'scrollbar': 1,
-        \ 'highlight': 'Normal',
         \ 'callback': 'OpenPydocPopupCallback'
         \ }
   call timer_start(10, {-> popup_menu(s:pyhelp_dict_list, opts) })
 endfunction
 
 function! OpenPydocPopupCallback(id, result)
-  let target_dict = s:pyhelp_dict_list[a:result-1]
+  let target_dict = s:pyhelp_dict_list[a:result - 1]
   call OpenPydocPopup(target_dict)
 endfunction
 
 
+function! s:scroll_popup_filter(winid, key) abort
+    if a:key ==# "j"
+        call win_execute(a:winid, "normal! \<c-e>")
+    elseif a:key ==# "k"
+        call win_execute(a:winid, "normal! \<c-y>")
+    elseif a:key ==# "\<c-d>"
+        call win_execute(a:winid, "normal! \<c-d>")
+    elseif a:key ==# "\<c-u>"
+        call win_execute(a:winid, "normal! \<c-u>")
+    elseif a:key ==# "\<c-f>"
+        call win_execute(a:winid, "normal! \<c-f>")
+    elseif a:key ==# "\<c-b>"
+        call win_execute(a:winid, "normal! \<c-b>")
+    elseif a:key ==# "G"
+        call win_execute(a:winid, "normal! G")
+    elseif a:key ==# "g"
+        call win_execute(a:winid, "normal! gg")
+    elseif a:key ==# "1"
+        call win_execute(a:winid, "normal! 10%")
+    elseif a:key ==# "2"
+        call win_execute(a:winid, "normal! 20%")
+    elseif a:key ==# "3"
+        call win_execute(a:winid, "normal! 30%")
+    elseif a:key ==# "4"
+        call win_execute(a:winid, "normal! 40%")
+    elseif a:key ==# "5"
+        call win_execute(a:winid, "normal! 50%")
+    elseif a:key ==# "6"
+        call win_execute(a:winid, "normal! 60%")
+    elseif a:key ==# "7"
+        call win_execute(a:winid, "normal! 70%")
+    elseif a:key ==# "8"
+        call win_execute(a:winid, "normal! 80%")
+    elseif a:key ==# "9"
+        call win_execute(a:winid, "normal! 90%")
+    elseif a:key ==# 'q'
+        call popup_close(a:winid)
+    else
+        call popup_close(a:winid)
+        return v:false
+    endif
+    return v:true
+endfunction
+
+function! s:popup_filter(winid, key) abort
+    if a:key ==# 'q'
+        call popup_close(a:winid)
+    else
+        return v:false
+    endif
+    return v:true
+endfunction
