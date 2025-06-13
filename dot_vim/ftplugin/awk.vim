@@ -13,9 +13,10 @@ iabbrev <buffer> \surrb; "<"str">"
 iabbrev <buffer> \surrc; "{"str"}"
 iabbrev <buffer> \split; split(str, arr, sep)
 iabbrev <buffer> \strip; function strip(str) {<CR>gsub(/^\s+\|\s+$/, "", str)<CR>return str<CR>}
-iabbrev <buffer> \join; function join(arr, sep) {<CR>acc = arr[1]<CR>for (i = 2; i <= length(arr); i++) {<CR>acc = acc sep arr[i]<CR>}<CR>return acc<CR>}
+iabbrev <buffer> \join; function join(arr, sep,    acc) {<CR>acc = arr[1]<CR>for (i = 2; i <= length(arr); i++) {<CR>acc = acc sep arr[i]<CR>}<CR>return acc<CR>}
 iabbrev <buffer> \gsub; gsub(regex, replace, str)
 iabbrev <buffer> \rindex; function rindex(hay, needle,    arr, lastToken) {<CR>lastToken = arr[split(hay, arr, needle)]<CR>return length(hay) - length(needle) - length(lastToken) + 1<CR>}
+iabbrev \include; @include "common"
 
 setlocal tabstop=2
 setlocal shiftwidth=2

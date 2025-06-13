@@ -53,6 +53,9 @@ alias runawk='awk -f ~/script.awk ~/temp.txt'
 alias runjq='jq -f ~/script.jq ~/temp.json'
 alias runcurl='curl --config ~/script.curl'
 
+# awk @include common library
+export AWKPATH="~/.cli/awk/lib"
+
 # kotlin
 alias runjar='java -jar'
 alias runkt='$HOME/.cli/shell/runkt.sh'
