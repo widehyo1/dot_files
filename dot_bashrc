@@ -65,6 +65,9 @@ alias ktc='$HOME/.cli/shell/ktc.sh'
 alias difft="difft --skip-unchanged"
 alias pyctags='ctags -R --languages=Python --exclude=".venv" -f .tags .'
 
+# graphviz
+alias vdot='vimdot ~/graphviz/graph.dot'
+
 # nvim(toggle terminal-nvim)
 bind '"\C-x\C-x": "fg\n"'
 export HISTIGNORE="fg:"
