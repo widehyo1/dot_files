@@ -18,3 +18,5 @@ iabbrev <buffer> \asm; ```asm<CR>%include "io64.inc"<CR><CR>section .text<CR>glo
 iabbrev <buffer> \datasection; section .data
 iabbrev <buffer> \bsssection; section .bss
 iabbrev <buffer> \textsection; section .text
+
+nnoremap <buffer> <leader><leader>jld :g/\v(java\.(util<BAR>lang)<BAR>springframework<BAR>catalina<BAR>org\.apache<BAR>org\.jboss<BAR>sun\.reflect<BAR>javax\.servlet)/d
