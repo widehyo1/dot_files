@@ -67,6 +67,7 @@ alias pyctags='ctags -R --languages=Python --exclude=".venv" -f .tags .'
 
 # graphviz
 alias vdot='vimdot ~/graphviz/graph.dot'
+alias drawdot='cat > ~/graphviz/graph.dot && vimdot ~/graphviz/graph.dot'
 
 # nvim(toggle terminal-nvim)
 bind '"\C-x\C-x": "fg\n"'
