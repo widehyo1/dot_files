@@ -76,6 +76,8 @@ export HISTIGNORE="fg:"
 # misc
 alias python='python3'
 alias catetc="cat /mnt/c/Windows/System32/drivers/etc/hosts"
+alias lastfile="ls -rt | tail -n 1"
+alias lstime='ls -l --time-style long-iso'
 
 # nvm(for mermaid)
 export NVM_DIR="$HOME/.nvm"
