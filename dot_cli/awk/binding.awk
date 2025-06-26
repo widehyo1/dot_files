@@ -1,46 +1,5 @@
-# out array set to global variable "mapres"
-function map(arr, fn, res,     idx) {
-  delete res
-  for (idx in arr) {
-    res[idx] = @fn(arr[idx])
-  }
-}
-
-# inplace operation
-function apply(arr, fn,     idx) {
-  for (idx in arr) {
-    arr[idx] = @fn(arr[idx])
-  }
-}
-
-function filter(arr, pred, res,    count, i) {
-  delete res
-  for (i = 1; i <= length(arr); i++) {
-    if (@pred(arr[i])) res[++count] = arr[i]
-  }
-}
-
-function filterAssoc(arr, pred, res,     idx) {
-  delete res
-  for (idx in arr) {
-    if (@pred(arr[idx])) res[idx] = arr[idx]
-  }
-}
-
-function executeFunc1(fnname, params) {
-  @fnname(params[1])
-}
-
-function executeFunc2(fnname, params) {
-  @fnname(params[1], params[2])
-}
-
-function executeFunc3(fnname, params) {
-  @fnname(params[1], params[2], params[3])
-}
-
-function executeFunc4(fnname, params) {
-  @fnname(params[1], params[2], params[3], params[4])
+function sample(a, b, c) {
+  printf "a: %s, b: %s, c: %s\n", a, b, c
 }
 
 # save binding arguments to global variable BINDING
@@ -74,6 +33,24 @@ function bindPosition(array,    acc) {
   return substr(acc, 1, length(acc) - 1)
 }
 
+function flip(assoc) {
+  for (idx in assoc) {
+    assoc[assoc[idx]] = idx
+  }
+}
+
+function printArray(arr, arrName) {
+  for (idx in arr) {
+    printf "%s[%s]: %s\n", (arrName ? arrName : "arr"), idx, arr[idx]
+  }
+}
+
+function apply(arr, fn) {
+  for (idx in arr) {
+    arr[idx] = @fn(arr[idx])
+  }
+}
+
 function strReprArr2dict(strReprArr, dict,    strRepr) {
   delete dict
   for (i = 1; i <= length(strReprArr); i++) {
@@ -81,6 +58,11 @@ function strReprArr2dict(strReprArr, dict,    strRepr) {
     partition(strRepr, SUBSEP, headtail)
     dict[headtail[1]] = headtail[2]
   }
+}
+
+function partition(str, sep, headtail) {
+  headtail[1] = substr(str, 1, index(str, sep) - length(sep))
+  headtail[2] = substr(str, index(str, sep) + length(sep))
 }
 
 function call(key, args,    bindings) {
@@ -152,10 +134,45 @@ function posRepr2Dict(posRepr, paramDict,    tmp, posNameTuple) {
   }
 }
 
+function executeFunc1(fnname, params) {
+  @fnname(params[1])
+}
+
+function executeFunc2(fnname, params) {
+  @fnname(params[1], params[2])
+}
+
+function executeFunc3(fnname, params) {
+  @fnname(params[1], params[2], params[3])
+}
+
+function executeFunc4(fnname, params) {
+  @fnname(params[1], params[2], params[3], params[4])
+}
+
 # save function signature to global variable FUNCSIG
 # argument information is of form list of tuples (position, parameter name)
 # list element delemter: SSEP, key-value delemeter: SUBSEP
 function saveSignature(fnname, argInfo) {
   posRepr = bindPosition(argInfo)
   FUNCSIG[fnname] = posRepr
+}
+
+function zip(arr1, arr2, dict) {
+  minlen = (length(arr1) < length(arr2) ? length(arr1) : length(arr2))
+  for (i = 1; i <= minlen; i++) {
+    dict[arr1[i]] = arr2[i]
+  }
+}
+
+BEGIN {
+  SSEP = "\035"
+  split("a b c", arginfo)
+  saveSignature("sample", arginfo)
+  split("b c", keys)
+  split("5678 asdf", vals)
+  zip(keys, vals, bindings)
+  bind("partial", "sample", bindings)
+  split("1", args)
+  call("partial", args)
 }

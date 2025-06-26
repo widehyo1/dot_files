@@ -47,3 +47,47 @@ function rindex(hay, needle,    arr, lastToken) {
 function format(fmt, target) {
   return sprintf(fmt, strip(target))
 }
+
+function compareAssoc(assoc1, assoc2, res) {
+  delete res
+  for (idx1 in assoc1) {
+    res[idx1]--
+  }
+  for (idx2 in assoc2) {
+    res[idx2]++
+  }
+}
+
+function compareArray(arr1, arr2, res) {
+  delete res
+  for (idx1 in arr1) {
+    res[arr1[idx1]]--
+  }
+  for (idx2 in arr2) {
+    res[arr2[idx2]]++
+  }
+}
+
+function partition(str, sep, headtail) {
+  headtail[1] = substr(str, 1, index(str, sep) - length(sep))
+  headtail[2] = substr(str, index(str, sep) + length(sep))
+}
+
+function printArray(arr, arrName) {
+  for (idx in arr) {
+    printf "%s[%s]: %s\n", (arrName ? arrName : "arr"), idx, arr[idx]
+  }
+}
+
+function flip(assoc) {
+  for (idx in assoc) {
+    assoc[assoc[idx]] = idx
+  }
+}
+
+function zip(arr1, arr2, dict) {
+  minlen = (length(arr1) < length(arr2) ? length(arr1) : length(arr2))
+  for (i = 1; i <= minlen; i++) {
+    dict[arr1[i]] = arr2[i]
+  }
+}
