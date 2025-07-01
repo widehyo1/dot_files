@@ -1,4 +1,6 @@
-# out array set to global variable "mapres"
+@include "extension"
+
+# out array set to res
 function map(arr, fn, res,     idx) {
   delete res
   for (idx in arr) {
@@ -27,40 +29,26 @@ function filterAssoc(arr, pred, res,     idx) {
   }
 }
 
-function executeFunc1(fnname, params) {
-  @fnname(params[1])
-}
-
-function executeFunc2(fnname, params) {
-  @fnname(params[1], params[2])
-}
-
-function executeFunc3(fnname, params) {
-  @fnname(params[1], params[2], params[3])
-}
-
-function executeFunc4(fnname, params) {
-  @fnname(params[1], params[2], params[3], params[4])
-}
-
-# save binding arguments to global variable BINDING
+# save binding arguments to global variable FREEVARS
 # key will be used as partial function(default parameter from binding info)
 # the form value consists two parts, head and tails separated with first SSEP
 # head contains `original function name`
 # tail is of form string representation of the list of tuple, which argName SUBSEP value
 # each elements is joined with SSEP
-function bind(key, fnname, bindings,    argRepr) {
+function bind(key, fnname, freeVars,    argRepr) {
+  if (! SSEP) SSEP = "\035"
   argRepr = fnname SSEP
 
-  if (length(bindings) == 0) {
-    BINDING[key] = argRepr
+  if (length(freeVars) == 0) {
+    FREEVARS[key] = argRepr
     return
   }
-  argRepr = argRepr serializeAssoc(bindings)
-  BINDING[key] = argRepr
+  argRepr = argRepr serializeAssoc(freeVars)
+  FREEVARS[key] = argRepr
 }
 
 function serializeAssoc(assoc,    acc) {
+  assert(SSEP, "SSEP is not set")
   for (key in assoc) {
     acc = acc key SUBSEP assoc[key] SSEP
   }
@@ -68,6 +56,7 @@ function serializeAssoc(assoc,    acc) {
 }
 
 function bindPosition(array,    acc) {
+  assert(SSEP, "SSEP is not set")
   for (i = 1; i <= length(array); i++) {
     acc = acc i SUBSEP array[i] SSEP
   }
@@ -78,13 +67,13 @@ function strReprArr2dict(strReprArr, dict,    strRepr) {
   delete dict
   for (i = 1; i <= length(strReprArr); i++) {
     strRepr = strReprArr[i]
-    partition(strRepr, SUBSEP, headtail)
-    dict[headtail[1]] = headtail[2]
+    dict[substr(strRepr, 1, index(strRepr, SUBSEP) - 1)] = substr(strRepr, index(strRepr, SUBSEP) + 1) # dict[key] = val
   }
 }
 
 function call(key, args,    bindings) {
-  if (!BINDING[key]) {
+  if (! SSEP) SSEP = "\035"
+  if (!FREEVARS[key]) {
     print "unregistered function call"
     return
   }
@@ -92,16 +81,16 @@ function call(key, args,    bindings) {
 
   switch (length(params)) {
     case 1:
-      executeFunc1(fnname, params)
+      @fnname(params[1])
       break
     case 2:
-      executeFunc2(fnname, params)
+      @fnname(params[1], params[2])
       break
     case 3:
-      executeFunc3(fnname, params)
+      @fnname(params[1], params[2], params[3])
       break
     case 4:
-      executeFunc4(fnname, params)
+      @fnname(params[1], params[2], params[3], params[4])
       break
     default:
       print "#(function params) must one of 1, 2, 3, or 4"
@@ -111,10 +100,11 @@ function call(key, args,    bindings) {
 }
 
 function buildParameter(key, args, params) {
-  partition(BINDING[key], SSEP, fnBinding)
-  fnname = fnBinding[1]
+  assert(SSEP, "SSEP is not set")
+  delete params
+  fnname = substr(FREEVARS[key], 1, index(FREEVARS[key], SSEP) - 1)
   inspectParams(fnname, paramDict)
-  bindingRepr = fnBinding[2]
+  bindingRepr = substr(FREEVARS[key], index(FREEVARS[key], SSEP) + 1)
   bindingRepr2Dict(bindingRepr, bindingDict)
 
   for (idx in args) {
@@ -132,10 +122,11 @@ function buildParameter(key, args, params) {
 }
 
 function bindingRepr2Dict(repr, bindingDict,    tmp) {
+  assert(SSEP, "SSEP is not set")
+  delete bindingDict
   split(repr, tmp, SSEP)
   for (idx in tmp) {
-    split(tmp[idx], keyVal, SUBSEP)
-    bindingDict[keyVal[1]] = keyVal[2]
+    bindingDict[substr(tmp[idx], 1, index(tmp[idx], SUBSEP) - 1)] = substr(tmp[idx], index(tmp[idx], SUBSEP) + 1)
   }
 }
 
@@ -145,6 +136,8 @@ function inspectParams(fnname, paramDict) {
 }
 
 function posRepr2Dict(posRepr, paramDict,    tmp, posNameTuple) {
+  assert(SSEP, "SSEP is not set")
+  delete paramDict
   split(posRepr, tmp, SSEP)
   for (idx in tmp) {
     split(tmp[idx], posName, SUBSEP)
@@ -156,6 +149,7 @@ function posRepr2Dict(posRepr, paramDict,    tmp, posNameTuple) {
 # argument information is of form list of tuples (position, parameter name)
 # list element delemter: SSEP, key-value delemeter: SUBSEP
 function saveSignature(fnname, argInfo) {
+  if (! SSEP) SSEP = "\035"
   posRepr = bindPosition(argInfo)
   FUNCSIG[fnname] = posRepr
 }
