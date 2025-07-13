@@ -105,3 +105,8 @@ vim.api.nvim_set_keymap('n', '<leader>d', ':%s/\r//g<CR>', { noremap = true, sil
 vim.api.nvim_set_keymap('n', '<leader>cd', ':cd %:h<bar>pwd<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>g', ':echo expand("%:p")<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pp', ':let @+ = expand("%:p")<CR>', { noremap = true, silent = true })
+
+-- netrw
+vim.g.netrw_liststyle = 3
+vim.api.nvim_set_keymap('n', '<leader>n', ':20Lex<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>.', ':exe ":20Lex " .. expand("%:h")<CR>', { noremap = true, silent = false })
