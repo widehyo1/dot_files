@@ -1,5 +1,6 @@
 vim.g.mapleader = ","
 
+vim.o.mouse = ""
 vim.o.number = true
 vim.o.showmatch = true
 vim.o.smartindent = true
@@ -28,26 +29,13 @@ vim.api.nvim_set_keymap('n', '<leader>h', ':noh<CR><ESC>', { noremap = true, sil
 vim.api.nvim_set_keymap('n', '<leader><C-D>', '<C-D> <C-D>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>H', 'H', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>L', 'L', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<F5>', ':call ToggleSnakeCamel()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader><leader>p', ':call CopyPwd()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<silent>', '<leader><leader><leader> :call BufferMenu()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader><leader>s', ':BufferMenu ', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader><leader><C-F>', ':SearchAcrossFiles ', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>`v', '/`/-1<CR>V?`?+1<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>`y', '/`/-1<CR>V?`?+1<CR>y', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>(', ':call ToggleRoundBraket()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>[', ':call ToggleSquareBraket()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>{', ':call ToggleCurlyBraket()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space><', ':call ToggleAngleBraket()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>"', ':call ToggleQuote()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>"', ':call ToggleDoubleQuote()<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<space>`', ':call ToggleBackTick()<CR>', { noremap = true, silent = true })
 
 -- awk
 vim.api.nvim_set_keymap('n', '<leader>as', ':e ~/script.awk<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>at', ':e ~/temp.txt<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ay', ':let @+ = system("awk -f ~/script.awk ~/temp.txt")<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader>ay', ':call AwkYankVisual()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ap', ':r ! awk -f ~/script.awk ~/temp.txt<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ap', ':! awk -f ~/script.awk<CR>', { noremap = true, silent = true })
 
@@ -55,7 +43,6 @@ vim.api.nvim_set_keymap('n', '<leader>ap', ':! awk -f ~/script.awk<CR>', { norem
 vim.api.nvim_set_keymap('n', '<leader>js', ':e ~/script.jq<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>jt', ':e ~/temp.json<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>jy', ':let @+ = system("jq -r -f ~/script.jq ~/temp.json")<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader>jy', ':call JqYankVisual()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>jp', ':r ! jq -r -f ~/script.jq ~/temp.json<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>jp', ':! jq -r -f ~/script.jq<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>jf', ':! jq .<CR>', { noremap = true, silent = true })
@@ -106,7 +93,16 @@ vim.api.nvim_set_keymap('n', '<leader>cd', ':cd %:h<bar>pwd<CR>', { noremap = tr
 vim.api.nvim_set_keymap('n', '<leader>g', ':echo expand("%:p")<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pp', ':let @+ = expand("%:p")<CR>', { noremap = true, silent = true })
 
+
 -- netrw
 vim.g.netrw_liststyle = 3
 vim.api.nvim_set_keymap('n', '<leader>n', ':20Lex<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>.', ':exe ":20Lex " .. expand("%:h")<CR>', { noremap = true, silent = false })
+
+-- load scripts
+local common = require('common')
+vim.keymap.set('n', '<leader><leader>p', common.copy_pwd)
+vim.keymap.set('n', '<F5>', common.toggle_snake_camel)
+
+local tree = require('custom_tree')
+vim.keymap.set('n', '<leader>tn', tree.print_treesitter_node_path)
