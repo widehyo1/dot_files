@@ -1,9 +1,6 @@
 local harpoon = require("harpoon")
-local function get_absolute_path()
-  local api = require("nvim-tree.api")
-  local node = api.tree.get_node_under_cursor()
-  return node.absolute_path
-end
+local common = require("common")
+local nvim_tree_util = require("plugin_util.nvim-tree")
 
 -- REQUIRED
 harpoon:setup()
@@ -17,14 +14,15 @@ local dir_list = harpoon:list("directory")
 
 -- 디렉토리 추가
 vim.keymap.set("n", "<leader>hd", function()
+  dir_list:add({ value = nvim_tree_util.get_directory_path() })
   -- local dir = vim.fn.expand("%:h")
-  local dir = vim.fn.input("Directory to add: ", get_absolute_path())
-  if vim.fn.isdirectory(dir) == 1 then
-    dir_list:add({ value = dir })
-    print("Added: " .. dir)
-  else
-    print("Invalid directory")
-  end
+  -- local dir = vim.fn.input("Directory to add: ", nvim_tree_util.get_directory_path())
+  -- if vim.fn.isdirectory(dir) == 1 then
+  --   dir_list:add({ value = dir })
+  --   print("Added: " .. dir)
+  -- else
+  --   print("Invalid directory")
+  -- end
 end)
 
 -- 디렉토리 북마크 UI
@@ -41,39 +39,13 @@ vim.keymap.set("n", "<leader><C-e>", function()
     lines[i] = i .. ". " .. item.value
   end
 
-  -- 임시 버퍼 생성
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-  -- 윈도우 사이즈/위치
-  local width = 60
-  local height = math.min(#lines, 10)
-  local row = math.floor((vim.o.lines - height) / 2 - 1)
-  local col = math.floor((vim.o.columns - width) / 2)
-
-  -- 윈도우 생성
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor",
-    width = width,
-    height = height,
-    row = row,
-    col = col,
-    style = "minimal",
-    border = "rounded",
-  })
-
-  -- 하이라이트 이동 가능하게
-  vim.api.nvim_buf_set_option(buf, "modifiable", false)
-  vim.cmd("setlocal cursorline")
-
-  -- Enter 키 처리
-  vim.keymap.set("n", "<CR>", function()
+  local win, buf = common.floating_window(lines)
+  common.add_floating_window_callback(win, buf, function()
     local line = vim.api.nvim_win_get_cursor(0)[1]
     local dir = entries[line] and entries[line].value
     if dir then
-      vim.api.nvim_win_close(win, true)
       vim.cmd("NvimTreeClose")
       vim.cmd("NvimTreeOpen " .. dir)
     end
-  end, { buffer = buf })
+  end)
 end)

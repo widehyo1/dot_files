@@ -22,6 +22,7 @@ vim.o.listchars = "tab:>-,trail:«,space:•,lead:»"
 local silent_noremap = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap('i', 'jj', '<ESC>', silent_noremap)
+vim.api.nvim_set_keymap('t', '<C-Q>', '<C-\\><C-n>', silent_noremap)
 
 vim.api.nvim_set_keymap('n', '<leader>rc', ':e ~/.config/nvim/init.lua<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>vrc', ':e ~/.vimrc<CR>', silent_noremap)
@@ -29,7 +30,6 @@ vim.api.nvim_set_keymap('n', '<leader>brc', ':e ~/.bashrc<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>plugin', ':e ~/.config/nvim/lua/plugins/init.lua<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>md', ':e $TODAYMD<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>h', ':noh<CR><ESC>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader><C-D>', '<C-D> <C-D>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>H', 'H', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>L', 'L', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>`v', '/`/-1<CR>V?`?+1<CR>', silent_noremap)
@@ -71,7 +71,7 @@ vim.api.nvim_set_keymap('n', '<C-Down>', ':m .+1<CR>==', silent_noremap)
 -- buffer
 vim.api.nvim_set_keymap('n', 'L', ':bn!<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', 'H', ':bp!<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>q', ':bp<bar>bd #<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>q', ':bp<bar>bd! #<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>ls', ':ls<CR>', silent_noremap)
 
 -- window
@@ -88,7 +88,8 @@ vim.api.nvim_set_keymap('n', '<leader>wwv', '<C-W>_', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwh', '<C-W><bar>', silent_noremap)
 
 -- misc
-vim.api.nvim_set_keymap('n', '<C-D>', ':susp<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<C-Q>', ':terminal<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader><C-Q>', ':cd %:h<bar>terminal<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>d', ':%s/<CR>//g<CR>', silent_noremap)
 
 -- path
