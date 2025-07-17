@@ -3,7 +3,11 @@ local common = require("common")
 local nvim_tree_util = require("plugin_util.nvim-tree")
 
 -- REQUIRED
-harpoon:setup()
+harpoon:setup({
+  settings = {
+    save_on_change = true,
+  }
+})
 -- REQUIRED
 
 vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
@@ -15,14 +19,6 @@ local dir_list = harpoon:list("directory")
 -- 디렉토리 추가
 vim.keymap.set("n", "<leader>hd", function()
   dir_list:add({ value = nvim_tree_util.get_directory_path() })
-  -- local dir = vim.fn.expand("%:h")
-  -- local dir = vim.fn.input("Directory to add: ", nvim_tree_util.get_directory_path())
-  -- if vim.fn.isdirectory(dir) == 1 then
-  --   dir_list:add({ value = dir })
-  --   print("Added: " .. dir)
-  -- else
-  --   print("Invalid directory")
-  -- end
 end)
 
 -- 디렉토리 북마크 UI
