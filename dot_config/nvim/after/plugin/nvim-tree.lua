@@ -1,4 +1,4 @@
-local common = require("common")
+local lua_util = require("util.lua")
 local util = require("plugin_util.nvim-tree")
 local silent_noremap = { noremap = true, silent = true }
 
@@ -15,7 +15,7 @@ end)
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "NvimTree",
   callback = function()
-    local buffer_noremap = common.concat(silent_noremap, { buffer = true })
+    local buffer_noremap = lua_util.concat(silent_noremap, { buffer = true })
     vim.keymap.set('n', '<leader>cd', util.cd_node, buffer_noremap)
   end
 })

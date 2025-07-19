@@ -1,10 +1,11 @@
+local lua_util = require('util.lua')
+local buf_util = require('util.buf')
+local chain = require('util.chain')
+
 local M = {}
 
 -- Copy relative path of current file to system clipboard
-function M.copy_pwd()
-  local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
-  vim.fn.setreg("+", path)
-end
+M.copy_pwd = buf_util.copy_pwd
 
 function M.copy_abs_path()
   local path = vim.fs.abspath(vim.fn.expand("%"))
@@ -74,44 +75,43 @@ function M.toggle_snake_camel()
 end
 
 -- Buffer menu popup
-local buf_dict = {}
-
 function M.buffer_menu(search_text)
-  local buffers = vim.tbl_map(function(buf)
+  local buf_listed = function(buf) return buf.listed == 1 end
+  local bufnr_relpath = function(buf)
     return {
       bufnr = buf.bufnr,
-      text = vim.fn.fnamemodify(buf.name, ":.:~"),
+      path = vim.fn.fnamemodify(buf.name, ":.:~")
     }
-  end, vim.tbl_filter(function(buf)
-    return buf.listed == 1
-  end, vim.fn.getbufinfo()))
+  end
+  local search_match = function(buf) return buf.path:match(search_text) end
+  local buffers = chain.from(vim.fn.getbufinfo())
+    :filter(buf_listed)
+    :apply(bufnr_relpath)
+    :get()
 
   if search_text and search_text ~= "" then
-    buffers = vim.tbl_filter(function(buf)
-      return buf.text:match(search_text)
-    end, buffers)
-
+    buffers = chain.from(buffers)
+      :filter(search_match)
+      :get()
     if #buffers == 0 then
-      vim.fn.popup_menu("there is no buffer with name matching " .. search_text, {
-        time = 3000,
-        cursorline = 0,
-        highlight = "WarningMsg"
-      })
+      local empty_msg = "there is no buffer with name matching <" .. search_text .. ">"
+      local win, buf = buf_util.floating_window({empty_msg})
+      buf_util.add_floating_window_callback(win, buf)
       return
     end
   end
 
-  buf_dict = buffers
-  vim.fn.popup_menu(buffers, {
-    callback = "v:lua.require'mymodule'.load_buffer"
-  })
-end
-
-function M.load_buffer(_, result)
-  local buf = buf_dict[result - 1]
-  if buf then
-    vim.cmd("buffer! " .. buf.bufnr)
+  local select_buffer = function ()
+    return buffers[vim.fn.line(".")]
   end
+
+  local load_buffer = function (item)
+    vim.cmd("buffer! " .. item.bufnr)
+  end
+
+  local win, buf = buf_util.floating_window(buffers, 'path')
+  buf_util.add_floating_window_callback(win, buf, select_buffer, load_buffer)
+
 end
 
 -- Search across files using grep and present in popup
@@ -171,47 +171,43 @@ function M.popup_filter(winid, key)
 end
 
 function M.floating_window(lines)
-    local max_line_width = 0
-    for _, line in ipairs(lines) do
-        max_line_width = math.max(max_line_width, vim.fn.strwidth(line))
-    end
+  local max_line_width = 0
+  for _, line in ipairs(lines) do
+    max_line_width = math.max(max_line_width, vim.fn.strwidth(line))
+  end
 
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
-    local width = math.max(max_line_width + 2, 80)
-    local height = math.max(#lines, 20)
+  local width = math.max(max_line_width + 2, 80)
+  local height = math.max(#lines, 20)
 
-    local win = vim.api.nvim_open_win(buf, true, {
-        relative = 'editor',
-        width = width,
-        height = height,
-        row = math.floor((vim.o.lines - height) / 2),
-        col = math.floor((vim.o.columns - width) / 2),
-        style = 'minimal',
-        border = 'rounded',
-    })
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = width,
+    height = height,
+    row = math.floor((vim.o.lines - height) / 2),
+    col = math.floor((vim.o.columns - width) / 2),
+    style = 'minimal',
+    border = 'rounded',
+  })
 
-    vim.api.nvim_buf_set_option(buf, 'modifiable', false)
-    vim.cmd("setlocal cursorline")
+  vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+  vim.cmd("setlocal cursorline")
 
-    return win, buf
+  return win, buf
 end
 
 function M.add_floating_window_callback(win, buf, callback)
-    vim.keymap.set('n', '<CR>', function()
-        callback()
-        vim.api.nvim_win_close(win, true)
-    end, { buffer = buf })
+  vim.keymap.set('n', '<CR>', function()
+    callback()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf })
 end
 
 function M.print_item(win, buf)
   local item = vim.api.nvim_get_current_line()
   print("item: " .. item)
-end
-
-function M.concat(tbl1, tbl2)
-  return vim.tbl_extend("force", tbl1, tbl2)
 end
 
 return M
