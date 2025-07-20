@@ -210,4 +210,49 @@ function M.print_item(win, buf)
   print("item: " .. item)
 end
 
+function M.command_menu(hist_size)
+  if hist_size then
+    hist_size = tonumber(hist_size)
+  else
+    hist_size = 20
+  end
+  
+  local histories = vim.fn.execute('history cmd -' .. hist_size .. ',')
+  local lines = vim.split(histories, "\n", { trimempty = true })
+  -- skip first row
+  lines = vim.list_slice(lines, 2)
+  -- extract  part
+  local extract_ = function(line)
+    for _, cmd in line:sub(2):gmatch('%s+(%d*)%s+(.+)') do
+      return cmd
+    end
+  end
+  lines = chain.from(lines)
+    :apply(extract_)
+    :get()
+  local select = function()
+    return vim.fn.line(".")
+  end
+  local execute = function(item)
+    vim.cmd(lines[item])
+  end
+
+  local win, buf = buf_util.floating_window(lines)
+  buf_util.add_floating_window_callback(win, buf, select, execute)
+end
+
+
+function M.add_snippet(trigger, body, opts)
+    vim.keymap.set("ia", trigger, function()
+        -- If abbrev is expanded with keys like "(", ")", "<cr>", "<space>",
+        -- don't expand the snippet. Only accept "<c-]>" as a trigger key.
+        local c = vim.fn.nr2char(vim.fn.getchar(0))
+        if c ~= "" then
+            vim.api.nvim_feedkeys(trigger .. c, "i", true)
+            return
+        end
+        vim.snippet.expand(body)
+    end, opts)
+end
+
 return M

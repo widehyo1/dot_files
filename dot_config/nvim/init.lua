@@ -140,6 +140,7 @@ vim.api.nvim_create_user_command(
   }
 )
 vim.keymap.set('n', '<leader><leader>s', ':BufferMenu ')
+vim.keymap.set('n', 'q:', common.command_menu)
 
 local tree = require('custom_tree')
 vim.keymap.set('n', '<leader>tn', tree.print_treesitter_node_path)
