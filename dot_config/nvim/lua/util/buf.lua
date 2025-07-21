@@ -1,6 +1,6 @@
 local M = {}
 
-function M.floating_window(lines, field)
+function M.floating_window(lines, field, opt)
   local max_line_width = 0
   local contents = {}
 
@@ -9,6 +9,8 @@ function M.floating_window(lines, field)
   if field and field ~= "" then
     get_content = function(line) return line[field] end
   end
+
+  opt = opt or {}
 
   for _, line in ipairs(lines) do
     local content = get_content(line)
@@ -20,10 +22,10 @@ function M.floating_window(lines, field)
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, contents)
 
-  local width = math.max(max_line_width + 2, 80)
-  local height = math.max(#lines, 20)
+  local width = vim.fn.float2nr(vim.o.columns * 0.8)
+  local height = vim.fn.float2nr(vim.o.lines * 0.8)
 
-  local win = vim.api.nvim_open_win(buf, true, {
+  local win = vim.api.nvim_open_win(buf, true, vim.tbl_deep_extend("force", {
     relative = 'editor',
     width = width,
     height = height,
@@ -31,7 +33,7 @@ function M.floating_window(lines, field)
     col = math.floor((vim.o.columns - width) / 2),
     style = 'minimal',
     border = 'rounded',
-  })
+  }, opt))
 
   vim.api.nvim_buf_set_option(buf, 'modifiable', false)
   vim.cmd("setlocal cursorline")

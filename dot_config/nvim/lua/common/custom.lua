@@ -1,6 +1,5 @@
 
 local common = require('common')
-vim.keymap.set('n', '<F5>', common.toggle_snake_camel)
 vim.keymap.set('n', '<leader><leader><leader>', common.buffer_menu)
 vim.api.nvim_create_user_command(
   'BufferMenu',
