@@ -11,6 +11,12 @@ vim.api.nvim_set_keymap('n', '<leader>ay', ':let @+ = system("awk -f ~/script.aw
 vim.api.nvim_set_keymap('n', '<leader>ap', ':r ! awk -f ~/script.awk ~/temp.txt<CR>', silent_noremap)
 vim.api.nvim_set_keymap('v', '<leader>ap', ':! awk -f ~/script.awk<CR>', silent_noremap)
 
+-- gvpr
+vim.api.nvim_set_keymap('n', '<leader>gvs', ':e ~/script.gvpr<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>gvt', ':e ~/temp.dot<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>gvp', ':r ! awk -f ~/script.gvpr ~/temp.dot<CR>', silent_noremap)
+vim.api.nvim_set_keymap('v', '<leader>gvp', ':! awk -f ~/script.gvpr<CR>', silent_noremap)
+
 -- jq
 vim.api.nvim_set_keymap('n', '<leader>js', ':e ~/script.jq<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>jt', ':e ~/temp.json<CR>', silent_noremap)

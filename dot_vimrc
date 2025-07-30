@@ -146,6 +146,12 @@ vnoremap <leader>jp :! jq -f ~/script.jq<CR>
 
 vnoremap <leader>jf :! jq .<CR>
 
+" gvpr
+nnoremap <leader>gvs :e ~/script.gvpr<CR>
+nnoremap <leader>gvt :e ~/temp.dot<CR>
+nnoremap <leader>gvp :r ! gvpr -f ~/script.gvpr ~/temp.dot<CR>
+vnoremap <leader>gvp :! gvpr -f ~/script.gvpr<CR>
+
 " curl
 nnoremap <leader>cs :e ~/script.curl<CR>
 nnoremap <leader>ct :e ~/request.json<CR>
