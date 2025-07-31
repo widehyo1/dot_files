@@ -1,46 +1,28 @@
-local lua_util = require('util.lua')
-local buf_util = require('util.buf')
-local chain = require('util.chain')
-
-local M = {}
-
-function M.buffer_menu(search_text)
-  local buf_listed = function(buf) return buf.listed == 1 end
-  local bufnr_relpath = function(buf)
-    return {
-      bufnr = buf.bufnr,
-      path = vim.fn.fnamemodify(buf.name, ":.:~")
-    }
+function paste_code_block(info_string)
+  local code_block_start = "```"
+  local code_block_end = "```"
+  if info_string then
+    code_block_start = code_block_start .. info_string
   end
-  local search_match = function(buf) return buf.path:match(search_text) end
-  local buffers = chain.from(vim.fn.getbufinfo())
-    :filter(buf_listed)
-    :apply(bufnr_relpath)
-    :get()
-
-  if search_text and search_text ~= "" then
-    buffers = chain.from(buffers)
-      :filter(search_match)
-      :get()
-    if #buffers == 0 then
-      local empty_msg = "there is no buffer with name matching <" .. search_text .. ">"
-      local win, buf = buf_util.floating_window({empty_msg})
-      buf_util.add_floating_window_callback(win, buf, function() end)
-      return
-    end
-  end
-
-  local print_item = function ()
-    local selection = vim.fn.line(".")
-    vim.cmd("buffer! " .. buffers[selection].bufnr)
-  end
-
-  local win, buf = buf_util.floating_window(buffers, 'path')
-  buf_util.add_floating_window_post_callback(win, buf, print_item)
-
+  local code_block = code_block_start
+    .. '\n' .. vim.fn.getreg('0') .. '\n'
+    .. code_block_end
+  print(code_block)
+  local lines = vim.split(code_block, '\n', {plain = true})
+  vim.api.nvim_put(lines, 'l', true, true)
 end
 
-local util = M
+vim.api.nvim_create_user_command(
+  'PasteCodeBlock',
+  function(opts)
+    local info_string = opts.fargs[1]
+    paste_code_block(info_string)
+  end,
+  {
+    nargs = 1,
+    desc = "Paste codeblock with infomation string"
+  }
+)
 
-util.buffer_menu()
--- util.buffer_menu('init')
+vim.keymap.set('n', '<leader>p', ':PasteCodeBlock ')
+

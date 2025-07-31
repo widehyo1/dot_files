@@ -89,4 +89,8 @@ function M.add_snippet(trigger, body, opts)
   end, opts)
 end
 
+function M.get_selection()
+  return vim.fn.getline("'<", ">'")
+end
+
 return M

@@ -31,11 +31,5 @@ vim.api.nvim_set_keymap('n', '<leader>ct', ':e ~/request.json<CR>', silent_norem
 vim.api.nvim_set_keymap('n', '<leader>cy', ':let @+ = system("curl --config ~/script.curl")<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>cp', ':r ! curl --config ~/script.curl<CR>', silent_noremap)
 
--- sql
-vim.api.nvim_set_keymap('n', '<leader>sf', ':! sqlformat --reindent --keywords upper --identifiers lower --comma_first true -<CR>', silent_noremap)
-
--- python
-vim.api.nvim_set_keymap('n', '<leader>pf', ':! black %<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>plf', ':! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>', silent_noremap)
 -- vim.api.nvim_set_keymap('n', '<leader>pg', ':PyGrep ', silent_noremap)
 

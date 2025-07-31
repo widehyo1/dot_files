@@ -71,6 +71,31 @@ function Chain:apply_dict(mapper)
   return self
 end
 
+-- reduce
+function Chain:reduce(func, init)
+  local len = #self._data
+  if len == 0 then
+    return init
+  end
+
+  local acc, start_index
+
+  if init then
+    start_index = 1
+    acc = init
+  else
+    start_index = 2
+    acc = self._data[1]
+  end
+
+  for i = start_index, len do
+    acc = func(acc, self._data[i])
+  end
+
+  return acc
+end
+
+
 -- 현재 데이터를 가져오는 메소드 (체이닝의 끝)
 function Chain:get()
   return self._data
