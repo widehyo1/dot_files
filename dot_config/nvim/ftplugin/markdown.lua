@@ -23,16 +23,9 @@ common.add_snippet("bsssection", "section .bss", b_local)
 common.add_snippet("textsection", "section .text", b_local)
 
 function paste_code_block(info_string)
-  local code_block_start = "```"
-  local code_block_end = "```"
-  if info_string then
-    code_block_start = code_block_start .. info_string
-  end
-  local code_block = code_block_start
-    .. '\n' .. vim.fn.getreg('0')
-    .. code_block_end
-  local lines = vim.split(code_block, '\n', {plain = true})
-  vim.api.nvim_put(lines, 'l', true, true)
+  vim.fn.setline('.', '```' .. (info_string or ''))
+  vim.cmd('put')
+  vim.fn.setline('.', '```')
 end
 
 vim.api.nvim_create_user_command(
@@ -42,9 +35,9 @@ vim.api.nvim_create_user_command(
     paste_code_block(info_string)
   end,
   {
-    nargs = 1,
+    nargs = "?",
     desc = "Paste codeblock with infomation string"
   }
 )
 
-vim.keymap.set('n', '<leader>p', ':PasteCodeBlock ')
+vim.keymap.set('n', '<space>p', ':PasteCodeBlock ')
