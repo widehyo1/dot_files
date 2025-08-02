@@ -25,7 +25,7 @@ common.add_snippet("textsection", "section .text", b_local)
 function paste_code_block(info_string)
   vim.fn.setline('.', '```' .. (info_string or ''))
   vim.cmd('put')
-  vim.fn.setline('.', '```')
+  vim.fn.setline(vim.fn.line('.') + 1, '```')
 end
 
 vim.api.nvim_create_user_command(

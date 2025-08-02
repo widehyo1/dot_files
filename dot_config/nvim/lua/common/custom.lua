@@ -24,6 +24,9 @@ vim.api.nvim_create_user_command(
   { range = 0 }
 )
 
+vim.keymap.set('n', '<space>`', ':SurroundBacktick<CR>')
+vim.keymap.set('v', '<space>`', ':SurroundBacktick<CR>')
+
 vim.api.nvim_create_user_command(
   'SurroundQuote',
   function(opts)
@@ -31,6 +34,9 @@ vim.api.nvim_create_user_command(
   end,
   { range = 0 }
 )
+
+vim.keymap.set('n', "<space>'", ':SurroundQuote<CR>')
+vim.keymap.set('v', "<space>'", ':SurroundQuote<CR>')
 
 vim.api.nvim_create_user_command(
   'SurroundDoubleQuote',
@@ -40,9 +46,49 @@ vim.api.nvim_create_user_command(
   { range = 0 }
 )
 
-vim.keymap.set('n', '<space>`', ':SurroundBacktick<CR>')
-vim.keymap.set('v', '<space>`', ':SurroundBacktick<CR>')
-vim.keymap.set('n', "<space>'", ':SurroundQuote<CR>')
-vim.keymap.set('v', "<space>'", ':SurroundQuote<CR>')
 vim.keymap.set('n', '<space>"', ':SurroundDoubleQuote<CR>')
 vim.keymap.set('v', '<space>"', ':SurroundDoubleQuote<CR>')
+
+vim.api.nvim_create_user_command(
+  'SurroundRoundBraket',
+  function(opts)
+    surround.round_braket()
+  end,
+  { range = 0 }
+)
+
+vim.keymap.set('n', '<space>(', ':SurroundRoundBraket<CR>')
+vim.keymap.set('v', '<space>(', ':SurroundRoundBraket<CR>')
+
+vim.api.nvim_create_user_command(
+  'SurroundSquareBraket',
+  function(opts)
+    surround.square_braket()
+  end,
+  { range = 0 }
+)
+
+vim.keymap.set('n', '<space>[', ':SurroundSquareBraket<CR>')
+vim.keymap.set('v', '<space>[', ':SurroundSquareBraket<CR>')
+
+vim.api.nvim_create_user_command(
+  'SurroundAngleBraket',
+  function(opts)
+    surround.angle_braket()
+  end,
+  { range = 0 }
+)
+
+vim.keymap.set('n', '<space><', ':SurroundAngleBraket<CR>')
+vim.keymap.set('v', '<space><', ':SurroundAngleBraket<CR>')
+
+vim.api.nvim_create_user_command(
+  'SurroundCurlyBraket',
+  function(opts)
+    surround.curly_braket()
+  end,
+  { range = 0 }
+)
+
+vim.keymap.set('n', '<space>{', ':SurroundCurlyBraket<CR>')
+vim.keymap.set('v', '<space>{', ':SurroundCurlyBraket<CR>')
