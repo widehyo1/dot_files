@@ -25,7 +25,10 @@ vim.api.nvim_create_user_command(
   function(opts)
     local bookmark_path = '/home/widehyo/.config/nvim/lua/data/bookmark'
     local lines = vim.fn.readfile(bookmark_path)
-    local buf_opt = { filetype = 'bookmark' }
+    local buf_opt = {
+      filetype = 'bookmark',
+      modifiable = true
+    }
 
     local select_bookmark = function ()
       return lines[vim.fn.line('.')]
