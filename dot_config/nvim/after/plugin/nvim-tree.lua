@@ -5,11 +5,10 @@ local silent_noremap = { noremap = true, silent = true }
 -- nvimtree
 vim.api.nvim_set_keymap('n', '<leader>n', ':NvimTreeToggle<CR>', silent_noremap)
 vim.keymap.set('n', '<leader>.', function()
-  if util.is_visible() then
-    vim.cmd(":NvimTreeFindFile")
-  else
-    vim.cmd(":NvimTreeClose|NvimTreeOpen " .. vim.fn.expand("%:h"))
+  if not util.is_visible() then
+    vim.cmd(":NvimTreeClose")
   end
+  vim.cmd(":NvimTreeFindFile!")
 end)
 
 vim.api.nvim_create_autocmd("FileType", {
