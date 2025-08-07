@@ -26,4 +26,15 @@ function M.is_visible()
   return view.is_visible()
 end
 
+function M.load_item(item)
+  if vim.uv.fs_stat(item).type == "file" then
+    vim.cmd('edit! ' .. item)
+  else
+    if view.is_visible() then
+      vim.cmd(":NvimTreeClose")
+    end
+    api.tree.open({ path = item })
+  end
+end
+
 return M
