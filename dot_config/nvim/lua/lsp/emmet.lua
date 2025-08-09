@@ -1,5 +1,5 @@
 vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = "css,eruby,html,htmldjango,javascriptreact,less,pug,sass,scss,typescriptreact,javascript,typescript",
+  pattern = "css,eruby,html,htmldjango,javascriptreact,less,pug,sass,scss,typescriptreact,javascript,typescript,markdown",
   callback = function()
     vim.lsp.start({
       cmd = { "emmet-language-server", "--stdio" },

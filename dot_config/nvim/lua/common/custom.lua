@@ -19,3 +19,11 @@ vim.api.nvim_create_user_command(
 )
 vim.keymap.set('n', '<leader><leader>s', ':BufferMenu ')
 -- vim.keymap.set('n', 'q:', common.command_menu)
+
+vim.keymap.set('n', '<space>`', 'yiwcw``"0P')
+vim.keymap.set('n', '<space>"', 'yiwcw"""0P')
+vim.keymap.set('n', '<space>\'', 'yiwcw\'\'"0P')
+vim.keymap.set('n', '<space>(', 'yiwcw()"0P')
+vim.keymap.set('n', '<space>[', 'yiwcw[]"0P')
+vim.keymap.set('n', '<space><', 'yiwcw<>"0P')
+vim.keymap.set('n', '<space>{', 'yiwcw{}"0P')
