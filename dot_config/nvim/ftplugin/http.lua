@@ -26,4 +26,4 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-vim.keymap.set('n', '<leader>run', ':Rest run<CR>', b_local)
+vim.keymap.set('n', '<leader>rr', ':Rest run<CR>', b_local)

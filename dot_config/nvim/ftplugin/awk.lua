@@ -16,3 +16,5 @@ common.add_snippet("strip", 'function strip(str) {\n  gsub(/^\\s|\\s\\$/, "", st
 common.add_snippet("gsub", "gsub(${1:regex}, ${2:replace}, ${3:str})", b_local)
 common.add_snippet("rindex", "function rindex(hay, needle,    arr, lastToken) {\n  lastToken = arr[split(hay, arr, needle)]\n  return length(hay) - length(needle) - length(lastToken) + 1\n}", b_local)
 common.add_snippet("include", '@include "common"', b_local)
+
+vim.keymap.set('n', '<leader>rr', ':!awk -f %', b_local)

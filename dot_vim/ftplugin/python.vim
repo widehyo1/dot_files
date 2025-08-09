@@ -6,3 +6,5 @@ iabbrev <buffer> \requests; import requests
 iabbrev <buffer> \debug; debug(name, 'name')
 
 vnoremap <buffer> gcc :s/^/# /<CR>
+
+nnoremap <buffer> <leader>rr :!python3 %<CR>

@@ -1,14 +1,13 @@
 iabbrev <buffer> \post; ---<CR>layout: post<CR>title: post title<CR>subtitle: post subtitle<CR>tags: [tag]<CR>comments: true<CR>author: widehyo<CR>---
-iabbrev <buffer> \awk; ```awk<CR>```
 iabbrev <buffer> \bash; ```bash<CR>```
-iabbrev <buffer> \curl; ```curl<CR>```
 iabbrev <buffer> \java; ```java<CR>```
-iabbrev <buffer> \jq; ```jq<CR>```
 iabbrev <buffer> \js; ```js<CR>```
-iabbrev <buffer> \json; ```json<CR>```
-iabbrev <buffer> \log; ```log<CR>```
 iabbrev <buffer> \py; ```py<CR>```
-iabbrev <buffer> \sql; ```sql<CR>```
+iabbrev <buffer> \jq; ```jq<CR>```
+iabbrev <buffer> \awk; ```awk<CR>```
+iabbrev <buffer> \log; ```log<CR>```
+iabbrev <buffer> \json; ```json<CR>```
+iabbrev <buffer> \curl; ```curl<CR>```
 iabbrev <buffer> \kt; ```kt<CR>```
 iabbrev <buffer> \lua; ```lua<CR>```
 iabbrev <buffer> \vim; ```vim<CR>```
@@ -19,4 +18,17 @@ iabbrev <buffer> \datasection; section .data
 iabbrev <buffer> \bsssection; section .bss
 iabbrev <buffer> \textsection; section .text
 
-nnoremap <buffer> <leader><leader>jld :g/\v(java\.(util<BAR>lang)<BAR>springframework<BAR>catalina<BAR>org\.apache<BAR>org\.jboss<BAR>sun\.reflect<BAR>javax\.servlet)/d
+
+function! PasteCodeBlock(info_string = '')
+  if len(a:info_string)
+    call setline('.', '```' .. a:info_string)
+  else
+    call setline('.', '```')
+  endif
+  execute 'put'
+  normal o
+  call setline('. + 1', '```')
+endfunction
+
+command -nargs=? PasteCodeBlock :call PasteCodeBlock(<f-args>)
+nnoremap <space>p :PasteCodeBlock 

@@ -6,15 +6,15 @@ function! CopyPwd()
 endfunction
 
 function! JqYankVisual()
-    let l:sel = join(getline("'<", "'>"), "\n")
-    let l:result = system('jq -f ~/script.jq', l:sel)
-    call setreg('+', l:result)
+    let sel = join(getline("'<", "'>"), "\n")
+    let result = system('jq -f ~/script.jq', sel)
+    call setreg('+', result)
 endfunction
 
 function! AwkYankVisual()
-    let l:sel = join(getline("'<", "'>"), "\n")
-    let l:result = system('awk -f ~/script.awk', l:sel)
-    call setreg('+', l:result)
+    let sel = join(getline("'<", "'>"), "\n")
+    let result = system('awk -f ~/script.awk', sel)
+    call setreg('+', result)
 endfunction
 
 function! CamelToSnake(text)
@@ -22,45 +22,46 @@ function! CamelToSnake(text)
 endfunction
 
 function! SnakeToCamel(text)
-  let l:lst = split(a:text, '_')
-  let l:camel = l:lst[0]
-  for l:item in l:lst[1 :]
-    let l:camel = l:camel . toupper(l:item[0]) . l:item[1 :]
+  let lst = split(a:text, '_')
+  let camel = lst[0]
+  for item in lst[1 :]
+    let camel = camel . toupper(item[0]) . item[1 :]
   endfor
-  return l:camel
+  return camel
 endfunction
 
 function! ReplaceCursorWord(target)
   let @+=a:target
-  normal viwp
+  normal viwpb
 endfunction
 
 " Main function to toggle between snake_case and CamelCase
 function! ToggleSnakeCamel()
   " Get cursor infomations
-  let l:word = expand('<cword>')
+  let word = expand('<cword>')
 
   " Remove leading underscores if present
-  let l:text = substitute(l:word, '^_+', '', '')
+  let text = substitute(word, '^_+', '', '')
 
   " Initialize the result variable
-  let l:result = l:text
+  let result = text
 
   " Check if the word is in snake_case (contains an underscore) or CamelCase
-  if match(l:text, '_') > 0
+  if match(text, '_') > 0
     echo 'snake case found, snake to camel'
     " If the word contains underscores, convert it to CamelCase
-    let l:result = SnakeToCamel(l:text)
-  elseif match(l:text, '[[:upper:]]') > 0
+    let result = SnakeToCamel(text)
+  elseif match(text, '[[:upper:]]') > 0
     echo 'camel case found, camel to snake'
     " If the word contains uppercase letters, convert it to snake_case
-    let l:result = CamelToSnake(l:text)
+    let result = CamelToSnake(text)
   else
     echo 'return it unchanged'
-    let l:result = l:word
+    let result = word
   endif
 
-  call ReplaceCursorWord(l:result)
+  " replace the result in the buffer
+  call ReplaceCursorWord(result)
 endfunction
 
 function! BufferMenu(search_text = '')
@@ -75,6 +76,7 @@ function! BufferMenu(search_text = '')
     if len(s:buf_dict) == 0
       let popup_config = #{
       \   time: 3000,
+      \   cursorline: 0,
       \   highlight: 'WarningMsg'
       \ }
       let empty_msg = 'there is no buffer with name matching ' . a:search_text
@@ -95,17 +97,8 @@ function! LoadBuffer(id, result)
 endfunction
 
 function! SearchAcrossFiles(search_text)
-  let grep_result = system('grep -Irn --include=*.py --exclude-dir=.venv ' . a:search_text)
+  let grep_result = system('grep -Irn ' . a:search_text)
   let search_results = grep_result->split('\n')
-  if len(search_results) == 0
-    let popup_config = #{
-    \   time: 3000,
-    \   highlight: 'WarningMsg'
-    \ }
-    let empty_msg = 'there is no buffer with name matching ' . a:search_text
-    call popup_menu(empty_msg, popup_config)
-    return
-  endif
   let s:search_info_list = []
   for search_result in search_results
     let info_dict = {}
@@ -134,19 +127,8 @@ function! GoSelectedFile(id, result)
   normal zz
 endfunction
 
-function! ListToString(list, sep=' ', start='[', end=']')
-  return a:start .. ' ' .. join(copy(a:list), a:sep) .. ' ' .. a:end
-endfunction
 
-function! DictToString(dict, sep=', ')
-  return '{ ' .. copy(a:dict)->map(' v:key .. ": " .. v:val ')->values()->join(a:sep) .. ' }'
-endfunction
-
-function! DictListToString(list, sep=' ')
-  return ListToString(copy(a:list)->map('DictToString(v:val)'), a:sep)
-endfunction
-
-function! ScrollPopupFilter(winid, key) abort
+function! PopupFilter(winid, key) abort
     if a:key ==# "j"
         call win_execute(a:winid, "normal! \<c-e>")
     elseif a:key ==# "k"
@@ -163,24 +145,6 @@ function! ScrollPopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! G")
     elseif a:key ==# "g"
         call win_execute(a:winid, "normal! gg")
-    elseif a:key ==# "1"
-        call win_execute(a:winid, "normal! 10%")
-    elseif a:key ==# "2"
-        call win_execute(a:winid, "normal! 20%")
-    elseif a:key ==# "3"
-        call win_execute(a:winid, "normal! 30%")
-    elseif a:key ==# "4"
-        call win_execute(a:winid, "normal! 40%")
-    elseif a:key ==# "5"
-        call win_execute(a:winid, "normal! 50%")
-    elseif a:key ==# "6"
-        call win_execute(a:winid, "normal! 60%")
-    elseif a:key ==# "7"
-        call win_execute(a:winid, "normal! 70%")
-    elseif a:key ==# "8"
-        call win_execute(a:winid, "normal! 80%")
-    elseif a:key ==# "9"
-        call win_execute(a:winid, "normal! 90%")
     elseif a:key ==# 'q'
         call popup_close(a:winid)
     else
@@ -189,11 +153,3 @@ function! ScrollPopupFilter(winid, key) abort
     return v:true
 endfunction
 
-function! PopupFilter(winid, key) abort
-    if a:key ==# 'q'
-        call popup_close(a:winid)
-    else
-        return v:false
-    endif
-    return v:true
-endfunction

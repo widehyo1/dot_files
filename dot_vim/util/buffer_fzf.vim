@@ -103,7 +103,7 @@ function! GetSmithWatermanScore(search_word, buf_name)
       call add(l:highest_scored_position_list, [l:cur_row - 1, l:cur_col])
     endif
     if and(l:cur_direction, l:left) > 0
-      call insert(l:buf_name_position_list, l:cur_col - 1)
+      " call insert(l:buf_name_position_list, l:cur_col - 1)
       call add(l:highest_scored_position_list, [l:cur_row, l:cur_col - 1])
     endif
     if and(l:cur_direction, l:upleft) > 0

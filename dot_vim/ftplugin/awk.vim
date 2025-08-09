@@ -22,3 +22,5 @@ setlocal tabstop=2
 setlocal shiftwidth=2
 setlocal softtabstop=2
 vnoremap <buffer> gcc :s/^/# /<CR>
+
+nnoremap <buffer> <leader>rr :!awk -f %<CR>
