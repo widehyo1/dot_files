@@ -1,4 +1,5 @@
 local M = {}
+local lua_util = require("util.lua")
 local api = require("nvim-tree.api")
 local view = require("nvim-tree.view")
 
@@ -45,9 +46,12 @@ function M.update_nvim_tree()
 end
 
 function M.change_root()
-  api.tree.change_root_to_node(
-    api.tree.get_node_under_cursor()
-  )
+  local node = api.tree.get_node_under_cursor()
+  if node.type == "file" then
+    api.tree.change_root_to_node(node.parent)
+  else
+    api.tree.change_root_to_node(node)
+  end
 end
 
 return M

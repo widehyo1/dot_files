@@ -1,3 +1,2 @@
 local api = require("nvim-tree.api")
-api.tree.close()
-api.tree.open({ path = '/home/widehyo/.config/nvim/ftplugin/' })
+local node = api.tree.get_node_under_cursor()

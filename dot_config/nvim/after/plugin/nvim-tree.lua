@@ -10,6 +10,7 @@ vim.api.nvim_set_keymap('n', '<leader>n', ':NvimTreeToggle<CR>', silent_noremap)
 vim.keymap.set('n', '<leader>.', util.update_nvim_tree)
 vim.keymap.set('n', '<leader>ft', function() util.load_item(nvim_conf_home .. 'ftplugin/') end)
 vim.keymap.set('n', '<leader>after', function() util.load_item(nvim_conf_home .. 'after/') end)
+vim.keymap.set('n', '<leader>lua', function() util.load_item(nvim_conf_home .. 'lua/') end)
 
 vim.api.nvim_create_user_command(
   "OpenBookmark",
