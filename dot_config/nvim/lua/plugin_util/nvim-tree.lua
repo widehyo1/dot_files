@@ -31,10 +31,23 @@ function M.load_item(item)
     vim.cmd('edit! ' .. item)
   else
     if view.is_visible() then
-      vim.cmd(":NvimTreeClose")
+      api.tree.close()
     end
     api.tree.open({ path = item })
   end
+end
+
+function M.update_nvim_tree()
+  if not view.is_visible() then
+    api.tree.close()
+  end
+  api.tree.find_file({ update_root = true, open = true, focus = true, })
+end
+
+function M.change_root()
+  api.tree.change_root_to_node(
+    api.tree.get_node_under_cursor()
+  )
 end
 
 return M

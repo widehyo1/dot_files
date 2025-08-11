@@ -3,27 +3,18 @@ local buf_util = require('util.buf')
 local util = require("plugin_util.nvim-tree")
 local silent_noremap = { noremap = true, silent = true }
 
+local nvim_conf_home = '/home/widehyo/.config/nvim/'
+
 -- nvimtree
 vim.api.nvim_set_keymap('n', '<leader>n', ':NvimTreeToggle<CR>', silent_noremap)
-vim.keymap.set('n', '<leader>.', function()
-  if not util.is_visible() then
-    vim.cmd(":NvimTreeClose")
-  end
-  vim.cmd(":NvimTreeFindFile!")
-end)
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "NvimTree",
-  callback = function()
-    local buffer_noremap = lua_util.concat(silent_noremap, { buffer = true })
-    vim.keymap.set('n', '<leader>cd', util.cd_node, buffer_noremap)
-  end
-})
+vim.keymap.set('n', '<leader>.', util.update_nvim_tree)
+vim.keymap.set('n', '<leader>ft', function() util.load_item(nvim_conf_home .. 'ftplugin/') end)
+vim.keymap.set('n', '<leader>after', function() util.load_item(nvim_conf_home .. 'after/') end)
 
 vim.api.nvim_create_user_command(
   "OpenBookmark",
   function(opts)
-    local bookmark_path = '/home/widehyo/.config/nvim/lua/data/bookmark'
+    local bookmark_path = nvim_conf_home .. 'lua/data/bookmark'
     local lines = vim.fn.readfile(bookmark_path)
     local buf_opt = {
       filetype = 'bookmark',
