@@ -93,4 +93,16 @@ function M.get_selection()
   return vim.fn.getline("'<", ">'")
 end
 
+function M.get_terminal_cfile()
+  local expand = vim.fn.expand
+  local cfile = expand('<cfile>')
+  local idx = string.find(cfile, ':')
+  if idx then
+    idx = idx + 1
+  else
+    idx = 1
+  end
+  return string.sub(cfile, idx, string.len(cfile) - 1)
+end
+
 return M

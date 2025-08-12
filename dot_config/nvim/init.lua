@@ -9,6 +9,9 @@ require('lsp.emmet')
 -- custom_keymaps
 require('common.custom')
 
+-- autocommand
+require('common.autocommand')
+
 -- netrw
 -- vim.g.netrw_liststyle = 3
 -- vim.api.nvim_set_keymap('n', '<leader>n', ':20Lex<CR>', silent_noremap)

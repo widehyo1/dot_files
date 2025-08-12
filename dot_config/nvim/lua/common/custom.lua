@@ -1,7 +1,5 @@
 local common = require('common')
-local surround = require('util.surround')
 local tree = require('custom_tree')
-local buf_util = require('util.buf')
 
 vim.keymap.set('n', '<leader>tn', tree.print_treesitter_node_path)
 
