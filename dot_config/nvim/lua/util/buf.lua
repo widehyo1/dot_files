@@ -23,6 +23,13 @@ function M.floating_window(lines, field, win_opt, buf_opt)
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, contents)
 
+  local win = M.display_floating_window(buf, win_opt, buf_opt)
+
+  return win, buf
+end
+
+function M.display_floating_window(buf, win_opt, buf_opt)
+
   local width = vim.fn.float2nr(vim.o.columns * 0.8)
   local height = vim.fn.float2nr(vim.o.lines * 0.8)
 
@@ -45,16 +52,24 @@ function M.floating_window(lines, field, win_opt, buf_opt)
     vim.api.nvim_set_option_value(key, value, {buf=buf})
   end
 
-  return win, buf
+  return win
 end
 
-function M.add_floating_window_callback(win, buf, pre_callback, post_callback)
-  vim.keymap.set('n', '<CR>', function()
+function M.add_floating_window_callback(win, buf, opt)
+  opt = opt or {}
+  local pre_callback = opt['pre_callback']
+  local post_callback = opt['post_callback']
+  local key = opt['key'] or '<CR>'
+  local close_window = opt['close_window']
+
+  vim.keymap.set('n', key, function()
     local item = nil
     if pre_callback then
       item = pre_callback()
     end
-    vim.api.nvim_win_close(win, true)
+    if close_window == nil or close_window == true then
+      vim.api.nvim_win_close(win, true)
+    end
     if post_callback then
       post_callback(item)
     end

@@ -31,16 +31,17 @@ function M.buffer_menu(search_text)
     end
   end
 
-  local select_buffer = function ()
-    return buffers[vim.fn.line(".")]
-  end
-
-  local load_buffer = function (item)
-    vim.cmd("buffer! " .. item.bufnr)
-  end
+  local callback_opt = {
+    pre_callback = function()
+      return buffers[vim.fn.line(".")]
+    end,
+    post_callback = function(item)
+      vim.cmd("buffer! " .. item.bufnr)
+    end
+  }
 
   local win, buf = buf_util.floating_window(buffers, 'path')
-  buf_util.add_floating_window_callback(win, buf, select_buffer, load_buffer)
+  buf_util.add_floating_window_callback(win, buf, callback_opt)
 
 end
 
@@ -65,15 +66,18 @@ function M.command_menu(hist_size)
   lines = chain.from(lines)
     :apply(extract_)
     :get()
-  local select = function()
-    return vim.fn.line(".")
-  end
-  local execute = function(item)
-    vim.cmd(lines[item])
-  end
+
+  local callback_opt = {
+    pre_callback = function()
+      return vim.fn.line(".")
+    end,
+    post_callback = function(item)
+      vim.cmd(lines[item])
+    end
+  }
 
   local win, buf = buf_util.floating_window(lines)
-  buf_util.add_floating_window_callback(win, buf, select, execute)
+  buf_util.add_floating_window_callback(win, buf, callback_opt)
 end
 
 function M.add_snippet(trigger, body, opts)
@@ -103,6 +107,17 @@ function M.get_terminal_cfile()
     idx = 1
   end
   return string.sub(cfile, idx, string.len(cfile) - 1)
+end
+
+function M.make_termpath(path)
+  return 'edit term://' .. path .. '//bash'
+end
+
+function M.message()
+  local messages= vim.fn.execute('message')
+  local lines = vim.split(messages, "\n", { trimempty = true })
+  local win, buf = buf_util.floating_window(lines)
+  vim.cmd.normal('G')
 end
 
 return M

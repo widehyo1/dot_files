@@ -32,3 +32,5 @@ vim.keymap.set('n', '<space><', 'yiwcw<>"0P')
 vim.keymap.set('v', '<space><', 'ygvc<>"0P')
 vim.keymap.set('n', '<space>{', 'yiwcw{}"0P')
 vim.keymap.set('v', '<space>{', 'ygvc{}"0P')
+
+vim.keymap.set('n', '<leader>msg', common.message)

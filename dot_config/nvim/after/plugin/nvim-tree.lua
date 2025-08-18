@@ -1,3 +1,4 @@
+local common = require("common")
 local lua_util = require("util.lua")
 local buf_util = require('util.buf')
 local util = require("plugin_util.nvim-tree")
@@ -22,16 +23,26 @@ vim.api.nvim_create_user_command(
       modifiable = true
     }
 
-    local select_bookmark = function ()
-      return lines[vim.fn.line('.')]
-    end
+    local bookmark_callback = {
+      pre_callback = function()
+        return lines[vim.fn.line(".")]
+      end,
+      post_callback = function(path)
+        util.load_item(path)
+      end
+    }
 
-    local load_bookmark = function(item)
-      util.load_item(item)
-    end
+    local term_callback = vim.tbl_deep_extend("force", bookmark_callback, {
+      key = 't',
+      post_callback = function(path)
+        vim.fn.execute(common.make_termpath(path))
+      end,
+      close_window = false
+    })
 
     local win, buf = buf_util.floating_window(lines, nil, nil, buf_opt)
-    buf_util.add_floating_window_callback(win, buf, select_bookmark, load_bookmark)
+    buf_util.add_floating_window_callback(win, buf, bookmark_callback)
+    buf_util.add_floating_window_callback(win, buf, term_callback)
 
   end,
   {
