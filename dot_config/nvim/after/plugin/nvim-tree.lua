@@ -35,7 +35,14 @@ vim.api.nvim_create_user_command(
     local term_callback = vim.tbl_deep_extend("force", bookmark_callback, {
       key = 't',
       post_callback = function(path)
+        if vim.uv.fs_stat(path).type == "file" then
+          return
+        end
         vim.fn.execute(common.make_termpath(path))
+        vim.keymap.set('n', '<C-D>', function()
+          vim.fn.execute('bp|bd! #')
+          vim.api.nvim_win_close(0, true)
+        end, { buffer = buf })
       end,
       close_window = false
     })
