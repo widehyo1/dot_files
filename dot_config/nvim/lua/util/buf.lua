@@ -1,6 +1,7 @@
 local M = {}
 
 function M.floating_window(lines, field, win_opt, buf_opt)
+  lines = lines or {}
   local max_line_width = 0
   local contents = {}
 

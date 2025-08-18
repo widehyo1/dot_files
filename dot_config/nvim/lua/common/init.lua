@@ -120,4 +120,13 @@ function M.message()
   vim.cmd.normal('G')
 end
 
+function M.floating_terminal()
+  local win, buf = buf_util.floating_window()
+  vim.fn.execute('terminal')
+  vim.keymap.set('n', '<C-D>', function()
+    vim.fn.execute('bp|bd! #')
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf })
+end
+
 return M

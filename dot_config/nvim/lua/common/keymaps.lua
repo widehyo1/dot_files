@@ -1,7 +1,7 @@
 local silent_noremap = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap('i', 'jj', '<ESC>', silent_noremap)
-vim.api.nvim_set_keymap('t', '<C-Q>', '<C-\\><C-n>', silent_noremap)
+vim.api.nvim_set_keymap('t', '<C-D>', '<C-\\><C-n>', silent_noremap)
 
 vim.api.nvim_set_keymap('n', '<leader>rc', ':e ~/.config/nvim/init.lua<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>vrc', ':e ~/.vimrc<CR>', silent_noremap)
@@ -46,7 +46,7 @@ vim.api.nvim_set_keymap('n', '<leader>wwv', '<C-W>_', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwh', '<C-W><bar>', silent_noremap)
 
 -- misc
-vim.api.nvim_set_keymap('n', '<C-Q>', ':terminal<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader><C-D>', '<C-D>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader><C-Q>', ':cd %:h<bar>terminal<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>d', ':%s/<C-V><CR>//g<CR>', silent_noremap)
 
