@@ -4,3 +4,5 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.cmd.startinsert()
   end,
 })
+
+require('autocmd.custom')

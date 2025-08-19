@@ -19,7 +19,6 @@ vim.api.nvim_create_user_command(
     local bookmark_path = nvim_conf_home .. 'lua/data/bookmark'
     local lines = vim.fn.readfile(bookmark_path)
     local buf_opt = {
-      filetype = 'bookmark',
       modifiable = true
     }
 
@@ -39,6 +38,7 @@ vim.api.nvim_create_user_command(
           return
         end
         vim.fn.execute(common.make_termpath(path))
+        vim.bo.filetype = 'floating_window'
         vim.keymap.set('n', '<C-D>', function()
           vim.fn.execute('bp|bd! #')
           vim.api.nvim_win_close(0, true)
@@ -50,6 +50,9 @@ vim.api.nvim_create_user_command(
     local win, buf = buf_util.floating_window(lines, nil, nil, buf_opt)
     buf_util.add_floating_window_callback(win, buf, bookmark_callback)
     buf_util.add_floating_window_callback(win, buf, term_callback)
+
+    -- keymap to write bookmark
+    vim.keymap.set('n', '<leader>w', ':write! /home/widehyo/.config/nvim/lua/data/bookmark<CR>', { buffer = buf })
 
   end,
   {

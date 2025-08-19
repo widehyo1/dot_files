@@ -1,5 +1,12 @@
 local M = {}
 
+local config = {
+    pre_callback = nil,
+    post_callback = nil,
+    key = '<CR>',
+    close_window = true,
+}
+
 function M.floating_window(lines, field, win_opt, buf_opt)
   lines = lines or {}
   local max_line_width = 0
@@ -12,7 +19,7 @@ function M.floating_window(lines, field, win_opt, buf_opt)
   end
 
   win_opt = win_opt or {}
-  buf_opt = buf_opt or {}
+  buf_opt = vim.tbl_deep_extend("force", { filetype = 'floating_window' }, buf_opt or {})
 
   for _, line in ipairs(lines) do
     local content = get_content(line)
@@ -57,18 +64,19 @@ function M.display_floating_window(buf, win_opt, buf_opt)
 end
 
 function M.add_floating_window_callback(win, buf, opt)
-  opt = opt or {}
-  local pre_callback = opt['pre_callback']
-  local post_callback = opt['post_callback']
-  local key = opt['key'] or '<CR>'
-  local close_window = opt['close_window']
+  opt = vim.tbl_deep_extend("force", config, opt or {})
+
+  local pre_callback = opt.pre_callback
+  local post_callback = opt.post_callback
+  local key = opt.key
+  local close_window = opt.close_window
 
   vim.keymap.set('n', key, function()
     local item = nil
     if pre_callback then
       item = pre_callback()
     end
-    if close_window == nil or close_window == true then
+    if close_window then
       vim.api.nvim_win_close(win, true)
     end
     if post_callback then

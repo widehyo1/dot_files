@@ -9,8 +9,11 @@ require('lsp.emmet')
 -- custom_keymaps
 require('common.custom')
 
--- autocommand
-require('common.autocommand')
+-- autocmd
+require('autocmd')
+local autocmd_custom = require('autocmd.custom')
+local fw_config = {}
+autocmd_custom.fw_setup(fw_config)
 
 -- netrw
 -- vim.g.netrw_liststyle = 3

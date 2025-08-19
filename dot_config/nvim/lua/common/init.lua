@@ -97,23 +97,11 @@ function M.get_selection()
   return vim.fn.getline("'<", ">'")
 end
 
-function M.get_terminal_cfile()
-  local expand = vim.fn.expand
-  local cfile = expand('<cfile>')
-  local idx = string.find(cfile, ':')
-  if idx then
-    idx = idx + 1
-  else
-    idx = 1
-  end
-  return string.sub(cfile, idx, string.len(cfile) - 1)
-end
-
 function M.make_termpath(path)
   return 'edit term://' .. path .. '//bash'
 end
 
-function M.message()
+function M.message_window()
   local messages= vim.fn.execute('message')
   local lines = vim.split(messages, "\n", { trimempty = true })
   local win, buf = buf_util.floating_window(lines)
@@ -123,6 +111,7 @@ end
 function M.floating_terminal()
   local win, buf = buf_util.floating_window()
   vim.fn.execute('terminal')
+  vim.bo.filetype = 'floating_window'
   vim.keymap.set('n', '<C-D>', function()
     vim.fn.execute('bp|bd! #')
     vim.api.nvim_win_close(win, true)
