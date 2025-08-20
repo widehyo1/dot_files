@@ -108,6 +108,20 @@ function M.message_window()
   vim.cmd.normal('G')
 end
 
+function M.map_window()
+  local maps= vim.fn.execute('map')
+  local lines = vim.split(maps, "\n", { trimempty = true })
+  local win, buf = buf_util.floating_window(lines)
+  vim.cmd.normal('G')
+end
+
+function M.autocmd_window()
+  local autocmds= vim.fn.execute('autocmd')
+  local lines = vim.split(autocmds, "\n", { trimempty = true })
+  local win, buf = buf_util.floating_window(lines)
+  vim.cmd.normal('G')
+end
+
 function M.floating_terminal()
   local win, buf = buf_util.floating_window()
   vim.fn.execute('terminal')
@@ -116,6 +130,33 @@ function M.floating_terminal()
     vim.fn.execute('bp|bd! #')
     vim.api.nvim_win_close(win, true)
   end, { buffer = buf })
+end
+
+function _G.tabline_buffers()
+  local buf_listed = function(buf) return buf.listed == 1 end
+  local get_bufname = function(buf)
+    local name = ''
+    if buf.name == '' then 
+      name = '[No Name]'
+    else
+      name = vim.fn.fnamemodify(buf.name, ":t")
+    end
+    if buf.changed == 1 then
+      name = name .. ' +'
+    end
+    return name
+  end
+
+  local joiner = function(acc, cur)
+    return acc .. ' | ' .. cur
+  end
+
+  local buf_name_str = chain.from(vim.fn.getbufinfo())
+    :filter(buf_listed)
+    :apply(get_bufname)
+    :reduce(joiner)
+
+  return buf_name_str
 end
 
 return M

@@ -1,67 +1,33 @@
-local M = {}
+chain = require('util.chain')
 
-local buf_util = require('util.buf')
+function _G.tabline_buffers()
+  local buf_listed = function(buf) return buf.listed == 1 end
+  local get_bufname = function(buf)
+    local name = ''
+    if buf.name == '' then
+      name = '[No Name]'
+    else
+      name = vim.fn.fnamemodify(buf.name, ":t")
+    end
+    if buf.changed == 1 then
+      name = name .. ' +'
+    end
+    return name
+  end
 
-local config = {
-  filetype = "floating_window",
-  winblend_active = 0,
-  winblend_inactive = 80,
-  faded_hl = {
-    fg = "#222222",
-    bg = "#1e1e1e"
-  }
-}
+  local joiner = function(acc, cur)
+    return acc .. ' | ' .. cur
+  end
 
-function M.setup(user_config)
-  config = vim.tbl_deep_extend("force", config, user_config or {})
+  local buf_name_str = chain.from(vim.fn.getbufinfo())
+    :filter(buf_listed)
+    :apply(get_bufname)
+    :reduce(joiner)
 
-  -- 하이라이트 설정
-  vim.api.nvim_set_hl(0, "FadedNormal", config.faded_hl)
-
-  local fw_group = vim.api.nvim_create_augroup("FloatingWinFocus", { clear = true })
-
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = config.filetype,
-    group = fw_group,
-    callback = function(args)
-      local buf = args.buf
-      local win = vim.fn.bufwinid(buf)
-      if win == -1 then return end
-
-      -- 윈도우 들어오면 진하게
-      vim.api.nvim_create_autocmd("WinEnter", {
-        buffer = buf,
-        callback = function(ev)
-          M.focus_window(win)
-        end,
-      })
-
-      -- 나가면 다시 흐리게
-      vim.api.nvim_create_autocmd("WinLeave", {
-        buffer = buf,
-        callback = function(ev)
-          M.fade_window(win)
-        end,
-      })
-    end,
-  })
+  return buf_name_str
 end
 
-function M.focus_window(win)
-  vim.api.nvim_win_set_option(win, "winblend", config.winblend_active)
-  vim.api.nvim_win_set_option(win, "winhighlight", "")
-end
+vim.o.showtabline = 2
+vim.o.tabline = '%!v:lua.tabline_buffers()'
 
-function M.fade_window(win)
-  vim.api.nvim_win_set_option(win, "winblend", config.winblend_inactive)
-  vim.api.nvim_win_set_option(win, "winhighlight", "Normal:FadedNormal")
-end
-
-M.setup()
-
-local buf_opt = {
-  filetype = 'floating_window',
-}
-
-
-local win, buf = buf_util.floating_window(lines, nil, nil, buf_opt)
+-- print(statusline_buffers())

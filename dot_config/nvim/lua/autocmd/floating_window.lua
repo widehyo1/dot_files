@@ -16,11 +16,11 @@ function M.setup(user_config)
   -- 하이라이트 설정
   vim.api.nvim_set_hl(0, "FadedNormal", config.faded_hl)
 
-  local fw_group = vim.api.nvim_create_augroup("FloatingWinFocus", { clear = true })
+  local user_group = vim.api.nvim_create_augroup("UserCustom", { clear = true })
 
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "floating_window",
-    group = fw_group,
+    group = user_group,
     callback = function(args)
       local buf = args.buf
       local win = vim.fn.bufwinid(buf)
