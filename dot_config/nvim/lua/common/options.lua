@@ -37,4 +37,5 @@ vim.o.autoread = true
 vim.o.cursorline = true
 vim.o.list = true
 vim.o.showtabline = 2
+vim.o.tags = './.tags;/'
 vim.o.listchars = "tab:>-,trail:«,space:•,lead:»"

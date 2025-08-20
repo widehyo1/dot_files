@@ -102,7 +102,7 @@ function M.make_termpath(path)
 end
 
 function M.message_window()
-  local messages= vim.fn.execute('message')
+  local messages = vim.fn.execute('message')
   local lines = vim.split(messages, "\n", { trimempty = true })
   local win, buf = buf_util.floating_window(lines)
   vim.cmd.normal('G')
