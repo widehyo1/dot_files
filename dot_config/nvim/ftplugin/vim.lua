@@ -1,4 +1,6 @@
 local common = require('common')
+local cmd_window = require('util.buf.cmd_window')
+
 local b_local = { buffer = 0 }
 
 local bufnr = vim.api.nvim_get_current_buf()
@@ -12,3 +14,4 @@ common.add_snippet("for", "for ${1:varname} in ${2:listexpression}\n  ${3:statem
 common.add_snippet("function", "function! ${1:Funcname()}\n  ${2:statement}\nendfunction", b_local)
 
 vim.keymap.set('n', '<leader>rr', ':source %<CR>', b_local)
+vim.keymap.set('n', '<leader>rf', cmd_window.run_vim, b_local)

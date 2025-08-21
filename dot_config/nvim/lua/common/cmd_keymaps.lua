@@ -1,3 +1,5 @@
+local cmd_window = require('util.buf.cmd_window')
+
 local silent_noremap = { noremap = true, silent = true }
 
 -- md
@@ -14,8 +16,8 @@ vim.api.nvim_set_keymap('v', '<leader>ap', ':! awk -f ~/script.awk<CR>', silent_
 -- gvpr
 vim.api.nvim_set_keymap('n', '<leader>gvs', ':e ~/script.gvpr<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>gvt', ':e ~/temp.dot<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>gvp', ':r ! awk -f ~/script.gvpr ~/temp.dot<CR>', silent_noremap)
-vim.api.nvim_set_keymap('v', '<leader>gvp', ':! awk -f ~/script.gvpr<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>gvp', ':r ! gvpr -f ~/script.gvpr ~/temp.dot<CR>', silent_noremap)
+vim.api.nvim_set_keymap('v', '<leader>gvp', ':! gvpr -f ~/script.gvpr<CR>', silent_noremap)
 
 -- jq
 vim.api.nvim_set_keymap('n', '<leader>js', ':e ~/script.jq<CR>', silent_noremap)
@@ -30,6 +32,12 @@ vim.api.nvim_set_keymap('n', '<leader>cs', ':e ~/script.curl<CR>', silent_norema
 vim.api.nvim_set_keymap('n', '<leader>ct', ':e ~/request.json<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>cy', ':let @+ = system("curl --config ~/script.curl")<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>cp', ':r ! curl --config ~/script.curl<CR>', silent_noremap)
+
+-- floating window
+vim.keymap.set('n', '<leader>af', cmd_window.awk_window)
+vim.keymap.set('n', '<leader>gvf', cmd_window.gvpr_window)
+vim.keymap.set('n', '<leader>jf', cmd_window.jq_window)
+vim.keymap.set('n', '<leader>cf', cmd_window.curl_window)
 
 -- vim.api.nvim_set_keymap('n', '<leader>pg', ':PyGrep ', silent_noremap)
 

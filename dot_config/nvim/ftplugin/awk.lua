@@ -1,4 +1,6 @@
 local common = require('common')
+local cmd_window = require('util.buf.cmd_window')
+
 local b_local = { buffer = 0 }
 
 local bufnr = vim.api.nvim_get_current_buf()
@@ -18,3 +20,4 @@ common.add_snippet("rindex", "function rindex(hay, needle,    arr, lastToken) {\
 common.add_snippet("include", '@include "common"', b_local)
 
 vim.keymap.set('n', '<leader>rr', ':!awk -f %', b_local)
+vim.keymap.set('n', '<leader>rf', cmd_window.run_awk, b_local)
