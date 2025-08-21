@@ -101,27 +101,6 @@ function M.make_termpath(path)
   return 'edit term://' .. path .. '//bash'
 end
 
-function M.message_window()
-  local messages = vim.fn.execute('message')
-  local lines = vim.split(messages, "\n", { trimempty = true })
-  local win, buf = buf_util.floating_window(lines)
-  vim.cmd.normal('G')
-end
-
-function M.map_window()
-  local maps= vim.fn.execute('map')
-  local lines = vim.split(maps, "\n", { trimempty = true })
-  local win, buf = buf_util.floating_window(lines)
-  vim.cmd.normal('G')
-end
-
-function M.autocmd_window()
-  local autocmds= vim.fn.execute('autocmd')
-  local lines = vim.split(autocmds, "\n", { trimempty = true })
-  local win, buf = buf_util.floating_window(lines)
-  vim.cmd.normal('G')
-end
-
 function M.floating_terminal()
   local win, buf = buf_util.floating_window()
   vim.fn.execute('terminal')
@@ -133,6 +112,8 @@ function M.floating_terminal()
 end
 
 function _G.tabline_buffers()
+  local cur_buf = vim.api.nvim_get_current_buf()
+
   local buf_listed = function(buf) return buf.listed == 1 end
   local get_bufname = function(buf)
     local name = ''
@@ -143,6 +124,9 @@ function _G.tabline_buffers()
     end
     if buf.changed == 1 then
       name = name .. ' +'
+    end
+    if buf.bufnr == cur_buf then
+      name = '< ' .. name .. ' >'
     end
     return name
   end
