@@ -41,7 +41,12 @@ function M.setup(user_config)
         key = "<leader>gf"
       }
 
+      local quit_config = {
+        key = "<ESC>",
+      }
+
       buf_util.add_floating_window_callback(win, buf, load_config)
+      buf_util.add_floating_window_callback(win, buf, quit_config)
 
       -- 윈도우 들어오면 진하게
       vim.api.nvim_create_autocmd("WinEnter", {
