@@ -1,4 +1,5 @@
 local common = require('common')
+local fw_util = require('autocmd.floating_window')
 local tree = require('custom_tree')
 
 vim.keymap.set('n', '<leader>tn', tree.print_treesitter_node_path)
@@ -38,5 +39,7 @@ vim.keymap.set('n', '<leader>map', common.map_window)
 vim.keymap.set('n', '<leader>autocmd', common.autocmd_window)
 
 vim.keymap.set('n', '<C-D>', common.floating_terminal)
+
+vim.keymap.set('n', '<leader>wb', fw_util.toggle_focus)
 
 vim.o.tabline =  '%!v:lua.tabline_buffers()'

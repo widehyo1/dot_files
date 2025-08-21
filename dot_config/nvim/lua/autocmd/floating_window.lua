@@ -32,6 +32,7 @@ function M.setup(user_config)
         callback = function(ev)
           local new_buf = ev.buf
           local new_win = vim.fn.bufwinid(new_buf)
+          vim.o.hlsearch = false
           M.focus_window(win)
         end,
       })
@@ -42,6 +43,7 @@ function M.setup(user_config)
         callback = function(ev)
           local new_buf = ev.buf
           local new_win = vim.fn.bufwinid(new_buf)
+          vim.o.hlsearch = true
           M.fade_window(win)
         end,
       })
@@ -50,13 +52,23 @@ function M.setup(user_config)
 end
 
 function M.focus_window(win)
+  win = win or 0
   vim.api.nvim_win_set_option(win, "winblend", config.winblend_active)
   vim.api.nvim_win_set_option(win, "winhighlight", "")
 end
 
 function M.fade_window(win)
+  win = win or 0
   vim.api.nvim_win_set_option(win, "winblend", config.winblend_inactive)
   vim.api.nvim_win_set_option(win, "winhighlight", "Normal:FadedNormal")
+end
+
+function M.toggle_focus()
+  if vim.o.winblend == 0 then
+    M.fade_window()
+  else
+    M.focus_window()
+  end
 end
 
 return M
