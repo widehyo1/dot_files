@@ -1,4 +1,5 @@
 local common = require('common')
+local cmd_window = require('util.buf.cmd_window')
 local fw_util = require('autocmd.floating_window')
 local tree = require('custom_tree')
 
@@ -34,9 +35,10 @@ vim.keymap.set('v', '<space><', 'ygvc<>"0P')
 vim.keymap.set('n', '<space>{', 'yiwcw{}"0P')
 vim.keymap.set('v', '<space>{', 'ygvc{}"0P')
 
-vim.keymap.set('n', '<leader>msg', common.message_window)
-vim.keymap.set('n', '<leader>map', common.map_window)
-vim.keymap.set('n', '<leader>autocmd', common.autocmd_window)
+vim.keymap.set('n', '<leader>msg', cmd_window.message_window)
+vim.keymap.set('n', '<leader>map', cmd_window.map_window)
+vim.keymap.set('n', '<leader>autocmd', cmd_window.autocmd_window)
+vim.keymap.set('n', '<leader>hi', cmd_window.highlight_window)
 
 vim.keymap.set('n', '<C-D>', common.floating_terminal)
 
