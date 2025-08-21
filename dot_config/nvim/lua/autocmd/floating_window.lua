@@ -1,3 +1,6 @@
+local fs_util = require('util.fs')
+local buf_util = require('util.buf')
+
 local M = {}
 
 local config = {
@@ -25,6 +28,20 @@ function M.setup(user_config)
       local buf = args.buf
       local win = vim.fn.bufwinid(buf)
       if win == -1 then return end
+
+      local load_config = {
+        pre_callback = function()
+          print(string.format("pre_callback returns %s", vim.fn.getline(".")))
+          return vim.fn.getline(".")
+        end,
+        post_callback = function(line)
+          local type, cmd = fs_util.make_load_command(line)
+          vim.cmd(cmd)
+        end,
+        key = "<leader>gf"
+      }
+
+      buf_util.add_floating_window_callback(win, buf, load_config)
 
       -- 윈도우 들어오면 진하게
       vim.api.nvim_create_autocmd("WinEnter", {

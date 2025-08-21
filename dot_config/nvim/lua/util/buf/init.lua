@@ -1,3 +1,5 @@
+local lua_util = require('util.lua')
+
 local M = {}
 
 local config = {
@@ -7,19 +9,20 @@ local config = {
     close_window = true,
 }
 
+
 function M.floating_window(lines, field, win_opt, buf_opt)
   lines = lines or {}
   local max_line_width = 0
   local contents = {}
 
   -- set content-extracting function
-  local get_content = function(line) return line end
+  local get_content = function(line) return line or "" end
   if field and field ~= "" then
-    get_content = function(line) return line[field] end
+    get_content = function(line) return line[field] or "" end
   end
 
   win_opt = win_opt or {}
-  buf_opt = vim.tbl_deep_extend("force", { filetype = 'floating_window' }, buf_opt or {})
+  buf_opt = lua_util.extend({ filetype = 'floating_window' }, buf_opt or {})
 
   for _, line in ipairs(lines) do
     local content = get_content(line)
@@ -42,7 +45,7 @@ function M.display_floating_window(buf, win_opt, buf_opt)
   local height = vim.fn.float2nr(vim.o.lines * 0.8)
 
   -- default floating window option
-  local win = vim.api.nvim_open_win(buf, true, vim.tbl_deep_extend("force", {
+  local win = vim.api.nvim_open_win(buf, true, lua_util.extend({
     relative = 'editor',
     width = width,
     height = height,
@@ -64,7 +67,7 @@ function M.display_floating_window(buf, win_opt, buf_opt)
 end
 
 function M.add_floating_window_callback(win, buf, opt)
-  opt = vim.tbl_deep_extend("force", config, opt or {})
+  opt = lua_util.extend(config, opt or {})
 
   local pre_callback = opt.pre_callback
   local post_callback = opt.post_callback

@@ -1,5 +1,7 @@
 local M = {}
 
+local EMPTY_MSG = "table is empty"
+
 function M.filter(tbl, predicate)
   local filtered = {}
   for _, v in ipairs(tbl) do
@@ -82,7 +84,6 @@ function M.print_table(tbl, sep, formatter)
 end
 
 function M.print_table_lazy(tbl, sep, formatter)
-  local EMPTY_MSG = "table is empty"
   -- Set default separator if not provided
   sep = M.default(sep, ", ")
 
@@ -112,6 +113,10 @@ function M.print_table_lazy(tbl, sep, formatter)
     io.write(sep) -- print seperator
     io.write(value) -- print value
   end
+end
+
+function M.extend(tbl1, tbl2)
+  return vim.tbl_deep_extend("force", tbl1, tbl2)
 end
 
 return M

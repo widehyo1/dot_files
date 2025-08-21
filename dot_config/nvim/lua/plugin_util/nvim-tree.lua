@@ -1,7 +1,9 @@
-local M = {}
 local lua_util = require("util.lua")
+local fs_util = require("util.fs")
 local api = require("nvim-tree.api")
 local view = require("nvim-tree.view")
+
+local M = {}
 
 function M.get_absolute_path()
   local node = api.tree.get_node_under_cursor()
@@ -28,13 +30,16 @@ function M.is_visible()
 end
 
 function M.load_item(item)
-  if vim.uv.fs_stat(item).type == "file" then
-    vim.cmd('edit! ' .. item)
-  else
+  local type, cmd = fs_util.make_load_command(item)
+  if type == "file" then
+    vim.cmd(cmd)
+  elseif type == "directory" then
     if view.is_visible() then
       api.tree.close()
     end
     api.tree.open({ path = item })
+  else
+    print("invalid type")
   end
 end
 
