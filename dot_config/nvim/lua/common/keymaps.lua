@@ -3,6 +3,7 @@ local silent_noremap = { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', 'jj', '<ESC>', silent_noremap)
 vim.api.nvim_set_keymap('t', '<C-D>', '<C-\\><C-n>', silent_noremap)
 
+-- open file shortcut
 vim.api.nvim_set_keymap('n', '<leader>rc', ':e ~/.config/nvim/init.lua<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>vrc', ':e ~/.vimrc<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>brc', ':e ~/.bashrc<CR>', silent_noremap)
@@ -10,11 +11,12 @@ vim.api.nvim_set_keymap('n', '<leader>play', ':e ~/.config/nvim/playground.lua<C
 vim.api.nvim_set_keymap('n', '<leader>plugin', ':e ~/.config/nvim/lua/plugins/init.lua<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>book', ':e ~/.config/nvim/lua/data/bookmark<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>md', ':e $TODAYMD<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>common', ':e /home/widehyo/.config/nvim/lua/common/init.lua<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>keymap', ':e /home/widehyo/.config/nvim/lua/common/keymaps.lua<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>option', ':e /home/widehyo/.config/nvim/lua/common/options.lua<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>custom', ':e /home/widehyo/.config/nvim/lua/common/custom.lua<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<leader>buf', ':e /home/widehyo/.config/nvim/lua/util/buf.lua<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>common', ':e ~/.config/nvim/lua/common/init.lua<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>keymap', ':e ~/.config/nvim/lua/common/keymaps.lua<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>option', ':e ~/.config/nvim/lua/common/options.lua<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>custom', ':e ~/.config/nvim/lua/common/custom.lua<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>buf', ':e ~/.config/nvim/lua/util/buf/init.lua<CR>', silent_noremap)
+
 vim.api.nvim_set_keymap('n', '<leader>h', ':noh<CR><ESC>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>H', 'H', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>L', 'L', silent_noremap)
@@ -56,5 +58,26 @@ vim.api.nvim_set_keymap('n', '<leader>d', ':%s/<C-V><CR>//g<CR>', silent_noremap
 vim.api.nvim_set_keymap('n', '<leader>cd', ':cd %:h<bar>pwd<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>g', ':echo expand("%:p")<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>pp', ':let @+ = expand("%:p")<CR>', silent_noremap)
+
+-- excommand cursor
+vim.keymap.set('n', '<leader>rw', ':<C-R><C-W>')
+vim.keymap.set('n', '<leader>rl', ':<C-R><C-L>')
+vim.keymap.set('c', '<leader>rw', '<C-R><C-W>')
+vim.keymap.set('c', '<leader>rl', '<C-R><C-L>')
+
+-- excommand navigation
+vim.keymap.set('c', '<C-A>', '<Home>')
+vim.keymap.set('c', '<C-E>', '<End>')
+vim.keymap.set('c', '<C-H>', '<Left>')
+vim.keymap.set('c', '<C-L>', '<Right>')
+
+-- print lua expression (by mannual or using buffer)
+vim.keymap.set('n', '<leader>==', ':=')
+vim.keymap.set('n', '<leader>=l', ':=<C-R><C-L><CR>')
+vim.keymap.set('n', '<space>rr', ':lua <C-R><C-L><CR>')
+
+-- print vim expression (for command line insert)
+vim.keymap.set('n', '<leader>r=', ':<C-R>=')
+vim.keymap.set('c', '<leader>r=', '<C-R>=')
 
 require('common.cmd_keymaps')
