@@ -33,11 +33,18 @@ vim.api.nvim_set_keymap('n', '<leader>ct', ':e ~/request.json<CR>', silent_norem
 vim.api.nvim_set_keymap('n', '<leader>cy', ':let @+ = system("curl --config ~/script.curl")<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>cp', ':r ! curl --config ~/script.curl<CR>', silent_noremap)
 
+-- httpyac
+vim.api.nvim_set_keymap('n', '<leader>hts', ':e ~/script.http<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>htt', ':e ~/request.json<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>hty', ':let @+ = system("cd ~ && httpyac ~/script.http --all")<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<leader>htp', ':r ! cd ~ && httpyac ~/script.http --all<CR>', silent_noremap)
+
 -- floating window
 vim.keymap.set('n', '<leader>af', cmd_window.awk_window)
 vim.keymap.set('n', '<leader>gvf', cmd_window.gvpr_window)
 vim.keymap.set('n', '<leader>jf', cmd_window.jq_window)
 vim.keymap.set('n', '<leader>cf', cmd_window.curl_window)
+vim.keymap.set('n', '<leader>htf', cmd_window.httpyac_window)
 
 -- vim.api.nvim_set_keymap('n', '<leader>pg', ':PyGrep ', silent_noremap)
 

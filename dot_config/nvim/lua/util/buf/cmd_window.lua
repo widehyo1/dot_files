@@ -13,12 +13,13 @@ function M.command_window(cmd, lseek)
   end
 end
 
-function M.system_window(cmd, lseek)
+function M.system_window(cmd, lseek, skip_line)
   if cmd == nil or cmd == '' then return end
+  skip_line = skip_line or 3
   lseek = lseek or false
-  local cmd_result = vim.fn.execute(cmd)
+  local cmd_result = vim.fn.execute("! " .. cmd)
   local lines = vim.split(cmd_result, "\n", { trimempty = true })
-  local win, buf = buf_util.floating_window({unpack(lines, 3)})
+  local win, buf = buf_util.floating_window({unpack(lines, skip_line)})
 end
 
 function M.message_window()
@@ -38,19 +39,23 @@ function M.highlight_window()
 end
 
 function M.awk_window()
-  M.system_window('! awk -f ~/script.awk ~/temp.txt', false)
+  M.system_window('awk -f ~/script.awk ~/temp.txt', false)
 end
 
 function M.jq_window()
-  M.system_window('! jq -r -f ~/script.jq ~/temp.json', false)
+  M.system_window('jq -r -f ~/script.jq ~/temp.json', false)
 end
 
 function M.curl_window()
-  M.system_window('! curl --config ~/script.curl', false)
+  M.system_window('curl --config ~/script.curl', false)
 end
 
 function M.gvpr_window()
-  M.system_window('! gvpr -f ~/script.gvpr ~/temp.dot', false)
+  M.system_window('gvpr -f ~/script.gvpr ~/temp.dot', false)
+end
+
+function M.httpyac_window()
+  M.system_window('cd ~ && httpyac ~/script.http --all', false)
 end
 
 function M.run_lua()
@@ -62,19 +67,19 @@ function M.run_vim()
 end
 
 function M.run_awk()
-  M.system_window('! awk -f %', false)
+  M.system_window('awk -f %', false)
 end
 
 function M.run_python()
-  M.system_window('! python3 %', false)
+  M.system_window('python3 %', false)
 end
 
 function M.run_node()
-  M.system_window('! node %', false)
+  M.system_window('node %', false)
 end
 
 function M.run_bash()
-  M.system_window('! bash %', false)
+  M.system_window('bash %', false)
 end
 
 return M
