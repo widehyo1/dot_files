@@ -118,6 +118,24 @@ function M.copy_to_pwd(filename)
   local cmd = "write " .. target_path
   vim.fn.execute(cmd)
 end
+
+function M.cd_current_line()
+  local line = lua_util.strip(vim.fn.getline('.'))
+  local mode = vim.api.nvim_get_mode().mode
+  local buftype = vim.bo.buftype
+
+  if mode == "nt" then
+    -- assume PS1 ='\[\033[01;34m\]\w\[\033[00m\] $ '
+    if vim.endswith(line, " $") then
+      line = string.sub(line, 1, -3)
+    end
+  end
+
+  local target_dir = fs_util.get_directory(line)
+  local cmd = 'cd ' .. target_dir
+  vim.fn.execute(cmd)
+end
+
 function M.get_selection()
   return vim.fn.getline("'<", ">'")
 end

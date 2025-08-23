@@ -57,4 +57,6 @@ vim.keymap.set('n', '<C-D>', common.floating_terminal)
 
 vim.keymap.set('n', '<leader>wb', fw_util.toggle_focus)
 
+vim.keymap.set('n', '<space>cd', common.cd_current_line)
+
 vim.o.tabline =  '%!v:lua.tabline_buffers()'
