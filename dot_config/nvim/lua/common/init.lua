@@ -149,7 +149,7 @@ function M.floating_terminal()
   vim.fn.execute('terminal')
   vim.bo.filetype = 'floating_window'
   vim.keymap.set('n', '<C-D>', function()
-    vim.fn.execute('bp|bd! #')
+    -- vim.fn.execute('bp|bd! #')
     vim.api.nvim_win_close(win, true)
   end, { buffer = buf })
 end

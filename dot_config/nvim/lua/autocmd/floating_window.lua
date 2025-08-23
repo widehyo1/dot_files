@@ -41,12 +41,7 @@ function M.setup(user_config)
         key = "<leader>gf"
       }
 
-      local quit_config = {
-        key = "<ESC>",
-      }
-
       buf_util.add_floating_window_callback(win, buf, load_config)
-      buf_util.add_floating_window_callback(win, buf, quit_config)
 
       -- 윈도우 들어오면 진하게
       vim.api.nvim_create_autocmd("WinEnter", {
@@ -71,6 +66,21 @@ function M.setup(user_config)
       })
     end,
   })
+
+  -- clean up buffer which is attached floating window
+  vim.api.nvim_create_autocmd("WinClosed", {
+    callback = function(ev)
+      local buf = ev.buf
+      local win = vim.fn.bufwinid(buf)
+      local win_config = vim.api.nvim_win_get_config(win)
+      -- if closed window is floating window
+      if win_config.relative ~= "" then
+        local buf_info = vim.fn.getbufinfo(buf)
+        vim.fn.execute('bdelete! ' .. buf)
+      end
+    end,
+  })
+
 end
 
 function M.focus_window(win)
