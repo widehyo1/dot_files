@@ -33,6 +33,33 @@ vim.api.nvim_create_user_command(
   }
 )
 vim.keymap.set('n', '<leader>cpwd', ':CopyToPwd ')
+
+vim.api.nvim_create_user_command(
+  'FloatingExecuteCommand',
+  function(opts)
+    local cmd = opts.fargs[1]
+    cmd_window.command_window(cmd)
+  end,
+  {
+    nargs = 1,
+    desc = "open floating window for vim command"
+  }
+)
+vim.keymap.set('n', '<leader>fwe', ':FloatingExecuteCommand ')
+
+vim.api.nvim_create_user_command(
+  'FloatingSystemCommand',
+  function(opts)
+    local cmd = opts.fargs[1]
+    cmd_window.system_window(cmd)
+  end,
+  {
+    nargs = 1,
+    desc = "open floating window for system(bash) command"
+  }
+)
+vim.keymap.set('n', '<leader>fws', ':FloatingSystemCommand ')
+
 vim.keymap.set('n', '<space>`', 'yiwcw``"0P')
 vim.keymap.set('v', '<space>`', 'ygvc``"0P')
 vim.keymap.set('n', '<space>"', 'yiwcw"""0P')
