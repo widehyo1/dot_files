@@ -119,4 +119,18 @@ function M.extend(tbl1, tbl2)
   return vim.tbl_deep_extend("force", tbl1, tbl2)
 end
 
+function M.lstrip(s)
+  return s:gsub("^%s*", "")
+end
+
+function M.rstrip(s)
+  return s:gsub("%s*$", "")
+end
+
+function M.strip(s)
+  s = s:gsub("^%s*", "")
+  s = s:gsub("%s*$", "")
+  return s
+end
+
 return M

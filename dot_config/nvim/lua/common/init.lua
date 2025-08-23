@@ -1,5 +1,6 @@
 local lua_util = require('util.lua')
 local buf_util = require('util.buf')
+local fs_util = require('util.fs')
 local chain = require('util.chain')
 
 local M = {}
@@ -93,6 +94,30 @@ function M.add_snippet(trigger, body, opts)
   end, opts)
 end
 
+function M.get_buffer_file()
+  return vim.fn.fnamemodify(vim.fn.expand('%'), ":t")
+end
+
+function M.get_buffer_dir()
+  return vim.fn.fnamemodify(vim.fn.expand('%'), ":p:h")
+end
+
+function M.get_pwd()
+  return lua_util.strip(vim.fn.execute('pwd'))
+end
+
+function M.copy_to_pwd(filename)
+  local target_path = ""
+  if filename == nil or filename == "" then
+    -- default filename is the current buffer file name
+    filename = M.get_buffer_file()
+    assert(buffer_filename ~= "", "file name is requried when current buffer has noname")
+  end
+
+  target_path = M.get_pwd() .. "/" .. filename
+  local cmd = "write " .. target_path
+  vim.fn.execute(cmd)
+end
 function M.get_selection()
   return vim.fn.getline("'<", ">'")
 end

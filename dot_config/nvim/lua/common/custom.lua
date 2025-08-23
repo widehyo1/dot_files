@@ -20,6 +20,19 @@ vim.api.nvim_create_user_command(
 vim.keymap.set('n', '<leader><leader>s', ':BufferMenu ')
 -- vim.keymap.set('n', 'q:', common.command_menu)
 
+vim.api.nvim_create_user_command(
+  'CopyToPwd',
+  function(opts)
+    local filename = opts.fargs[1]
+    common.copy_to_pwd(filename)
+  end,
+  {
+    nargs = "?",
+    desc = "paste current buffer to present working directory",
+    complete = "file"
+  }
+)
+vim.keymap.set('n', '<leader>cpwd', ':CopyToPwd ')
 vim.keymap.set('n', '<space>`', 'yiwcw``"0P')
 vim.keymap.set('v', '<space>`', 'ygvc``"0P')
 vim.keymap.set('n', '<space>"', 'yiwcw"""0P')
