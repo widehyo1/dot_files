@@ -5,3 +5,5 @@ setlocal softtabstop=2
 nnoremap <buffer> <leader>rr :!node %<CR>
 
 vnoremap <buffer> gcc :s/^/\/\/ /<CR>
+
+iabbrev <buffer> \typeof; Object.prototype.toString.call()
