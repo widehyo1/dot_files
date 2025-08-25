@@ -20,15 +20,11 @@ iabbrev <buffer> \textsection; section .text
 
 
 function! PasteCodeBlock(info_string = '')
-  if len(a:info_string)
-    call setline('.', '```' .. a:info_string)
-  else
-    call setline('.', '```')
-  endif
+  call setline('.', '```' .. a:info_string)
   execute 'put'
-  normal o
-  call setline('. + 1', '```')
+  call setline(line('.') + 1, '```')
+  silent! keeppatterns %s/\r//g
 endfunction
 
 command -nargs=? PasteCodeBlock :call PasteCodeBlock(<f-args>)
-nnoremap <space>p :PasteCodeBlock 
+nnoremap <buffer> <space>p :PasteCodeBlock 
