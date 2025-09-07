@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# linebetween: print lines between START_LINE and END_LINE from FILE or stdin
+# Usage: linebetween START_LINE END_LINE [FILE]
+
+# Check argument count
+if [[ $# -lt 2 || $# -gt 3 ]]; then
+    echo "Usage: $0 START_LINE END_LINE [FILE]" >&2
+    exit 1
+fi
+
+sline=$1
+eline=$2
+fname=${3:-}  # optional
+
+# Validate start line
+if ! [[ $sline =~ ^[0-9]+$ ]] || [[ $sline -lt 1 ]]; then
+    echo "Error: START_LINE must be a positive integer" >&2
+    exit 1
+fi
+
+# Validate end line
+if ! [[ $eline =~ ^[0-9]+$ ]]; then
+    echo "Error: END_LINE must be an integer" >&2
+    exit 1
+fi
+
+if (( sline > eline )); then
+    echo "Error: START_LINE cannot be greater than END_LINE" >&2
+    exit 1
+fi
+
+# Build sed expression
+if (( sline > 1 )); then
+    sed_expr="1,$((sline - 1))d; ${eline}q"
+else
+    sed_expr="${eline}q"
+fi
+
+# Run sed: from file or stdin
+if [[ -n $fname ]]; then
+    sed "$sed_expr" "$fname"
+else
+    sed "$sed_expr"
+fi
