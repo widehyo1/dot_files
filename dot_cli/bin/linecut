@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Print usage message
+usage() {
+    echo "Usage: linecut [-s START] [-e END] [-f FILE] [-d] [-h]" >&2
+    exit 1
+}
+
+# Defaults
+sline=""
+eline=""
+fname=""
+debug=""
+
+# Parse command-line options
+while getopts "s:e:f:dh" opt; do
+    case "$opt" in
+        s) sline="$OPTARG" ;;
+        e) eline="$OPTARG" ;;
+        f) fname="$OPTARG" ;;
+        d) debug=1 ;;
+        h) usage ;;
+        *) echo "Invalid option" >&2; usage ;;
+    esac
+done
+
+# Default start line is 1 if not provided
+sline=${sline:-1}
+
+# Validate sline
+if ! [[ $sline =~ ^[0-9]+$ ]] || (( sline < 1 )); then
+    echo "Error: start line must be a positive integer" >&2
+    exit 1
+fi
+
+# Validate eline
+if [[ -n $eline ]]; then
+    if ! [[ $eline =~ ^[0-9]+$ ]]; then
+        echo "Error: end line must be an integer" >&2
+        exit 1
+    fi
+    if (( sline > eline )); then
+        echo "Error: invalid range (start line is greater than end line)" >&2
+        exit 1
+    fi
+fi
+
+# Build sed delete command
+if (( sline > 1 )); then
+    delete_cmd="1,$((sline - 1))d;"
+else
+    delete_cmd=""
+fi
+
+# Build sed expression
+if [[ -n $eline ]]; then
+    sed_expr="${delete_cmd}${eline}q"
+else
+    sed_expr="${delete_cmd}"
+fi
+
+# Debug output
+if [[ -n $debug ]]; then
+    if [[ -n $fname ]]; then
+        echo "sed '$sed_expr' '$fname'"
+    else
+        echo "sed '$sed_expr'"
+    fi
+fi
+
+# Run sed
+if [[ -n $fname ]]; then
+    sed "$sed_expr" "$fname"
+else
+    sed "$sed_expr"
+fi
