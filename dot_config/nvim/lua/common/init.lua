@@ -186,4 +186,18 @@ function _G.tabline_buffers()
   return buf_name_str
 end
 
+function M.open_terminal()
+  local buffers = vim.api.nvim_list_bufs()
+  
+  for _, buf in ipairs(buffers) do
+    -- 버퍼가 유효하고 터미널 타입인지 확인
+    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      vim.cmd('buffer! ' .. buf)
+      return
+    end
+  end
+  
+  vim.fn.execute('terminal')
+end
+
 return M
