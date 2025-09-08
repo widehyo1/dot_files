@@ -1,7 +1,6 @@
 local silent_noremap = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap('i', 'jj', '<ESC>', silent_noremap)
-vim.api.nvim_set_keymap('t', '<C-D>', '<C-\\><C-n>', silent_noremap)
 
 -- open file shortcut
 vim.api.nvim_set_keymap('n', '<leader>rc', ':e ~/.config/nvim/init.lua<CR>', silent_noremap)
@@ -48,6 +47,10 @@ vim.api.nvim_set_keymap('n', '<leader>wnv', ':vnew<CR>', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwr', '<C-W>=', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwv', '<C-W>_', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwh', '<C-W><bar>', silent_noremap)
+
+-- terminal
+vim.api.nvim_set_keymap('n', '<leader>term', ':terminal<CR>', silent_noremap)
+vim.api.nvim_set_keymap('n', '<C-D>', ':terminal<CR>', silent_noremap)
 
 -- misc
 vim.api.nvim_set_keymap('n', '<leader><C-D>', '<C-D>', silent_noremap)

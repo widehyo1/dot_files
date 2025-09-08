@@ -80,7 +80,7 @@ vim.keymap.set('n', '<leader>map', cmd_window.map_window)
 vim.keymap.set('n', '<leader>autocmd', cmd_window.autocmd_window)
 vim.keymap.set('n', '<leader>hi', cmd_window.highlight_window)
 
-vim.keymap.set('n', '<C-D>', common.floating_terminal)
+-- vim.keymap.set('n', '<C-D>', common.floating_terminal)
 
 vim.keymap.set('n', '<leader>wb', fw_util.toggle_focus)
 
