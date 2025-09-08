@@ -1,0 +1,35 @@
+#!/bin/bash
+# grepline: Show lines around a given line number with context
+# Usage:
+#   grepline -C <nr> <lineno> <filename>   # before+after
+#   grepline -A <nr> <lineno> <filename>   # after only
+#   grepline -B <nr> <lineno> <filename>   # before only
+
+usage() {
+  echo "Usage: $0 [-C nr | -A nr | -B nr] <lineno> <filename>"
+  exit 1
+}
+
+if [ $# -lt 3 ]; then
+  usage
+fi
+
+mode=$1
+nr=$2
+lineno=$3
+filename=$4
+
+case "$mode" in
+  -C)
+    cat -n "$filename" | grep -C "$nr" "^[[:space:]]*$lineno[[:space:]]"
+    ;;
+  -A)
+    cat -n "$filename" | grep -A "$nr" "^[[:space:]]*$lineno[[:space:]]"
+    ;;
+  -B)
+    cat -n "$filename" | grep -B "$nr" "^[[:space:]]*$lineno[[:space:]]"
+    ;;
+  *)
+    usage
+    ;;
+esac
