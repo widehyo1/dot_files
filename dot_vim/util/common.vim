@@ -153,8 +153,7 @@ function! PopupFilter(winid, key) abort
     return v:true
 endfunction
 
-
-function! TablineBuffers()
+function! BufferTabline()
   let curBuf = bufnr('%')
 
   let bufNameList = []

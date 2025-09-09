@@ -1,5 +1,3 @@
-" Vundle
-set nocompatible              " be iMproved, required
 filetype off                  " required
 "git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -7,12 +5,15 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'tpope/vim-fugitive'
-Plugin 'majutsushi/tagbar'
-Plugin 'mattn/emmet-vim'
+" Plugin 'nanotech/jellybeans.vim'
+Plugin 'sainnhe/sonokai'
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'tpope/vim-fugitive'
+" Plugin 'widehyodev/poetry-doc'
+" Plugin 'airblade/vim-gitgutter'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'mattn/emmet-vim'
 
 call vundle#end()            " required
 filetype plugin indent on     " required!
@@ -20,23 +21,33 @@ filetype plugin indent on     " required!
 " mapleader
 let mapleader=","
 
-" jellybeans
+" colorscheme
 set t_Co=256
-colorscheme jellybeans
+colorscheme sonokai
 
-" nerdtree
-autocmd VimEnter * NERDTree | wincmd p
+" nerdtree autocmd group NERDTree
+" autocmd VimEnter * NERDTree | wincmd p
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 nnoremap <leader>. :NERDTreeFind<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 
 " airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
 " * enable/disable searchcount integration >
-let g:airline#extensions#searchcount#enabled = 1
+" let g:airline#extensions#searchcount#enabled = 1
 " * enable/disable displaying search term >
-let g:airline#extensions#searchcount#show_search_term = 1
+" let g:airline#extensions#searchcount#show_search_term = 1
+" * enable/disable csv integration for displaying the current column. >
+" let g:airline#extensions#csv#enabled = 1
+
+" * enable/disable showing a summary of changed hunks under source control. >
+" let g:airline#extensions#hunks#enabled = 1
+" * enable/disable showing only non-zero hunks. >
+" let g:airline#extensions#hunks#non_zero_only = 0
+" * set hunk count symbols. >
+" let g:airline#extensions#hunks#hunk_symbols = ['+', '~', '-']
 
 " ctags
 nnoremap <C-]> <C-]>zz
@@ -48,11 +59,17 @@ set tags=./.tags;/
 " set laststatus=2
 " set statusline=%{FugitiveStatusline()}
 
+
+
+
 " load custom script
 source ~/.vim/util/common.vim
 source ~/.vim/util/surround.vim
 source ~/.vim/util/buffer_fzf.vim
-source ~/.vim/util/navigate_pyhelp.vim
+" source ~/.vim/util/pyfullname.vim
+" source ~/.vim/util/navigate_pyhelp.vim
+" source ~/.vim/util/navigate_pyhelp.vim
+" nnoremap <leader>pp :call CopyPwd()<CR>
 
 " basic config
 set number
@@ -63,20 +80,25 @@ set shiftwidth=4
 set expandtab
 set noswapfile
 set clipboard=unnamedplus
-set nohlsearch
+" set nohlsearch
+set hlsearch
+set incsearch
 set splitright
 set splitbelow
 set showcmd
 set autoread
 set cursorline
-" set gdefault
 " print whitespace
 set list
 set listchars=tab:>-,trail:«,space:•,lead:»
 " set foldmethod=syntax
+set showtabline=2
+set tabline=%!BufferTabline()
+
 
 " rc
 nnoremap <leader>rc :e ~/.vimrc<CR>
+nnoremap <leader>nrc :e ~/.config/nvim/init.lua<CR>
 nnoremap <leader>brc :e ~/.bashrc<CR>
 nnoremap <leader>md :e $TODAYMD<CR>
 
@@ -86,48 +108,24 @@ nnoremap <leader><C-D> <C-D>
 nnoremap <leader>H H
 nnoremap <leader>L L
 nnoremap <F5> :call ToggleSnakeCamel()<CR>
+nnoremap <leader><leader>p :call CopyPwd()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
 command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
 command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossFiles 
-nnoremap <leader>cd :cd %:h<bar>pwd<CR>
-nnoremap <leader><leader>g :echo expand('%:p')<CR>
-nnoremap <leader><leader>p :let @+ = expand('%:p')<bar>echo @+<CR>
-" nnoremap <leader><leader>p :call CopyPwd()<CR>
-" nnoremap <leader>pp :call CopyPwd()<CR>
-nnoremap <leader>`v /`/-1<CR>V?`?+1
-
-" netrw
-" let g:netrw_browse_split=2
-" let g:netrw_liststyle=3
-" gh toggles dot files hide/show
-" nnoremap <leader>n :20Lex<CR>
-nnoremap <leader>. :e %:h<CR>
-
+nnoremap <leader>`v /`/-1<CR>V?`?+1<CR>
+nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
 
 " surround
 nnoremap <space>( :call ToggleRoundBraket()<CR>
-nnoremap <space>a( :call SurrondRoundBraket()<CR>
-nnoremap <space>d( :call UnSurrondRoundBraket()<CR>
 nnoremap <space>[ :call ToggleSquareBraket()<CR>
-nnoremap <space>a[ :call SurrondSquareBraket()<CR>
-nnoremap <space>d[ :call UnSurrondSquareBraket()<CR>
 nnoremap <space>{ :call ToggleCurlyBraket()<CR>
-nnoremap <space>a{ :call SurrondCurlyBraket()<CR>
-nnoremap <space>d{ :call UnSurrondCurlyBraket()<CR>
 nnoremap <space>< :call ToggleAngleBraket()<CR>
-nnoremap <space>a< :call SurrondAngleBraket()<CR>
-nnoremap <space>d< :call UnSurrondAngleBraket()<CR>
 nnoremap <space>' :call ToggleQuote()<CR>
-nnoremap <space>a' :call SurrondQuote()<CR>
-nnoremap <space>d' :call UnSurrondQuote()<CR>
 nnoremap <space>" :call ToggleDoubleQuote()<CR>
-nnoremap <space>a" :call SurrondDoubleQuote()<CR>
-nnoremap <space>d" :call UnSurrondDoubleQuote()<CR>
 nnoremap <space>` :call ToggleBackTick()<CR>
-nnoremap <space>a` :call SurrondBackTick()<CR>
-nnoremap <space>d` :call UnSurrondBackTick()<CR>
+
 
 " awk
 nnoremap <leader>as :e ~/script.awk<CR>
@@ -140,11 +138,10 @@ vnoremap <leader>ap :! awk -f ~/script.awk<CR>
 " jq
 nnoremap <leader>js :e ~/script.jq<CR>
 nnoremap <leader>jt :e ~/temp.json<CR>
-nnoremap <leader>jy :let @+ = system('jq -f ~/script.jq ~/temp.json')<CR>
+nnoremap <leader>jy :let @+ = system('jq -r -f ~/script.jq ~/temp.json')<CR>
 vnoremap <leader>jy :call JqYankVisual()<CR>
-nnoremap <leader>jp :r ! jq -f ~/script.jq ~/temp.json<CR>
-vnoremap <leader>jp :! jq -f ~/script.jq<CR>
-
+nnoremap <leader>jp :r ! jq -r -f ~/script.jq ~/temp.json<CR>
+vnoremap <leader>jp :! jq -r -f ~/script.jq<CR>
 vnoremap <leader>jf :! jq .<CR>
 
 " gvpr
@@ -156,8 +153,8 @@ vnoremap <leader>gvp :! gvpr -f ~/script.gvpr<CR>
 " curl
 nnoremap <leader>cs :e ~/script.curl<CR>
 nnoremap <leader>ct :e ~/request.json<CR>
-nnoremap <leader>cy :let @+ = system('curl --config script.curl')<CR>
-nnoremap <leader>cp :r ! curl --config script.curl<CR>
+nnoremap <leader>cy :let @+ = system('curl --config ~/script.curl')<CR>
+nnoremap <leader>cp :r ! curl --config ~/script.curl<CR>
 
 " sql (pip install sqlparse)
 vnoremap <leader>sf :! sqlformat --reindent --keywords upper --identifiers lower --comma_first true -<CR> " format sql file
@@ -167,7 +164,7 @@ nnoremap <leader>pf :! black %<CR> " format python file
 vnoremap <leader>plf :! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>
 command -nargs=1 PyGrep :read ! grep -Ir -n --include=*.py <q-args>
 nnoremap <leader>pg :PyGrep 
-nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
+" nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
 
 " line
 nnoremap <C-Up> :m .-2<CR>==
@@ -177,12 +174,12 @@ nnoremap <C-Down> :m .+1<CR>==
 nnoremap L :bn!<CR>
 nnoremap H :bp!<CR>
 nnoremap <leader>q :bp<bar>bd #<CR>
-nnoremap <leader>ls :ls<CR>
 nnoremap <leader>bf :bf<CR>
 nnoremap <leader>bl :bl<CR>
-nnoremap <leader>bdf :1,.-1bd<CR>
-nnoremap <leader>bdl :.+1,$bd<CR>
-nnoremap <leader>bonly :1,.-1bd<Bar>.+1,$bd<CR>
+nnoremap <leader>bdf :1,.-1bd!<CR>
+nnoremap <leader>bdl :.+1,$bd!<CR>
+nnoremap <leader>bonly :1,.-1bd!<Bar>.+1,$bd!<CR>
+nnoremap <leader>ls :ls<CR>
 
 " window
 nnoremap <C-H> <C-W>h
@@ -212,3 +209,18 @@ nnoremap <C-D> :sh<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
+
+" change directory :pwd to the direcotry which current buffer file located
+" nnoremap <leader>cd :execute 'cd ' . fnamemodify(expand('%'), ':p:h')<bar>pwd<CR>
+nnoremap <leader>cd :cd %:h<bar>pwd<CR>
+nnoremap <leader>g :echo expand('%:p')<CR>
+nnoremap <leader>pp :let @+ = expand('%:p')<CR>
+" nnoremap <leader>pp :call CopyPwd()<CR>
+
+" netrw
+" let g:netrw_browse_split=2
+" let g:netrw_liststyle=3
+" gh toggles dot files hide/show
+" nnoremap <leader>n :20Lex<CR>
+" nnoremap <leader>. :e %:h<CR>
+" nnoremap <leader>. :e $PWD<CR>
