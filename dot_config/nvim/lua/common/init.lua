@@ -193,11 +193,23 @@ function M.open_terminal()
     -- 버퍼가 유효하고 터미널 타입인지 확인
     if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
       vim.cmd('buffer! ' .. buf)
+
+      local job_id = vim.b[buf].terminal_job_id
+      if job_id and vim.fn.jobwait({job_id}, 0)[1] == -1 then
+        vim.fn.chansend(job_id, 'cd ' .. vim.fn.fnameescape(vim.fn.getcwd()) .. '\n')
+      end
       return
     end
   end
   
   vim.fn.execute('terminal')
+end
+
+function M.sync_terminal_pwd()
+  print('vim.b.osc7_dir: ' .. vim.b.osc7_dir)
+  if vim.b.osc7_dir and vim.fn.isdirectory(vim.b.osc7_dir) == 1 then
+    vim.cmd.cd(vim.b.osc7_dir)
+  end
 end
 
 return M

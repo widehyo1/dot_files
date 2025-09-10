@@ -1,9 +1,16 @@
+__osc7_pwd() {
+    local hostname="${HOSTNAME:-$(hostname)}"
+    local pwd="$PWD"
+    printf '\033]7;file://%s%s\007' "$hostname" "$pwd"
+}
+
 # history
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 shopt -s histappend                      # append to history, don't overwrite it
 # Save and reload the history after each command finishes
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+export PROMPT_COMMAND="__osc7_pwd; $PROMPT_COMMAND"
 
 # prompt display
 export PS1='\[\033]133;A\007\]\[\033[01;34m\]\w\[\033[00m\] $ '
