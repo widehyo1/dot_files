@@ -1,27 +1,15 @@
-function! TablineBuffers()
-  let curBuf = bufnr('%')
-
-  let bufNameList = []
-
-  for buf in filter(getbufinfo(), 'v:val.listed')
-    let bufName = ''
-    if buf.name == ''
-      let bufName = '[No Name]'
-    else
-      let bufName = fnamemodify(expand(buf.name), ':.:t')
+function! OpenTerminal()
+  for listed_buffer in filter(getbufinfo(), 'v:val.listed')
+    let bufnr = listed_buffer.bufnr
+    let buftype = getbufvar(bufnr, '&buftype')
+    let buftype = (buftype == '' ? 'normal' : buftype)
+    if buftype == 'terminal'
+      execute 'buffer! ' .. bufnr
+      return
     endif
-    if buf.changed == 1
-      let bufName = bufName .. ' +'
-    endif
-    if buf.bufnr == curBuf
-      let bufName = '< ' .. bufName .. ' >'
-    endif
-    call add(bufNameList, bufName)
   endfor
 
-  let bufNameStr = join(bufNameList, ' | ')
-  return bufNameStr
+  execute 'terminal! ++curwin'
 endfunction
 
-let result = TablineBuffers()
-echo result
+call OpenTerminal()

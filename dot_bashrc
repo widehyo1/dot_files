@@ -15,6 +15,11 @@ export PROMPT_COMMAND="__osc7_pwd; $PROMPT_COMMAND"
 # prompt display
 export PS1='\[\033]133;A\007\]\[\033[01;34m\]\w\[\033[00m\] $ '
 
+_syncpwd() {
+  printf '\e]51;["call","Tapi_SyncTerminalPwd","%s"]\x07' "$PWD"
+}
+alias syncpwd="_syncpwd"
+
 # git shortcut
 export GTOKEN=""
 alias catg="echo $GTOKEN"

@@ -66,6 +66,7 @@ set tags=./.tags;/
 source ~/.vim/util/common.vim
 source ~/.vim/util/surround.vim
 source ~/.vim/util/buffer_fzf.vim
+source ~/.vim/autocmd/terminal.vim
 " source ~/.vim/util/pyfullname.vim
 " source ~/.vim/util/navigate_pyhelp.vim
 " source ~/.vim/util/navigate_pyhelp.vim
@@ -97,10 +98,12 @@ set tabline=%!BufferTabline()
 
 
 " rc
-nnoremap <leader>rc :e ~/.vimrc<CR>
-nnoremap <leader>nrc :e ~/.config/nvim/init.lua<CR>
-nnoremap <leader>brc :e ~/.bashrc<CR>
-nnoremap <leader>md :e $TODAYMD<CR>
+nnoremap <leader>rc :e! ~/.vimrc<CR>
+nnoremap <leader>nrc :e! ~/.config/nvim/init.lua<CR>
+nnoremap <leader>brc :e! ~/.bashrc<CR>
+nnoremap <leader>common :e! ~/.vim/util/common.vim<CR>
+nnoremap <leader>play :e! ~/.vim/util/playground.vim <CR>
+nnoremap <leader>md :e! $TODAYMD<CR>
 
 " misc
 nnoremap <leader>h :noh<CR><ESC>
@@ -128,16 +131,16 @@ nnoremap <space>` :call ToggleBackTick()<CR>
 
 
 " awk
-nnoremap <leader>as :e ~/script.awk<CR>
-nnoremap <leader>at :e ~/temp.txt<CR>
+nnoremap <leader>as :e! ~/script.awk<CR>
+nnoremap <leader>at :e! ~/temp.txt<CR>
 nnoremap <leader>ay :let @+ = system('awk -f ~/script.awk ~/temp.txt')<CR>
 vnoremap <leader>ay :call AwkYankVisual()<CR>
 nnoremap <leader>ap :r ! awk -f ~/script.awk ~/temp.txt<CR>
 vnoremap <leader>ap :! awk -f ~/script.awk<CR>
 
 " jq
-nnoremap <leader>js :e ~/script.jq<CR>
-nnoremap <leader>jt :e ~/temp.json<CR>
+nnoremap <leader>js :e! ~/script.jq<CR>
+nnoremap <leader>jt :e! ~/temp.json<CR>
 nnoremap <leader>jy :let @+ = system('jq -r -f ~/script.jq ~/temp.json')<CR>
 vnoremap <leader>jy :call JqYankVisual()<CR>
 nnoremap <leader>jp :r ! jq -r -f ~/script.jq ~/temp.json<CR>
@@ -145,14 +148,14 @@ vnoremap <leader>jp :! jq -r -f ~/script.jq<CR>
 vnoremap <leader>jf :! jq .<CR>
 
 " gvpr
-nnoremap <leader>gvs :e ~/script.gvpr<CR>
-nnoremap <leader>gvt :e ~/temp.dot<CR>
+nnoremap <leader>gvs :e! ~/script.gvpr<CR>
+nnoremap <leader>gvt :e! ~/temp.dot<CR>
 nnoremap <leader>gvp :r ! gvpr -f ~/script.gvpr ~/temp.dot<CR>
 vnoremap <leader>gvp :! gvpr -f ~/script.gvpr<CR>
 
 " curl
-nnoremap <leader>cs :e ~/script.curl<CR>
-nnoremap <leader>ct :e ~/request.json<CR>
+nnoremap <leader>cs :e! ~/script.curl<CR>
+nnoremap <leader>ct :e! ~/request.json<CR>
 nnoremap <leader>cy :let @+ = system('curl --config ~/script.curl')<CR>
 nnoremap <leader>cp :r ! curl --config ~/script.curl<CR>
 
@@ -205,7 +208,9 @@ imap jj <ESC>
 imap JJ <ESC>
 
 " toggle terminal-vim
-nnoremap <C-D> :sh<CR>
+" nnoremap <C-D> :sh<CR>
+" nnoremap <C-D> :terminal ++curwin<CR>
+nnoremap <C-D> :call OpenTerminal()<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
