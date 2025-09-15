@@ -114,5 +114,7 @@ alias blackall='~/.cli/shell/blackall.sh'
 alias applynvimconf='~/.cli/shell/apply_nvimconf.sh'
 alias gchanged='git st | awk -f ~/.cli/awk/git_changed.awk'
 
+# alacritty
 alias cdalacritty='cd /mnt/c/Users/$USERNAME/AppData/Roaming/alacritty'
 alias vialacritty='vi /mnt/c/Users/$USERNAME/AppData/Roaming/alacritty/alacritty.toml'
+# & "C:\Program Files\Alacritty\alacritty.exe" --config-file "C:\Users\$USERNAME\AppData\Roaming\alacritty\alacritty-pwsh.toml"

@@ -1,0 +1,11 @@
+general.working_directory="D:/gitclone"
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+  { mouse = "Right", mods = "None", action = "Copy" }
+]
+
+[font]
+normal = { family = "0xProto Nerd Font", style = "Regular" }
