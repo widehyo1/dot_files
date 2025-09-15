@@ -12,3 +12,8 @@ args = ["~"]
 
 [font]
 normal = { family = "0xProto Nerd Font", style = "Regular" }
+
+[keyboard]
+bindings = [
+  { key = "Key6", mods = "Control", chars = "\u001e" }
+]
