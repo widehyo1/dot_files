@@ -1,6 +1,6 @@
 [user]
-	name = 
-	email = 
+	name = widehyo@mobigen.com
+	email = widehyo@mobigen.com
 [init]
 	defaultBranch = master
 [alias]
@@ -11,6 +11,12 @@
     info = branch -avv
     logfile = log --name-status --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
     logabbr = log --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
+
+    dlog = -c diff.external=difft log --ext-diff
+    dshow = -c diff.external=difft show --ext-diff
+    ddiff = -c diff.external=difft diff
+	logd = "!f() {\n  range=${1:-HEAD};\n  git log --reverse --format=\"%H %h %an %s\" \"$range\" |\n\n  while read full short author subject; do\n    echo;\n    echo \"commit $short $author - $subject\";\n    echo \"----------------------------------------\";\n    git difftool --tool=difft --no-prompt \"$full^!\" 2>/dev/null;\n  done | less -R;\n}; f"
+	showd = !env GIT_EXTERNAL_DIFF=\"difft --color=always\" git show
 [http]
 	sslVerify = false
 [diff]
@@ -21,7 +27,8 @@
 [difftool "vimdiff"]
 	cmd = vimdiff \"$LOCAL\" \"$REMOTE\"
 [core]
-	autocrlf = true
+	autocrlf = false
 	fscache = true
 	preloadindex = true
-
+[difftool "difft"]
+	cmd = difft --color=always \"$LOCAL\" \"$REMOTE\"

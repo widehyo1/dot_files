@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+range="${1:-HEAD}"
+pager="${PAGER:-less -R}"
+
+# find difftastic
+difft_bin="$(command -v difft || true)"
+if [ -z "$difft_bin" ]; then
+  echo "ERROR: difft (difftastic) not found in PATH. Install it or put it in PATH." >&2
+  exit 1
+fi
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+
+# Iterate commits (newest-first like `git log -p`)
+git rev-list "$range" | while read -r commit; do
+  # header similar to git log -p
+  git show -s --format="commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%s%n" "$commit"
+  echo "----------------------------------------------------------------"
+
+  # list changed files with statuses
+  git diff-tree --no-commit-id --name-status -r "$commit" | \
+  while IFS=$'\t' read -r status a b; do
+    case "$status" in
+      R* )
+        old="$a"; new="$b"
+        safe_old=$(echo "$old" | sed 's#[/ ]#_#g')
+        safe_new=$(echo "$new" | sed 's#[/ ]#_#g')
+        oldf="$tmpdir/${commit}_${safe_old}.old"
+        newf="$tmpdir/${commit}_${safe_new}.new"
+        git show "${commit}^:${old}" > "$oldf" 2>/dev/null || printf "" > "$oldf"
+        git show "${commit}:${new}"   > "$newf" 2>/dev/null || printf "" > "$newf"
+        echo "rename: $old -> $new"
+        "$difft_bin" "$oldf" "$newf"
+        ;;
+      A )
+        path="$a"
+        safe=$(echo "$path" | sed 's#[/ ]#_#g')
+        oldf="$tmpdir/${commit}_${safe}.old"; newf="$tmpdir/${commit}_${safe}.new"
+        printf "" > "$oldf"
+        git show "${commit}:${path}" > "$newf" 2>/dev/null || printf "" > "$newf"
+        echo "added: $path"
+        "$difft_bin" --color=always "$oldf" "$newf"
+        ;;
+      D )
+        path="$a"
+        safe=$(echo "$path" | sed 's#[/ ]#_#g')
+        oldf="$tmpdir/${commit}_${safe}.old"; newf="$tmpdir/${commit}_${safe}.new"
+        git show "${commit}^:${path}" > "$oldf" 2>/dev/null || printf "" > "$oldf"
+        printf "" > "$newf"
+        echo "deleted: $path"
+        "$difft_bin" --color=always "$oldf" "$newf"
+        ;;
+      * )
+        # M (modified) and any other status
+        path="$a"
+        safe=$(echo "$path" | sed 's#[/ ]#_#g')
+        oldf="$tmpdir/${commit}_${safe}.old"; newf="$tmpdir/${commit}_${safe}.new"
+        git show "${commit}^:${path}" > "$oldf" 2>/dev/null || printf "" > "$oldf"
+        git show "${commit}:${path}"   > "$newf" 2>/dev/null || printf "" > "$newf"
+        echo "modified: $path"
+        "$difft_bin" --color=always "$oldf" "$newf"
+        ;;
+    esac
+    echo
+  done
+
+  echo
+done | $pager

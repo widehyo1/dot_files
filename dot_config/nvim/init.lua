@@ -16,9 +16,7 @@ local fw_config = {}
 autocmd_custom.fw_setup(fw_config)
 
 -- netrw
--- vim.g.netrw_liststyle = 3
--- vim.api.nvim_set_keymap('n', '<leader>n', ':20Lex<CR>', silent_noremap)
--- vim.api.nvim_set_keymap('n', '<leader>.', ':exe ":20Lex " .. expand("%:h")<CR>', { noremap = true, silent = false })
+vim.g.netrw_liststyle = 3
 
 -- lazy.nvim
 require('config.lazy')

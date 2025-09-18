@@ -17,6 +17,9 @@ common.add_snippet("lua", "```lua\n${1:-- path}\n```", b_local)
 common.add_snippet("vim", "```vim\n${1:content}\n```", b_local)
 common.add_snippet("hs", "```hs\n${1:content}\n```", b_local)
 
+common.add_snippet("link", "[${1:title}](${2:uri})", b_local)
+common.add_snippet("res", "[${1:title}](${2:path})", b_local)
+
 common.add_snippet("asm", '```asm\n%include "io64.inc"\n\nsection .text\nglobal CMAIN\nCMAIN:\n    ;write your code here\nxor rax, rax\nret\n```', b_local)
 common.add_snippet("datasection", "section .data", b_local)
 common.add_snippet("bsssection", "section .bss", b_local)
