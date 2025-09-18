@@ -1,0 +1,38 @@
+#!/bin/bash
+
+envfile="$(dirname $(dirname $0))/env/.env"
+if [[ -f $envfile ]]; then
+    source $envfile
+else
+    echo "$envfile does not exist" >&2
+    exit 1
+fi
+
+# Print usage message
+usage() {
+    echo "Usage: makepost TITLE" >&2
+    exit 1
+}
+
+read -r -p "input post filename: " postfile
+read -r -p "input title: " title
+read -r -p "input subtitle: " subtitle
+read -r -p "input tags: " tags
+
+postfile=${postfile:-default_filename}
+title=${title:-default_title}
+subtitle=${subtitle:-default_subtitle}
+tags=${tags:-}
+
+postfile="$TODAYPOST-$postfile.md"
+
+cat <<EOF >$postfile
+---
+layout: post
+title: $title
+subtitle: $subtitle
+tags: [$tags]
+comments: true
+author: widehyo
+---
+EOF

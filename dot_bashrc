@@ -96,6 +96,9 @@ alias catetc="cat /mnt/c/Windows/System32/drivers/etc/hosts"
 alias lastfile="ls -rt | tail -n 1"
 alias lstime='ls -l --time-style long-iso'
 
+alias psH='ps -H'
+alias +x='chmod +x'
+
 # nvm(for mermaid)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
