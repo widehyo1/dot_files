@@ -10,7 +10,7 @@ fi
 
 # Print usage message
 usage() {
-    echo "Usage: makepost TITLE" >&2
+    echo "Usage: postblog TITLE" >&2
     exit 1
 }
 
