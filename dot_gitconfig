@@ -8,24 +8,9 @@
 	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%as)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
 	lg = lg1
     st = status --no-renames
-    info = branch -avv
-    logfile = log --name-status --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
-    logabbr = log --oneline --pretty=format:'%h|%ad|%s|by %an' --date=short
-
-    dlog = -c diff.external=difft log --ext-diff
-    dshow = -c diff.external=difft show --ext-diff
-    ddiff = -c diff.external=difft diff
-	logd = "!f() {\n  range=${1:-HEAD};\n  git log --reverse --format=\"%H %h %an %s\" \"$range\" |\n\n  while read full short author subject; do\n    echo;\n    echo \"commit $short $author - $subject\";\n    echo \"----------------------------------------\";\n    git difftool --tool=difft --no-prompt \"$full^!\" 2>/dev/null;\n  done | less -R;\n}; f"
-	showd = !env GIT_EXTERNAL_DIFF=\"difft --color=always\" git show
+    dlogp = -c diff.external=difft log --ext-diff -p
 [http]
 	sslVerify = false
-[diff]
-	tool = vimdiff
-[difftool]
-	prompt = false
-	trustExitCode = true
-[difftool "vimdiff"]
-	cmd = vimdiff \"$LOCAL\" \"$REMOTE\"
 [core]
 	autocrlf = false
 	fscache = true
