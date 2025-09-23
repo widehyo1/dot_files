@@ -130,9 +130,9 @@ endfunction
 
 function! PopupFilter(winid, key) abort
     if a:key ==# "j"
-        call win_execute(a:winid, "normal! \<c-e>")
+        call win_execute(a:winid, "normal! j")
     elseif a:key ==# "k"
-        call win_execute(a:winid, "normal! \<c-y>")
+        call win_execute(a:winid, "normal! k")
     elseif a:key ==# "\<c-d>"
         call win_execute(a:winid, "normal! \<c-d>")
     elseif a:key ==# "\<c-u>"
@@ -145,6 +145,12 @@ function! PopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! \<c-f>")
     elseif a:key ==# "u"
         call win_execute(a:winid, "normal! \<c-b>")
+    elseif a:key ==# "v"
+        call win_execute(a:winid, "normal! v")
+    elseif a:key ==# "V"
+        call win_execute(a:winid, "normal! V")
+    elseif a:key ==# "y"
+        call win_execute(a:winid, "normal! y")
     elseif a:key ==# "G"
         call win_execute(a:winid, "normal! G")
     elseif a:key ==# "g"
@@ -210,12 +216,10 @@ function! OpenMessagePopup()
         \ minheight: pop_height,
         \ maxwidth: pop_width,
         \ minwidth: pop_width,
-        \ filter: 'PopupFilter',
-        \ filtermode: 'n'
+        \ filter: 'PopupFilter'
         \ }
 
   let winid = popup_menu(lines, popup_config)
-  echomsg winid
   call win_execute(winid, 'normal! G')
   call win_execute(winid, 'normal! \<c-b>')
 endfunction
