@@ -208,9 +208,9 @@ imap jj <ESC>
 imap JJ <ESC>
 
 " toggle terminal-vim
-" nnoremap <C-D> :sh<CR>
+nnoremap <C-D> :sh<CR>
 " nnoremap <C-D> :terminal ++curwin<CR>
-nnoremap <C-D> :call OpenTerminal()<CR>
+" nnoremap <C-D> :call OpenTerminal()<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
@@ -220,6 +220,7 @@ nnoremap <leader>d :%s/\r//g<CR>
 nnoremap <leader>cd :cd %:h<bar>pwd<CR>
 nnoremap <leader>g :echo expand('%:p')<CR>
 nnoremap <leader>pp :let @+ = expand('%:p')<CR>
+nnoremap <leader>msg :call OpenMessagePopup()<CR>
 " nnoremap <leader>pp :call CopyPwd()<CR>
 
 " netrw
@@ -229,3 +230,8 @@ nnoremap <leader>pp :let @+ = expand('%:p')<CR>
 " nnoremap <leader>n :20Lex<CR>
 " nnoremap <leader>. :e %:h<CR>
 " nnoremap <leader>. :e $PWD<CR>
+
+" function! Tapi_test(arg1, arg2)
+"     echomsg a:arg1
+"     echomsg a:arg2
+" endfunction

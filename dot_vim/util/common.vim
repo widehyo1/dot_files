@@ -141,6 +141,10 @@ function! PopupFilter(winid, key) abort
         call win_execute(a:winid, "normal! \<c-f>")
     elseif a:key ==# "\<c-b>"
         call win_execute(a:winid, "normal! \<c-b>")
+    elseif a:key ==# "\<space>"
+        call win_execute(a:winid, "normal! \<c-f>")
+    elseif a:key ==# "u"
+        call win_execute(a:winid, "normal! \<c-b>")
     elseif a:key ==# "G"
         call win_execute(a:winid, "normal! G")
     elseif a:key ==# "g"
@@ -194,4 +198,24 @@ endfunction
 
 function! Tapi_SyncTerminalPwd(param, dir)
   execute 'cd ' .. a:dir
+endfunction
+
+function! OpenMessagePopup()
+  let pop_width = float2nr(&columns * 0.8)
+  let pop_height = float2nr(&lines * 0.8)
+  let lines = split(execute('message', 'silent'), '\n')
+  let popup_config = #{
+        \ scrollbar: 1,
+        \ maxheight: pop_height,
+        \ minheight: pop_height,
+        \ maxwidth: pop_width,
+        \ minwidth: pop_width,
+        \ filter: 'PopupFilter',
+        \ filtermode: 'n'
+        \ }
+
+  let winid = popup_menu(lines, popup_config)
+  echomsg winid
+  call win_execute(winid, 'normal! G')
+  call win_execute(winid, 'normal! \<c-b>')
 endfunction
