@@ -194,16 +194,40 @@ function! OpenTerminal()
     let buftype = getbufvar(bufnr, '&buftype')
     let buftype = (buftype == '' ? 'normal' : buftype)
     if buftype == 'terminal'
+      let term_winid = getbufvar(bufnr, 'winid')
+      if win_id2win(term_winid) != 0
+        " terminal buffer window is opened
+        " move cursor to the window
+        call win_gotoid(term_winid)
+      endif
       execute 'buffer! ' .. bufnr
+      let pwd = getcwd()
+      " sync vim pwd
+      call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
       return
     endif
   endfor
 
   execute 'terminal! ++curwin'
+  let term_bufnr = bufnr()
+  call setbufvar(term_bufnr, 'winid', bufwinid(term_bufnr)) " save window id
 endfunction
 
-function! Tapi_SyncTerminalPwd(param, dir)
-  execute 'cd ' .. a:dir
+function! Tapi_SyncTerminalPwd(bufnum, arglist)
+  execute 'cd ' .. a:arglist
+endfunction
+
+function! Tapi_SetOsc7_Dir(bufnum, arglist)
+  call setbufvar(a:bufnum, 'osc7_dir', a:arglist)
+endfunction
+
+function! SyncTerminalPwd()
+  let term_bufnr = bufnr()
+  let osc7_dir = getbufvar(term_bufnr, 'osc7_dir')
+  if isdirectory(osc7_dir)
+    echo 'osc7_dir: ' .. osc7_dir
+    execute 'cd ' .. osc7_dir
+  endif
 endfunction
 
 function! OpenMessagePopup()
