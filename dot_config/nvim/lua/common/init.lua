@@ -196,6 +196,7 @@ function M.open_terminal()
 
       local job_id = vim.b[buf].terminal_job_id
       if job_id and vim.fn.jobwait({job_id}, 0)[1] == -1 then
+        vim.fn.chansend(job_id, '\x15')
         vim.fn.chansend(job_id, 'cd ' .. vim.fn.fnameescape(vim.fn.getcwd()) .. '\n')
       end
       return
