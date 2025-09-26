@@ -18,17 +18,14 @@ iabbrev <buffer> \datasection; section .data
 iabbrev <buffer> \bsssection; section .bss
 iabbrev <buffer> \textsection; section .text
 
+nnoremap <buffer> <leader><leader>jld :g/\v(at java\.(util<BAR>lang)<BAR>at org\.springframework<BAR>at catalina<BAR>at org\.apache<BAR>at org\.jboss<BAR>at sun\.reflect<BAR>at javax\.servlet<BAR>at org\.thymeleaf<BAR>at jakarta\.servlet<BAR>at org\.keycloak<BAR>at java\.net)/d<CR>
 
 function! PasteCodeBlock(info_string = '')
-  if len(a:info_string)
-    call setline('.', '```' .. a:info_string)
-  else
-    call setline('.', '```')
-  endif
+  call setline('.', '```' .. a:info_string)
   execute 'put'
-  normal o
-  call setline('. + 1', '```')
+  call setline(line('.') + 1, '```')
+  silent! keeppatterns %s/\r//g
 endfunction
 
 command -nargs=? PasteCodeBlock :call PasteCodeBlock(<f-args>)
-nnoremap <space>p :PasteCodeBlock 
+nnoremap <buffer> <space>p :PasteCodeBlock 

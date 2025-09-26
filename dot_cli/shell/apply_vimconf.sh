@@ -1,4 +1,6 @@
 #!/bin/bash
+echo find /home/widehyo/gitclone/dot_files/dot_vim -type f | grep -v "bundle" | grep ".vim$" | cut -c42- | xargs -I@ rm @
+find /home/widehyo/gitclone/dot_files/dot_vim -type f | grep -v "bundle" | grep ".vim$" | cut -c42- | xargs -I@ rm @
 echo find /home/widehyo/.vim -type f | grep -v "bundle" | grep ".vim$" | cut -c20- | tar -czvf /home/widehyo/gitclone/dot_files/dot_vim/vimconf.tgz --directory /home/widehyo/.vim/ --files-from -
 find /home/widehyo/.vim -type f | grep -v "bundle" | grep ".vim$" | cut -c20- | tar -czvf /home/widehyo/gitclone/dot_files/dot_vim/vimconf.tgz --directory /home/widehyo/.vim/ --files-from -
 echo tar -xzvf /home/widehyo/gitclone/dot_files/dot_vim/vimconf.tgz --directory /home/widehyo/gitclone/dot_files/dot_vim

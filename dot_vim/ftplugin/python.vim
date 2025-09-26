@@ -1,3 +1,5 @@
+set keywordprg=poetry\ run\ python\ -m\ pydoc
+
 iabbrev <buffer> \main; if __name__ == '__main__':
 iabbrev <buffer> \pandas; import pandas as pd
 iabbrev <buffer> \numpy; import numpy as np

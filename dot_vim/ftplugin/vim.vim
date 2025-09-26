@@ -4,7 +4,7 @@ setlocal expandtab
 
 iabbrev <buffer> \while; while condition<CR>statements<CR>endwhile
 iabbrev <buffer> \for; for varname in listexpression<CR>commands<CR>endfor
-iabbrev <buffer> \function; function! Funcname()<CR>" content<CR><C-U>endfunciton
+iabbrev <buffer> \fun; function FnName<CR>endfunction
 
 vnoremap <buffer> gcc :s/^/" /<CR>
 
