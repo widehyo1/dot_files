@@ -32,23 +32,6 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 nnoremap <leader>. :NERDTreeFind<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 
-" airline
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_nr_show = 1
-" * enable/disable searchcount integration >
-" let g:airline#extensions#searchcount#enabled = 1
-" * enable/disable displaying search term >
-" let g:airline#extensions#searchcount#show_search_term = 1
-" * enable/disable csv integration for displaying the current column. >
-" let g:airline#extensions#csv#enabled = 1
-
-" * enable/disable showing a summary of changed hunks under source control. >
-" let g:airline#extensions#hunks#enabled = 1
-" * enable/disable showing only non-zero hunks. >
-" let g:airline#extensions#hunks#non_zero_only = 0
-" * set hunk count symbols. >
-" let g:airline#extensions#hunks#hunk_symbols = ['+', '~', '-']
-
 " ctags
 nnoremap <C-]> <C-]>zz
 set tags=./.tags;/
@@ -58,9 +41,6 @@ set tags=./.tags;/
 " autocmd FileType python call tagbar#autoopen(0)
 " set laststatus=2
 " set statusline=%{FugitiveStatusline()}
-
-
-
 
 " load custom script
 source ~/.vim/util/common.vim
@@ -121,13 +101,28 @@ nnoremap <leader>`v /`/-1<CR>V?`?+1<CR>
 nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
 
 " surround
-nnoremap <space>( :call ToggleRoundBraket()<CR>
-nnoremap <space>[ :call ToggleSquareBraket()<CR>
-nnoremap <space>{ :call ToggleCurlyBraket()<CR>
-nnoremap <space>< :call ToggleAngleBraket()<CR>
-nnoremap <space>' :call ToggleQuote()<CR>
-nnoremap <space>" :call ToggleDoubleQuote()<CR>
-nnoremap <space>` :call ToggleBackTick()<CR>
+" nnoremap <space>( :call ToggleRoundBraket()<CR>
+" nnoremap <space>[ :call ToggleSquareBraket()<CR>
+" nnoremap <space>{ :call ToggleCurlyBraket()<CR>
+" nnoremap <space>< :call ToggleAngleBraket()<CR>
+" nnoremap <space>' :call ToggleQuote()<CR>
+" nnoremap <space>" :call ToggleDoubleQuote()<CR>
+" nnoremap <space>` :call ToggleBackTick()<CR>
+
+nnoremap <space>` yiwcw``"0P
+vnoremap <space>` ygvc``"0P
+nnoremap <space>" yiwcw"""0P
+vnoremap <space>" ygvc"""0P
+nnoremap <space>' yiwcw''"0P
+vnoremap <space>' ygvc''"0P
+nnoremap <space>( yiwcw()"0P
+vnoremap <space>( ygvc()"0P
+nnoremap <space>[ yiwcw[]"0P
+vnoremap <space>[ ygvc[]"0P
+nnoremap <space>< yiwcw<>"0P
+vnoremap <space>< ygvc<>"0P
+nnoremap <space>{ yiwcw{}"0P
+vnoremap <space>{ ygvc{}"0P
 
 
 " awk
