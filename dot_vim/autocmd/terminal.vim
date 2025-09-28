@@ -5,9 +5,9 @@ augroup TerminalKeymaps
 augroup END
 
 function! s:SetupTerminalKeymaps() abort
-  set hidden
-  set nolist
-  set nonumber
+  setlocal hidden
+  setlocal nolist
+  setlocal nonumber
   " <C-D> : 이전 버퍼로 전환
   execute 'nnoremap <buffer> <C-D> :buffer! #<CR>'
 
