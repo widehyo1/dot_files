@@ -102,6 +102,7 @@ alias lstime='ls -l --time-style long-iso'
 alias +x='chmod +x'
 alias psH='ps -H'
 alias pb='postblog'
+alias rp='realpath'
 
 # nvm(for mermaid)
 export NVM_DIR="$HOME/.nvm"

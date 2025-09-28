@@ -230,10 +230,10 @@ function! SyncTerminalPwd()
   endif
 endfunction
 
-function! OpenMessagePopup()
+function! OpenExcommandPopup(excommand, lseek = v:false)
   let pop_width = float2nr(&columns * 0.8)
   let pop_height = float2nr(&lines * 0.8)
-  let lines = split(execute('message', 'silent'), '\n')
+  let lines = split(execute(a:excommand, 'silent'), '\n')
   let popup_config = #{
         \ scrollbar: 1,
         \ maxheight: pop_height,
@@ -244,6 +244,31 @@ function! OpenMessagePopup()
         \ }
 
   let winid = popup_menu(lines, popup_config)
-  call win_execute(winid, 'normal! G')
-  call win_execute(winid, 'normal! \<c-b>')
+
+  if a:lseek
+    call win_execute(winid, 'normal! G')
+    call win_execute(winid, 'normal! \<c-b>')
+  endif
+endfunction
+
+function! OpenSystemPopup(command, lseek = v:false)
+  let pop_width = float2nr(&columns * 0.8)
+  let pop_height = float2nr(&lines * 0.8)
+
+  let lines = split(system(a:command, 'silent'), '\n')
+  let popup_config = #{
+        \ scrollbar: 1,
+        \ maxheight: pop_height,
+        \ minheight: pop_height,
+        \ maxwidth: pop_width,
+        \ minwidth: pop_width,
+        \ filter: 'PopupFilter'
+        \ }
+
+  let winid = popup_menu(lines, popup_config)
+
+  if a:lseek
+    call win_execute(winid, 'normal! G')
+    call win_execute(winid, 'normal! \<c-b>')
+  endif
 endfunction

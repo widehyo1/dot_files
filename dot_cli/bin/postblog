@@ -36,3 +36,4 @@ comments: true
 author: widehyo
 ---
 EOF
+echo "$postfile"

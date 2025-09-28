@@ -215,8 +215,13 @@ nnoremap <leader>d :%s/\r//g<CR>
 nnoremap <leader>cd :cd %:h<bar>pwd<CR>
 nnoremap <leader>g :echo expand('%:p')<CR>
 nnoremap <leader>pp :let @+ = expand('%:p')<CR>
-nnoremap <leader>msg :call OpenMessagePopup()<CR>
-" nnoremap <leader>pp :call CopyPwd()<CR>
+
+" floating window
+nnoremap <leader>msg :call OpenExcommandPopup('messages', v:true)<CR>
+nnoremap <leader>map :call OpenExcommandPopup('map')<CR>
+
+nnoremap <leader>af :call OpenSystemPopup('awk -f ~/script.awk ~/temp.txt')<CR>
+nnoremap <leader>jf :call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<CR>
 
 " netrw
 " let g:netrw_browse_split=2
