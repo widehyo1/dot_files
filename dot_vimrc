@@ -219,6 +219,11 @@ nnoremap <leader>pp :let @+ = expand('%:p')<CR>
 " floating window
 nnoremap <leader>msg :call OpenExcommandPopup('messages', v:true)<CR>
 nnoremap <leader>map :call OpenExcommandPopup('map')<CR>
+nnoremap <leader>jumps :call OpenExcommandPopup('jumps', v:true)<CR>
+nnoremap <leader>changes :call OpenExcommandPopup('changes', v:true)<CR>
+nnoremap <leader>history :call OpenExcommandPopup('history', v:true)<CR>
+nnoremap <leader>undo :call OpenExcommandPopup('undo', v:true)<CR>
+nnoremap <leader>autocmd :call OpenExcommandPopup('autocmd')<CR>
 
 nnoremap <leader>af :call OpenSystemPopup('awk -f ~/script.awk ~/temp.txt')<CR>
 nnoremap <leader>jf :call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<CR>
