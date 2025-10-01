@@ -6,7 +6,7 @@ tmpfile=$(mktemp)
 sqlite3 ~/machine.db -cmd " CREATE TABLE IF NOT EXISTS df(
     created_at TEXT,
     filesystem TEXT,
-    blocks inteGER,
+    blocks INTEGER,
     used INTEGER,
     available INTEGER,
     use TEXT,
