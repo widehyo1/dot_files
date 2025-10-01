@@ -1,6 +1,7 @@
 #!/bin/bash
 df_to_csv_file="$HOME/.cli/awk/df_to_csv.awk"
 today=$(date '+%F')
+tmpfile=$(mktemp)
 
 sqlite3 ~/machine.db -cmd " CREATE TABLE IF NOT EXISTS df(
     created_at TEXT,
@@ -12,9 +13,9 @@ sqlite3 ~/machine.db -cmd " CREATE TABLE IF NOT EXISTS df(
     mounted TEXT
 ) " ".quit"
 sqlite3 ~/machine.db -cmd "delete from df where created_at = '$today'" ".quit"
-df | awk -f "$df_to_csv_file" > "$HOME"/df.csv
+df | awk -f "$df_to_csv_file" > "$tmpfile"
 sqlite3 ~/machine.db \
     -cmd ".mode csv" \
-    -cmd ".import --skip 1 $HOME/df.csv df" \
+    -cmd ".import --skip 1 $tmpfile df" \
     ".quit"
 sqlite3 ~/machine.db -cmd "select count(1) from df where created_at = '$today'" ".quit"
