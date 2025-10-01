@@ -74,7 +74,8 @@ alias runjq='jq -f ~/script.jq ~/temp.json'
 alias runcurl='curl --config ~/script.curl'
 
 # awk @include common library
-export AWKPATH="~/.cli/awk/lib"
+export AWKPATH=AWKPATH:"~/.cli/awk/lib"
+export AWKPATH=AWKPATH:"~/.cli/awk"
 
 # kotlin
 alias runjar='java -jar'
