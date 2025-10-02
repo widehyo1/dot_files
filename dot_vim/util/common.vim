@@ -188,29 +188,56 @@ function! BufferTabline()
   return bufNameStr
 endfunction
 
-function! OpenTerminal()
-  for listed_buffer in filter(getbufinfo(), 'v:val.listed')
-    let bufnr = listed_buffer.bufnr
-    let buftype = getbufvar(bufnr, '&buftype')
-    let buftype = (buftype == '' ? 'normal' : buftype)
-    if buftype == 'terminal'
-      let term_winid = getbufvar(bufnr, 'winid')
-      if win_id2win(term_winid) != 0
-        " terminal buffer window is opened
-        " move cursor to the window
-        call win_gotoid(term_winid)
-      endif
-      execute 'buffer! ' .. bufnr
-      let pwd = getcwd()
-      " sync vim pwd
-      call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
-      return
-    endif
-  endfor
+function! PrintOpenTerminalMode()
+  echomsg 'choice: ' .. g:open_terminal_mode .. ' [:sh(0), :terminal with sync buffer pwd(1), :terminal(2), :terminal in new buffer(3)]'
+endfunction
 
-  execute 'terminal! ++curwin'
-  let term_bufnr = bufnr()
-  call setbufvar(term_bufnr, 'winid', bufwinid(term_bufnr)) " save window id
+function! ToggleOpenTerminalMode()
+  let g:open_terminal_mode = (g:open_terminal_mode + 1) % 4
+  call PrintOpenTerminalMode()
+endfunction
+
+function! OpenTerminal()
+  call PrintOpenTerminalMode()
+  if g:open_terminal_mode == 0
+    execute ':sh'
+    return
+  endif
+
+  if g:open_terminal_mode > 0
+    for listed_buffer in filter(getbufinfo(), 'v:val.listed')
+      let bufnr = listed_buffer.bufnr
+      let buftype = getbufvar(bufnr, '&buftype')
+      let buftype = (buftype == '' ? 'normal' : buftype)
+      if buftype == 'terminal'
+        let term_winid = getbufvar(bufnr, 'winid')
+        if win_id2win(term_winid) != 0
+          " terminal buffer window is opened
+          " move cursor to the window
+          call win_gotoid(term_winid)
+        endif
+
+        if g:open_terminal_mode == 3
+          execute 'vsplit'
+        endif
+        execute 'buffer! ' .. bufnr
+        if g:open_terminal_mode == 1
+          let pwd = getcwd()
+          " sync vim pwd
+          call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
+        endif
+        return
+      endif
+    endfor
+
+    if g:open_terminal_mode == 3
+      execute 'vsplit'
+    endif
+    execute 'terminal! ++curwin'
+    let term_bufnr = bufnr()
+    call setbufvar(term_bufnr, 'winid', bufwinid(term_bufnr)) " save window id
+  endif
+
 endfunction
 
 function! Tapi_SyncTerminalPwd(bufnum, arglist)

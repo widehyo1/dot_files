@@ -205,7 +205,9 @@ imap JJ <ESC>
 " toggle terminal-vim
 " nnoremap <C-D> :sh<CR>
 " nnoremap <C-D> :terminal ++curwin<CR>
+let g:open_terminal_mode = 0
 nnoremap <C-D> :call OpenTerminal()<CR>
+nnoremap <space><C-D> :call ToggleOpenTerminalMode()<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
