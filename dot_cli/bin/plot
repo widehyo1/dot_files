@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Check argument count
+if [[ $# -ne 1 ]]; then
+    echo "Usage: plot FILE" >&2
+    exit 1
+fi
+
+filename=$1
+plt_command="$(awk 'length { print $0 ";" }' $1)"
+python3 -c "$plt_command"
