@@ -226,6 +226,9 @@ function! OpenTerminal()
           call win_gotoid(term_winid)
         endif
 
+        if g:open_terminal_mode == 3 && len(getwininfo()) == 1
+          execute 'vsplit'
+        endif
         execute 'buffer! ' .. bufnr
         if g:open_terminal_mode == 1
           let pwd = getcwd()
