@@ -189,7 +189,16 @@ function! BufferTabline()
 endfunction
 
 function! PrintOpenTerminalMode()
-  echomsg 'choice: ' .. g:open_terminal_mode .. ' [:sh(0), :terminal with sync buffer pwd(1), :terminal(2), :terminal in new buffer(3)]'
+  let terminal_modes = [':sh', ':terminal (cd pwd)', ':terminal', ':terminal (vs)']
+  let mode_repr_list = []
+  for idx in range(len(terminal_modes))
+    let t_mode = terminal_modes[idx]
+    if g:open_terminal_mode ==# idx
+      let t_mode = '< ' .. t_mode .. ' >'
+    endif
+    call add(mode_repr_list, t_mode)
+  endfor
+  echomsg join(mode_repr_list, ' | ')
 endfunction
 
 function! ToggleOpenTerminalMode()
@@ -217,14 +226,14 @@ function! OpenTerminal()
           call win_gotoid(term_winid)
         endif
 
-        if g:open_terminal_mode == 3
-          execute 'vsplit'
-        endif
         execute 'buffer! ' .. bufnr
         if g:open_terminal_mode == 1
           let pwd = getcwd()
           " sync vim pwd
           call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
+        endif
+        if g:open_terminal_mode == 3 && mode() == 'n'
+          call feedkeys("i\<C-u>")
         endif
         return
       endif
