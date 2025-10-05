@@ -208,6 +208,16 @@ imap JJ <ESC>
 let g:open_terminal_mode = 0
 nnoremap <C-D> :call OpenTerminal()<CR>
 nnoremap <space><space><space> :call ToggleOpenTerminalMode()<CR>
+nnoremap <space><space>0 :call SelectOpenTerminalMode(0)<CR>
+nnoremap <space><space>1 :call SelectOpenTerminalMode(1)<CR>
+nnoremap <space><space>2 :call SelectOpenTerminalMode(2)<CR>
+nnoremap <space><space>3 :call SelectOpenTerminalMode(3)<CR>
+
+" terminal-esc
+" tnoremap jj <C-W>N
+tnoremap <C-Q> <C-W>N
+" paste register + (unnamed plus)
+tnoremap <C-S-V> <C-W>"+
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
@@ -221,6 +231,7 @@ nnoremap <leader>pp :let @+ = expand('%:p')<CR>
 " floating window
 nnoremap <leader>msg :call OpenExcommandPopup('messages', v:true)<CR>
 nnoremap <leader>map :call OpenExcommandPopup('map')<CR>
+nnoremap <leader>reg :call OpenExcommandPopup('registers')<CR>
 nnoremap <leader>jumps :call OpenExcommandPopup('jumps', v:true)<CR>
 nnoremap <leader>changes :call OpenExcommandPopup('changes', v:true)<CR>
 nnoremap <leader>history :call OpenExcommandPopup('history', v:true)<CR>

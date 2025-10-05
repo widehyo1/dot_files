@@ -206,6 +206,11 @@ function! ToggleOpenTerminalMode()
   call PrintOpenTerminalMode()
 endfunction
 
+function! SelectOpenTerminalMode(mode)
+  let g:open_terminal_mode = a:mode
+  call PrintOpenTerminalMode()
+endfunction
+
 function! OpenTerminal()
   call PrintOpenTerminalMode()
   if g:open_terminal_mode == 0
