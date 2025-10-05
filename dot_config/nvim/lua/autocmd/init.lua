@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
   callback = function(args)
     local buf = args.buf
     vim.keymap.set('n', '<C-D>', '<C-^>', { noremap = true, silent = true, buffer = buf })
-    vim.keymap.set('n', '<space>cd', common.sync_terminal_pwd, { noremap = true, silent = true, buffer = buf })
+    vim.keymap.set('n', '<leader>cd', common.sync_terminal_pwd, { noremap = true, silent = true, buffer = buf })
     vim.keymap.set('t', '<C-Q>', [[<C-\><C-n>]], { noremap = true, silent = true, buffer = buf })
 
     vim.cmd.startinsert()
