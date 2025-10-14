@@ -49,8 +49,8 @@ vim.api.nvim_set_keymap('n', '<leader>wwv', '<C-W>_', silent_noremap)
 vim.api.nvim_set_keymap('n', '<leader>wwh', '<C-W><bar>', silent_noremap)
 
 -- terminal
-vim.api.nvim_set_keymap('n', '<leader>term', ':terminal<CR>', silent_noremap)
-vim.api.nvim_set_keymap('n', '<C-D>', ':terminal<CR>', silent_noremap)
+-- vim.api.nvim_set_keymap('n', '<leader>term', ':terminal<CR>', silent_noremap)
+-- vim.api.nvim_set_keymap('n', '<C-D>', ':terminal<CR>', silent_noremap)
 
 -- misc
 vim.api.nvim_set_keymap('n', '<leader><C-D>', '<C-D>', silent_noremap)

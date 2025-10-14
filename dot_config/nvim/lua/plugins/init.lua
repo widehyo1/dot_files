@@ -64,5 +64,5 @@ return {
         table.insert(opts.ensure_installed, "http")
       end,
     }
-  },
+  }
 }

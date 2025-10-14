@@ -186,23 +186,74 @@ function _G.tabline_buffers()
   return buf_name_str
 end
 
+function M.select_open_terminal_mode(mode)
+  vim.g.open_terminal_mode = mode
+  M.print_open_terminal_mode()
+end
+
+function M.toggle_open_terminal_mode()
+  vim.g.open_terminal_mode = (vim.g.open_terminal_mode + 1) % 3
+  M.print_open_terminal_mode()
+end
+
+function M.print_open_terminal_mode()
+  print(vim.g.open_terminal_mode)
+  local terminal_modes = {':terminal (cd pwd)', ':terminal', ':terminal (vs)'}
+  local joiner = function(acc, cur)
+    return acc .. ' | ' .. cur
+  end
+  for idx, modename in ipairs(terminal_modes) do
+    if (idx - 1) == vim.g.open_terminal_mode then
+      terminal_modes[idx] = '< ' .. modename .. ' >'
+    end
+  end
+  print(chain.from(terminal_modes)
+    :reduce(joiner)
+  )
+end
+
 function M.open_terminal()
+  M.print_open_terminal_mode()
   local buffers = vim.api.nvim_list_bufs()
   
   for _, buf in ipairs(buffers) do
     -- 버퍼가 유효하고 터미널 타입인지 확인
     if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      local term_winid = vim.fn.getbufvar(buf, 'winid')
+      if vim.fn.win_id2win(term_winid) ~= 0 then
+        -- terminal buffer window is opened
+        -- move cursor to the window
+        vim.fn.win_gotoid(term_winid)
+      end
+
+      if vim.g.open_terminal_mode == 2 and #vim.fn.getwininfo() == 1 then
+        vim.cmd('vsplit')
+      end
       vim.cmd('buffer! ' .. buf)
 
       local job_id = vim.b[buf].terminal_job_id
-      if job_id and vim.fn.jobwait({job_id}, 0)[1] == -1 then
-        vim.fn.chansend(job_id, 'cd ' .. vim.fn.fnameescape(vim.fn.getcwd()) .. '\n')
+
+      if vim.g.open_terminal_mode == 0 then
+        if job_id and vim.fn.jobwait({job_id}, 0)[1] == -1 then
+          vim.fn.chansend(job_id, '\x15')
+          vim.fn.chansend(job_id, 'cd ' .. vim.fn.fnameescape(vim.fn.getcwd()) .. '\n')
+        end
+      end
+
+      if vim.g.open_terminal_mode == 2 and vim.fn.mode() == 'n' then
+        vim.fn.chansend(job_id, '\x15')
       end
       return
     end
   end
+
+  if vim.g.open_terminal_mode == 2 then
+    vim.cmd('vsplit')
+  end
   
   vim.fn.execute('terminal')
+  local term_bufnr = vim.fn.bufnr()
+  vim.fn.setbufvar(term_bufnr, 'winid', vim.fn.bufwinid(term_bufnr)) -- save window id
 end
 
 function M.sync_terminal_pwd()

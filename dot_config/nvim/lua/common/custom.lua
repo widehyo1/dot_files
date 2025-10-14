@@ -88,6 +88,10 @@ vim.keymap.set('n', '<space>cd', common.cd_current_line)
 
 -- terminal
 vim.keymap.set('n', '<C-D>', common.open_terminal)
+vim.keymap.set('n', '<space><space><space>', common.toggle_open_terminal_mode)
+vim.keymap.set('n', '<space><space>0', function() common.select_open_terminal_mode(0) end)
+vim.keymap.set('n', '<space><space>1', function() common.select_open_terminal_mode(1) end)
+vim.keymap.set('n', '<space><space>2', function() common.select_open_terminal_mode(2) end)
 
 vim.o.tabline =  '%!v:lua.tabline_buffers()'
 

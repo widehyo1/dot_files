@@ -1,4 +1,5 @@
 vim.g.mapleader = ","
+vim.g.open_terminal_mode = 0
 
 require('common.options')
 require('common.keymaps')
