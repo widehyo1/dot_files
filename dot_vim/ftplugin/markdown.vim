@@ -29,3 +29,4 @@ endfunction
 
 command -nargs=? PasteCodeBlock :call PasteCodeBlock(<f-args>)
 nnoremap <buffer> <space>p :PasteCodeBlock 
+nnoremap <buffer> <space>` i`<C-R>0`
