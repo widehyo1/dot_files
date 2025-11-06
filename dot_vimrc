@@ -5,8 +5,8 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-" Plugin 'nanotech/jellybeans.vim'
-Plugin 'sainnhe/sonokai'
+Plugin 'nanotech/jellybeans.vim'
+" Plugin 'sainnhe/sonokai'
 " Plugin 'vim-airline/vim-airline'
 " Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'tpope/vim-fugitive'
@@ -23,7 +23,8 @@ let mapleader=","
 
 " colorscheme
 set t_Co=256
-colorscheme sonokai
+" colorscheme sonokai
+colorscheme jellybeans
 
 " nerdtree autocmd group NERDTree
 " autocmd VimEnter * NERDTree | wincmd p
@@ -44,13 +45,7 @@ set tags=./.tags;/
 
 " load custom script
 source ~/.vim/util/common.vim
-source ~/.vim/util/surround.vim
-source ~/.vim/util/buffer_fzf.vim
 source ~/.vim/autocmd/terminal.vim
-" source ~/.vim/util/pyfullname.vim
-" source ~/.vim/util/navigate_pyhelp.vim
-" source ~/.vim/util/navigate_pyhelp.vim
-" nnoremap <leader>pp :call CopyPwd()<CR>
 
 " basic config
 set number
@@ -91,7 +86,6 @@ nnoremap <leader><C-D> <C-D>
 nnoremap <leader>H H
 nnoremap <leader>L L
 nnoremap <F5> :call ToggleSnakeCamel()<CR>
-nnoremap <leader><leader>p :call CopyPwd()<CR>
 nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
 command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
@@ -101,14 +95,6 @@ nnoremap <leader>`v /`/-1<CR>V?`?+1<CR>
 nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
 
 " surround
-" nnoremap <space>( :call ToggleRoundBraket()<CR>
-" nnoremap <space>[ :call ToggleSquareBraket()<CR>
-" nnoremap <space>{ :call ToggleCurlyBraket()<CR>
-" nnoremap <space>< :call ToggleAngleBraket()<CR>
-" nnoremap <space>' :call ToggleQuote()<CR>
-" nnoremap <space>" :call ToggleDoubleQuote()<CR>
-" nnoremap <space>` :call ToggleBackTick()<CR>
-
 nnoremap <space>` yiwcw``"0P
 vnoremap <space>` ygvc``"0P
 nnoremap <space>" yiwcw"""0P
@@ -141,6 +127,7 @@ vnoremap <leader>jy :call JqYankVisual()<CR>
 nnoremap <leader>jp :r ! jq -r -f ~/script.jq ~/temp.json<CR>
 vnoremap <leader>jp :! jq -r -f ~/script.jq<CR>
 vnoremap <leader>jf :! jq .<CR>
+vnoremap <leader>jc :! jq -c .<CR>
 
 " gvpr
 nnoremap <leader>gvs :e ~/script.gvpr<CR>
@@ -154,8 +141,12 @@ nnoremap <leader>ct :e ~/request.json<CR>
 nnoremap <leader>cy :let @+ = system('curl --config ~/script.curl')<CR>
 nnoremap <leader>cp :r ! curl --config ~/script.curl<CR>
 
+" http
+nnoremap <leader>hs :e ~/script.http<CR>
+
 " sql (pip install sqlparse)
 vnoremap <leader>sf :! sqlformat --reindent --keywords upper --identifiers lower --comma_first true -<CR> " format sql file
+nnoremap <leader>ss :e ~/script.sql<CR>
 
 " python (pip install black)
 nnoremap <leader>pf :! black %<CR> " format python file
@@ -163,6 +154,7 @@ vnoremap <leader>plf :! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>
 command -nargs=1 PyGrep :read ! grep -Ir -n --include=*.py <q-args>
 nnoremap <leader>pg :PyGrep 
 " nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
+nnoremap <leader>ps :e ~/script.py<CR>
 
 " line
 nnoremap <C-Up> :m .-2<CR>==
@@ -203,8 +195,6 @@ imap jj <ESC>
 imap JJ <ESC>
 
 " toggle terminal-vim
-" nnoremap <C-D> :sh<CR>
-" nnoremap <C-D> :terminal ++curwin<CR>
 let g:open_terminal_mode = 0
 nnoremap <C-D> :call OpenTerminal()<CR>
 nnoremap <space><space><space> :call ToggleOpenTerminalMode()<CR>
@@ -214,13 +204,13 @@ nnoremap <space><space>2 :call SelectOpenTerminalMode(2)<CR>
 nnoremap <space><space>3 :call SelectOpenTerminalMode(3)<CR>
 
 " terminal-esc
-" tnoremap jj <C-W>N
 tnoremap <C-Q> <C-W>N
 " paste register + (unnamed plus)
 tnoremap <C-S-V> <C-W>"+
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>
+
 
 " change directory :pwd to the direcotry which current buffer file located
 " nnoremap <leader>cd :execute 'cd ' . fnamemodify(expand('%'), ':p:h')<bar>pwd<CR>
@@ -232,8 +222,8 @@ nnoremap <leader>pp :let @+ = expand('%:p')<CR>
 nnoremap <leader>msg :call OpenExcommandPopup('messages', v:true)<CR>
 nnoremap <leader>map :call OpenExcommandPopup('map')<CR>
 nnoremap <leader>reg :call OpenExcommandPopup('registers')<CR>
-nnoremap <leader>jumps :call OpenExcommandPopup('jumps', v:true)<CR>
-nnoremap <leader>changes :call OpenExcommandPopup('changes', v:true)<CR>
+nnoremap <leader>jumps :call OpenJumplistPopup()<CR>
+nnoremap <leader>changes :call OpenChangelistPopup()<CR>
 nnoremap <leader>history :call OpenExcommandPopup('history', v:true)<CR>
 nnoremap <leader>undo :call OpenExcommandPopup('undo', v:true)<CR>
 nnoremap <leader>autocmd :call OpenExcommandPopup('autocmd')<CR>
@@ -249,7 +239,5 @@ nnoremap <leader>jf :call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<CR>
 " nnoremap <leader>. :e %:h<CR>
 " nnoremap <leader>. :e $PWD<CR>
 
-" function! Tapi_test(arg1, arg2)
-"     echomsg a:arg1
-"     echomsg a:arg2
-" endfunction
+
+

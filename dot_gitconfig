@@ -9,6 +9,7 @@
 	lg = lg1
     st = status --no-renames
     dlogp = -c diff.external=difft log --ext-diff -p
+    difft = -c diff.external=difft diff --ext-diff
 [http]
 	sslVerify = false
 [core]

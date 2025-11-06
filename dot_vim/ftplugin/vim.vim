@@ -8,4 +8,4 @@ iabbrev <buffer> \fun; function FnName<CR>endfunction
 
 vnoremap <buffer> gcc :s/^/" /<CR>
 
-nnoremap <buffer> <leader>rr :source %<CR>
+nnoremap <buffer> <leader>rr :!source %<CR>

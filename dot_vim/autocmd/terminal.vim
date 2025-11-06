@@ -6,8 +6,9 @@ augroup END
 
 function! s:SetupTerminalKeymaps() abort
   setlocal hidden
-  setlocal nolist
   setlocal nonumber
+  setlocal nolist
+  setlocal nowrap
   " <C-D> : 이전 버퍼로 전환
   execute 'nnoremap <buffer> <C-D> :buffer! #<CR>'
 

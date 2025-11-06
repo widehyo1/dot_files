@@ -50,3 +50,4 @@ iabbrev <buffer> \byname; BY NAME
 iabbrev <buffer> \oconf; ON CONFLICT
 iabbrev <buffer> \nop; DO NOTHING
 
+vnoremap <buffer> gcc :s/^/-- /<CR>
