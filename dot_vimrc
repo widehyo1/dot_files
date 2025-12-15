@@ -206,7 +206,12 @@ nnoremap <space><space>3 :call SelectOpenTerminalMode(3)<CR>
 " terminal-esc
 tnoremap <C-Q> <C-W>N
 " paste register + (unnamed plus)
-tnoremap <C-S-V> <C-W>"+
+tnoremap <C-V> <C-W>"+
+
+" toggle terminal filetype
+let g:terminal_filetype_mode = 0
+nnoremap <leader><C-l> :call NextTerminalFileTypeMode()<CR>
+nnoremap <leader><C-h> :call PrevTerminalFileTypeMode()<CR>
 
 " remove (carriage return) character
 nnoremap <leader>d :%s/\r//g<CR>

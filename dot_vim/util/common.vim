@@ -368,3 +368,26 @@ function! GoChangelist(id, result)
   execute target_dict['cmd']
   normal zz
 endfunction
+
+
+function! NextTerminalFileTypeMode()
+  let g:terminal_filetype_mode = (g:terminal_filetype_mode + 1) % 3
+  call PrintTerminalFiletypeMode()
+  call SetTerminalFileType()
+endfunction
+
+function! PrevTerminalFileTypeMode()
+  let g:terminal_filetype_mode = (g:terminal_filetype_mode + 2) % 3
+  call PrintTerminalFiletypeMode()
+  call SetTerminalFileType()
+endfunction
+
+function! SetTerminalFileType()
+  if g:terminal_filetype_mode == 1
+    execute 'set filetype=java'
+  elseif g:terminal_filetype_mode == 2
+    execute 'set filetype=python'
+  elseif g:terminal_filetype_mode == 0
+    execute 'set filetype=terminal'
+  endif
+endfunction
