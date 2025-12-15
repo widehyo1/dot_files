@@ -101,9 +101,17 @@ alias lastfile="ls -rt | tail -n 1"
 alias lstime='ls -l --time-style long-iso'
 
 alias +x='chmod +x'
+alias hy='httpyac'
+alias lb='linebetween'
+alias gl='grepline'
+alias gla='grepline -A 50'
+alias glb='grepline -B 50'
+alias glc='grepline -C 50'
 alias psH='ps -H'
 alias pb='postblog'
 alias rp='realpath'
+alias dc='docker compose'
+alias catn='cat -n'
 
 # nvm(for mermaid)
 export NVM_DIR="$HOME/.nvm"
