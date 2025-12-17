@@ -1,0 +1,22 @@
+set datafile separator ","
+set title "Disk Usage Comparison (C vs D)"
+set ylabel "Usage (%)"
+set yrange [0:100]
+
+set style data histograms
+set style histogram cluster gap 1
+set style fill solid 0.7 border -1
+set boxwidth 0.9
+
+set xtics rotate by -45 scale 0
+set grid y
+set key top left
+
+# 헤더 무시
+set key autotitle columnhead
+
+plot 'disk_usage.csv' \
+    using (real(substr(strcol(4),1,strlen(strcol(4))-1))):xtic(1) title "C drive", \
+    '' using (real(substr(strcol(7),1,strlen(strcol(7))-1))) title "D drive"
+
+pause -1 "<cr> to plot the same dataset as stacked histogram"
