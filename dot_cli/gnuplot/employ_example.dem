@@ -1,0 +1,15 @@
+set title "U.S Solar Employment Growth\nBy Job Category."
+set style data lines
+set key outside right
+set grid
+set xlabel "Year"
+set ylabel "Employment"
+
+set datafile missing "null"
+set datafile separator "\t"
+stats 'employ_example.dat' using 0 nooutput
+cols = STATS_columns
+
+plot for [i=1:cols] 'employ_example.dat' using i title columnheader(i) lw 2
+
+pause -1 "Hit return to continue"
