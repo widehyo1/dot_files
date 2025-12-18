@@ -156,6 +156,14 @@ nnoremap <leader>pg :PyGrep
 " nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
 nnoremap <leader>ps :e ~/script.py<CR>
 
+" ruby
+nnoremap <leader>rs :e ~/script.rb<CR>
+
+" gnuplot
+nnoremap <leader>gps :e ~/script.dem<CR>
+nnoremap <leader>gpt :e ~/temp.dat<CR>
+nnoremap <leader>gpr :! gnuplot ~/script.dem<CR>
+
 " line
 nnoremap <C-Up> :m .-2<CR>==
 nnoremap <C-Down> :m .+1<CR>==

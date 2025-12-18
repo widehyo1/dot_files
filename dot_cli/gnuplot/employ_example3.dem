@@ -1,0 +1,17 @@
+set datafile missing "null"
+set datafile separator "\t"
+set key autotitle columnhead
+
+set title "U.S Solar Employment Growth\nBy Job Category."
+set key outside right
+set style data lines
+set grid
+set xlabel "Year"
+set ylabel "Employment"
+cols = 5
+
+plot \
+    'employ_example.dat' using 1 title col lw 2, \
+    for [i=2:cols] '' using i title col lw 2
+
+pause -1 "Hit return to continue"

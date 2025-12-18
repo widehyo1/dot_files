@@ -85,6 +85,7 @@ alias ktc='$HOME/.cli/shell/ktc.sh'
 # ctags, difft
 alias difft="difft --skip-unchanged"
 alias pyctags='ctags -R --languages=Python --exclude=".venv" -f .tags .'
+alias javactags='ctags -R --languages=Java -f .tags .'
 
 # graphviz
 alias vdot='vimdot ~/graphviz/graph.dot'
@@ -113,10 +114,19 @@ alias rp='realpath'
 alias dc='docker compose'
 alias catn='cat -n'
 
+# psql
+alias ptarget='source ~/env/.targetenv && psql'
+
 # nvm(for mermaid)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+_get_docker_id() {
+  local query=$1
+  local docker_id=$(docker ps | awk -v query="$query" '$0 ~ query { print $1 }')
+  echo "$docker_id"
+}
 
 export PATH=$PATH:$HOME/.cli/bin
 
@@ -124,6 +134,10 @@ export PATH=$PATH:$HOME/.cli/bin
 eval "$(starship init bash)"
 # for difft
 source "$HOME/.cargo/env"
+
+# gnuplot
+alias gp='gnuplot'
+alias rungp='gnuplot ~/script.dem'
 
 # custom commands
 alias gitcheck='~/.cli/shell/gitcheck.sh'
