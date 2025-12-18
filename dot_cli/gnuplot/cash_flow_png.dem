@@ -1,0 +1,61 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+year_color(yr) = \
+    (yr==0 ? "#1f77b4" : \
+     yr==1 ? "#ff7f0e" : \
+     yr==2 ? "#2ca02c" : \
+     "#d62728")
+
+idx_year(idx) = \
+    (idx==0 ? "2022" : \
+     idx==1 ? "2023" : \
+     idx==2 ? "2024" : \
+     "2025")
+
+set style line 1 lc rgb year_color(0) lt 1 dt solid   # income
+set style line 2 lc rgb year_color(1) lt 1 dt solid   # income
+set style line 3 lc rgb year_color(2) lt 1 dt solid   # income
+set style line 4 lc rgb year_color(3) lt 1 dt solid   # income
+
+set style line 5 lc rgb year_color(0) lt 1 dt "."   # bonus(ibk)
+set style line 6 lc rgb year_color(1) lt 1 dt "."   # bonus(ibk)
+set style line 7 lc rgb year_color(2) lt 1 dt "."   # bonus(ibk)
+set style line 8 lc rgb year_color(3) lt 1 dt "."   # bonus(ibk)
+
+set style line 9 lc rgb year_color(0) lt 1 dt "-"     # bonus(parent)
+set style line 10 lc rgb year_color(1) lt 1 dt "-"     # bonus(parent)
+set style line 11 lc rgb year_color(2) lt 1 dt "-"     # bonus(parent)
+set style line 12 lc rgb year_color(3) lt 1 dt "-"     # bonus(parent)
+
+set style line 13 lc rgb year_color(0) lt 1 dt "_" # event
+set style line 14 lc rgb year_color(1) lt 1 dt "_" # event
+set style line 15 lc rgb year_color(2) lt 1 dt "_" # event
+set style line 16 lc rgb year_color(3) lt 1 dt "_" # event
+
+set style line 17 lc rgb year_color(0) lt 1 dt ".-" # score
+set style line 18 lc rgb year_color(1) lt 1 dt ".-" # score
+set style line 19 lc rgb year_color(2) lt 1 dt ".-" # score
+set style line 20 lc rgb year_color(3) lt 1 dt ".-" # score
+
+set title "Cash Flow (Monthly Overlay)"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set key outside right
+
+set xtics 1,1,12
+
+cols = 7
+
+set terminal pngcairo size 1600,900 enhanced font "Arial,12"
+set output "~/cash_flow_monthly.png"
+
+plot \
+for [y=0:3] '~/temp.dat' index y using 1:3 with lines ls (y+1) title idx_year(y), \
+for [y=0:3] '~/temp.dat' index y using 1:4 with lines ls (y+5) title (y==0? "bonus(ibk)" : ""), \
+for [y=0:3] '~/temp.dat' index y using 1:5 with lines ls (y+9) title (y==0? "bonus(parent)" : ""), \
+for [y=0:3] '~/temp.dat' index y using 1:6 with lines ls (y+13) title (y==0? "event" : ""), \
+for [y=0:3] '~/temp.dat' index y using 1:7 with lines ls (y+17) title (y==0? "score" : "")
+
