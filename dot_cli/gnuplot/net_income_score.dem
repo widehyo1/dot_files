@@ -1,0 +1,25 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "Net Income vs Score (Monthly)"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set key outside right
+set xtic rotate by -45
+
+set style line 1 lc rgb "#1f77b4"  # net_income
+set style line 2 lc rgb "#ff7f0e"  # score
+
+set style data histograms
+set style histogram clustered gap 1
+set style fill solid border -1
+set boxwidth 0.7
+
+set terminal pdfcairo size 18cm,10cm enhanced font "Helvetica,10"
+set output "~/net_income_score.pdf"
+
+
+plot '~/temp.dat' using 2:xtic(1) title "net income" ls 1, \
+     '' using 3 title "score" ls 2

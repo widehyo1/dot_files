@@ -1,0 +1,33 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "Monthly Net Income (Stacked)"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set key outside right
+set xtic rotate by -45
+
+set style line 1 lc rgb "#1f77b4"  # income
+set style line 2 lc rgb "#ff7f0e"  # bonus(ibk)
+set style line 3 lc rgb "#2ca02c"  # bonus(parent)
+set style line 4 lc rgb "#d62728"  # event
+set style line 5 lc rgb "black" lw 2  # net_income
+
+set style data histograms
+set style histogram rowstacked
+set style fill solid border -1
+set boxwidth 0.7
+
+set terminal pdfcairo size 18cm,10cm enhanced font "Helvetica,10"
+set output "~/monthly_net_income.pdf"
+
+
+plot '~/temp.dat' using 2:xtic(1) title "income" ls 1, \
+     '' using 3 title "bonus(ibk)" ls 2, \
+     '' using 4 title "bonus(parent)" ls 3, \
+     '' using 5 title "event" ls 4, \
+     '' using ($2+$3+$4+$5) with lines title "net income" ls 5
+
+
