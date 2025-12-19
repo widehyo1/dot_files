@@ -1,0 +1,21 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "Total asset trend (Monthly)"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set key outside right
+
+set xdata time
+set timefmt "%Y-%m"
+set format x "%Y-%m"
+set xtics rotate by -45
+
+plot '~/temp.dat' using 1:2 with lines lw 2 title col, \
+     '' using 1:3 with boxes, \
+     '' using 1:4 with boxes
+
+pause -1 "Hit return to continue"
+
