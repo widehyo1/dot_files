@@ -1,0 +1,20 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "Disk Usage(C vs D)"
+set style data lines
+set grid
+set xlabel "day"
+set ylabel "remains"
+
+set xdata time
+set timefmt "%Y-%m-%d"
+set format x "%Y-%m-%d"
+set xtics rotate by -45
+
+set terminal pdfcairo size 18cm,10cm enhanced font "Helvetica,10"
+set output "~/disk_usage.pdf"
+
+plot '~/temp.dat' using 1:6 title col lw 2, \
+     '' using 1:3 title col lw 2
