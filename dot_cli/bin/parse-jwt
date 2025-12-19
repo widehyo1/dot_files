@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Print usage message
+usage() {
+    echo "Usage: parse-jwt [FILE]" >&2
+    exit 1
+}
+
+if [ $# -gt 1 ]; then
+  usage
+fi
+
+fname=$1
+
+if [[ -n $fname ]]; then
+  cut -d . -f 2 $fname | base64 -d
+else
+  cut -d . -f 2 | base64 -d
+fi
