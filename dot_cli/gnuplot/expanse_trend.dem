@@ -1,0 +1,27 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "monthly asset diff trend"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set xtic rotate by -45
+
+set style data histograms
+set style histogram clustered gap 1
+set style fill solid border -1
+set boxwidth 0.7
+
+set style line 1 lc rgb "#2ca02c"  # net_income
+set style line 2 lc rgb "#1f77b4"  # score
+set style line 3 lc rgb "#ff7f0e"  # expanse
+set style line 4 lc rgb "black"    # asset_diff
+
+plot '~/temp.dat' using 2:xtic(1) with histogram title col ls 1, \
+     '' using 3 with histogram ti col ls 2, \
+     '' using 4 with histogram ti col ls 3, \
+     '' using 5 with lines ti col ls 4
+
+pause -1 "Hit return to continue"
+
