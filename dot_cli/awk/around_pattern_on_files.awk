@@ -2,6 +2,11 @@ BEGIN {
   OFS = "|"
 }
 
+FNR == 1 {
+    delete buf
+    after = 0
+}
+
 {
   buf[NR % 21] = $0
 }
