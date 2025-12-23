@@ -12,30 +12,20 @@ BEGIN {
     ln = FNR - i
     if (ln > 0) {
       line = buf[(NR - i + 21) % 21]
-      key = FILENAME SUBSEP ln SUBSEP line
-      if (!(key in seen)) {
+      if (!seen[FILENAME,ln,line]++)
         print FILENAME, ln, line
-        seen[key]
-      }
     }
   }
 
   # 매칭 라인
-  key = FILENAME SUBSEP FNR SUBSEP $0
-  if (!(key in seen)) {
+  if (!seen[FILENAME,FNR,$0]++)
     print FILENAME, FNR, $0
-    seen[key]
-  }
-
   after = 10
   next
 }
 
 after > 0 {
-  key = FILENAME SUBSEP FNR SUBSEP $0
-  if (!(key in seen)) {
+  if (!seen[FILENAME,FNR,$0]++)
     print FILENAME, FNR, $0
-    seen[key]
-  }
   after--
 }
