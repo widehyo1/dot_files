@@ -1,256 +1,27 @@
-filetype off                  " required
-"git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plugin 'nanotech/jellybeans.vim'
-" Plugin 'sainnhe/sonokai'
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'tpope/vim-fugitive'
-" Plugin 'widehyodev/poetry-doc'
-" Plugin 'airblade/vim-gitgutter'
-" Plugin 'majutsushi/tagbar'
-" Plugin 'mattn/emmet-vim'
-
-call vundle#end()            " required
-filetype plugin indent on     " required!
-
 " mapleader
 let mapleader=","
 
-" colorscheme
-set t_Co=256
-" colorscheme sonokai
-colorscheme jellybeans
-
-" nerdtree autocmd group NERDTree
-" autocmd VimEnter * NERDTree | wincmd p
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-
-nnoremap <leader>. :NERDTreeFind<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
-
-" ctags
-nnoremap <C-]> <C-]>zz
-set tags=./.tags;/
-
-" tagbar
-" autocmd FileType c call tagbar#autoopen(0)
-" autocmd FileType python call tagbar#autoopen(0)
-" set laststatus=2
-" set statusline=%{FugitiveStatusline()}
-
 " load custom script
-source ~/.vim/util/common.vim
+source ~/.vim/common.vim
+source ~/.vim/utils/buffer.vim
 source ~/.vim/autocmd/terminal.vim
+source ~/.vim/utils/terminal.vim
+source ~/.vim/utils/snake_camel.vim
+source ~/.vim/utils/popup.vim
+source ~/.vim/custom/keymaps.vim
+source ~/.vim/custom/settings.vim
 
-" basic config
-set number
-set showmatch
-set smartindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set noswapfile
-set clipboard=unnamedplus
-" set nohlsearch
-set hlsearch
-set incsearch
-set splitright
-set splitbelow
-set showcmd
-set autoread
-set cursorline
-" print whitespace
-set list
-set listchars=tab:>-,trail:«,space:•,lead:»
-" set foldmethod=syntax
-set showtabline=2
-set tabline=%!BufferTabline()
+" machine specific
+" source ~/.vim/machine/wsl.vim
+" source ~/.vim/machine/jellybeans.vim
+" source ~/.vim/machine/nerdtree.vim
 
-
-" rc
-nnoremap <leader>rc :e ~/.vimrc<CR>
-nnoremap <leader>nrc :e ~/.config/nvim/init.lua<CR>
-nnoremap <leader>brc :e ~/.bashrc<CR>
-nnoremap <leader>common :e ~/.vim/util/common.vim<CR>
-nnoremap <leader>play :e ~/.vim/util/playground.vim <CR>
-nnoremap <leader>md :e $TODAYMD<CR>
-
-" misc
-nnoremap <leader>h :noh<CR><ESC>
-nnoremap <leader><C-D> <C-D>
-nnoremap <leader>H H
-nnoremap <leader>L L
-nnoremap <F5> :call ToggleSnakeCamel()<CR>
-nnoremap <silent> <leader><leader><leader> :call BufferMenu()<CR>
-command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
-nnoremap <leader><leader>s :BufferMenu 
-command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
-nnoremap <leader><leader><C-F> :SearchAcrossFiles 
-nnoremap <leader>`v /`/-1<CR>V?`?+1<CR>
-nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
-
-" surround
-nnoremap <space>` yiwcw``"0P
-vnoremap <space>` ygvc``"0P
-nnoremap <space>" yiwcw"""0P
-vnoremap <space>" ygvc"""0P
-nnoremap <space>' yiwcw''"0P
-vnoremap <space>' ygvc''"0P
-nnoremap <space>( yiwcw()"0P
-vnoremap <space>( ygvc()"0P
-nnoremap <space>[ yiwcw[]"0P
-vnoremap <space>[ ygvc[]"0P
-nnoremap <space>< yiwcw<>"0P
-vnoremap <space>< ygvc<>"0P
-nnoremap <space>{ yiwcw{}"0P
-vnoremap <space>{ ygvc{}"0P
-
-
-" awk
-nnoremap <leader>as :e ~/script.awk<CR>
-nnoremap <leader>at :e ~/temp.txt<CR>
-nnoremap <leader>ay :let @+ = system('awk -f ~/script.awk ~/temp.txt')<CR>
-vnoremap <leader>ay :call AwkYankVisual()<CR>
-nnoremap <leader>ap :r ! awk -f ~/script.awk ~/temp.txt<CR>
-vnoremap <leader>ap :! awk -f ~/script.awk<CR>
-
-" jq
-nnoremap <leader>js :e ~/script.jq<CR>
-nnoremap <leader>jt :e ~/temp.json<CR>
-nnoremap <leader>jy :let @+ = system('jq -r -f ~/script.jq ~/temp.json')<CR>
-vnoremap <leader>jy :call JqYankVisual()<CR>
-nnoremap <leader>jp :r ! jq -r -f ~/script.jq ~/temp.json<CR>
-vnoremap <leader>jp :! jq -r -f ~/script.jq<CR>
-vnoremap <leader>jf :! jq .<CR>
-vnoremap <leader>jc :! jq -c .<CR>
-
-" gvpr
-nnoremap <leader>gvs :e ~/script.gvpr<CR>
-nnoremap <leader>gvt :e ~/temp.dot<CR>
-nnoremap <leader>gvp :r ! gvpr -f ~/script.gvpr ~/temp.dot<CR>
-vnoremap <leader>gvp :! gvpr -f ~/script.gvpr<CR>
-
-" curl
-nnoremap <leader>cs :e ~/script.curl<CR>
-nnoremap <leader>ct :e ~/request.json<CR>
-nnoremap <leader>cy :let @+ = system('curl --config ~/script.curl')<CR>
-nnoremap <leader>cp :r ! curl --config ~/script.curl<CR>
-
-" http
-nnoremap <leader>hs :e ~/script.http<CR>
-
-" sql (pip install sqlparse)
-vnoremap <leader>sf :! sqlformat --reindent --keywords upper --identifiers lower --comma_first true -<CR> " format sql file
-nnoremap <leader>ss :e ~/script.sql<CR>
-
-" python (pip install black)
-nnoremap <leader>pf :! black %<CR> " format python file
-vnoremap <leader>plf :! bash ~/.cli/shell/pylog_format_vimfile.sh<CR>
-command -nargs=1 PyGrep :read ! grep -Ir -n --include=*.py <q-args>
-nnoremap <leader>pg :PyGrep 
-" nnoremap <leader>K :call PoetryHelpPopup()<CR> " requirements(poetry, ctags): project help popup in vim
-nnoremap <leader>ps :e ~/script.py<CR>
-
-" ruby
-nnoremap <leader>rs :e ~/script.rb<CR>
-
-" gnuplot
-nnoremap <leader>gps :e ~/script.dem<CR>
-nnoremap <leader>gpt :e ~/temp.dat<CR>
-nnoremap <leader>gpr :! gnuplot ~/script.dem<CR>
-
-" line
-nnoremap <C-Up> :m .-2<CR>==
-nnoremap <C-Down> :m .+1<CR>==
-
-" buffer
-nnoremap L :bn!<CR>
-nnoremap H :bp!<CR>
-nnoremap <leader>q :bp<bar>bd #<CR>
-nnoremap <leader>bf :bf<CR>
-nnoremap <leader>bl :bl<CR>
-nnoremap <leader>bdf :1,.-1bd!<CR>
-nnoremap <leader>bdl :.+1,$bd!<CR>
-nnoremap <leader>bonly :1,.-1bd!<Bar>.+1,$bd!<CR>
-nnoremap <leader>ls :ls<CR>
-
-" window
-nnoremap <C-H> <C-W>h
-nnoremap <C-L> <C-W>l
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-
-" window split
-nnoremap <leader>ws <C-W><C-S>
-nnoremap <leader>wv <C-W><C-V>
-
-" window split new
-nnoremap <leader>wns :new<CR>
-nnoremap <leader>wnv :vnew<CR>
-
-" window resize
-nnoremap <leader>wwr <C-W>=
-nnoremap <leader>wwv <C-W>_
-nnoremap <leader>wwh <C-W><bar>
-
-" esc
-imap jj <ESC>
-imap JJ <ESC>
-
-" toggle terminal-vim
-let g:open_terminal_mode = 0
-nnoremap <C-D> :call OpenTerminal()<CR>
-nnoremap <space><space><space> :call ToggleOpenTerminalMode()<CR>
-nnoremap <space><space>0 :call SelectOpenTerminalMode(0)<CR>
-nnoremap <space><space>1 :call SelectOpenTerminalMode(1)<CR>
-nnoremap <space><space>2 :call SelectOpenTerminalMode(2)<CR>
-nnoremap <space><space>3 :call SelectOpenTerminalMode(3)<CR>
-
-" terminal-esc
-tnoremap <C-Q> <C-W>N
-" paste register + (unnamed plus)
-tnoremap <C-V> <C-W>"+
-
-" toggle terminal filetype
-let g:terminal_filetype_mode = 0
-nnoremap <leader><C-l> :call NextTerminalFileTypeMode()<CR>
-nnoremap <leader><C-h> :call PrevTerminalFileTypeMode()<CR>
-
-" remove (carriage return) character
-nnoremap <leader>d :%s/\r//g<CR>
-
-
-" change directory :pwd to the direcotry which current buffer file located
-" nnoremap <leader>cd :execute 'cd ' . fnamemodify(expand('%'), ':p:h')<bar>pwd<CR>
-nnoremap <leader>cd :cd %:h<bar>pwd<CR>
-nnoremap <leader>g :echo expand('%:p')<CR>
-nnoremap <leader>pp :let @+ = expand('%:p')<CR>
-
-" floating window
-nnoremap <leader>msg :call OpenExcommandPopup('messages', v:true)<CR>
-nnoremap <leader>map :call OpenExcommandPopup('map')<CR>
-nnoremap <leader>reg :call OpenExcommandPopup('registers')<CR>
-nnoremap <leader>jumps :call OpenJumplistPopup()<CR>
-nnoremap <leader>changes :call OpenChangelistPopup()<CR>
-nnoremap <leader>history :call OpenExcommandPopup('history', v:true)<CR>
-nnoremap <leader>undo :call OpenExcommandPopup('undo', v:true)<CR>
-nnoremap <leader>autocmd :call OpenExcommandPopup('autocmd')<CR>
-
-nnoremap <leader>af :call OpenSystemPopup('awk -f ~/script.awk ~/temp.txt')<CR>
-nnoremap <leader>jf :call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<CR>
-
-" netrw
-" let g:netrw_browse_split=2
-" let g:netrw_liststyle=3
-" gh toggles dot files hide/show
-" nnoremap <leader>n :20Lex<CR>
-" nnoremap <leader>. :e %:h<CR>
-" nnoremap <leader>. :e $PWD<CR>
-
-
-
+" cli specific
+" source ~/.vim/cli/black.vim
+" source ~/.vim/cli/ctags.vim
+" source ~/.vim/cli/curl.vim
+" source ~/.vim/cli/gnuplot.vim
+" source ~/.vim/cli/gvpr.vim
+" source ~/.vim/cli/httpyac.vim
+" source ~/.vim/cli/jq.vim
+" source ~/.vim/cli/sqlparse.vim

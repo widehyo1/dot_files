@@ -1,0 +1,2 @@
+" tabline
+set tabline=%!BufferTabline()

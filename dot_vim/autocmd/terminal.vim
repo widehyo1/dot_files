@@ -4,6 +4,15 @@ augroup TerminalKeymaps
   autocmd TerminalOpen * call s:SetupTerminalKeymaps()
 augroup END
 
+function! SyncTerminalPwd()
+  let term_bufnr = bufnr()
+  let osc7_dir = getbufvar(term_bufnr, 'osc7_dir')
+  if isdirectory(osc7_dir)
+    echo 'osc7_dir: ' .. osc7_dir
+    execute 'cd ' .. osc7_dir
+  endif
+endfunction
+
 function! s:SetupTerminalKeymaps() abort
   setlocal hidden
   setlocal nonumber
