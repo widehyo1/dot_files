@@ -1,5 +1,6 @@
 " mapleader
 let mapleader=","
+filetype plugin indent on
 
 " load custom script
 source ~/.vim/common.vim
