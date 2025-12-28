@@ -1,0 +1,1 @@
+alias startplay="mkdir -p $TODAY/ && touch $TODAYMD && recorddf"
