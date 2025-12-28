@@ -1,0 +1,2 @@
+# jq
+alias runjq='jq -f ~/script.jq ~/temp.json'

@@ -1,0 +1,7 @@
+# custom commands
+alias lb='linebetween'
+alias gl='grepline'
+alias gla='grepline -A 50'
+alias glb='grepline -B 50'
+alias glc='grepline -C 50'
+alias pb='postblog'

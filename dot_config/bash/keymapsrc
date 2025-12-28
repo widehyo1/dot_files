@@ -1,0 +1,21 @@
+# rc
+alias brc='source ~/.bashrc'
+alias catrc='cat ~/.bashrc'
+alias virc='vi ~/.bashrc'
+
+# misc
+alias +x='chmod +x'
+alias psH='ps -H'
+alias lstime='ls -l --time-style long-iso'
+alias python='python3'
+alias rp='realpath'
+alias catn='cat -n'
+
+# tar
+alias tarc='tar -czvf'
+alias tarx='tar -xzvf'
+
+# awk
+alias runawk='awk -f ~/script.awk ~/temp.txt'
+export AWKPATH=AWKPATH:"~/.cli/awk/lib"
+export AWKPATH=AWKPATH:"~/.cli/awk"

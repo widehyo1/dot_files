@@ -1,0 +1,7 @@
+# git directories
+export GITDIR="$HOME/gitclone"
+export PLAYDIR="$GITDIR/playground"
+export BLOGDIR="$GITDIR/widehyo1.github.io"
+export DOTDIR="$GITDIR/dot_files"
+export TODAY="$PLAYDIR/`date '+%Y'`/`date '+%m'`/`date '+%d'`"
+export TODAYMD="$TODAY/`date '+%Y%m%d'`.md"

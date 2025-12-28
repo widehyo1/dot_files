@@ -1,0 +1,13 @@
+# git shortcut
+alias cdg="cd $GITDIR"
+alias cdplay="cd $PLAYDIR"
+alias cdblog="cd $BLOGDIR"
+alias cddot="cd $DOTDIR"
+alias cdtoday="cd $TODAY"
+alias startplay="mkdir -p $TODAY/ && touch $TODAYMD"
+alias catg="echo $GTOKEN"
+
+alias ginfo='git branch -avv'
+alias glog='git log --oneline --name-status --pretty=format:"%h|%ad|%s|by %an" --date=short'
+alias glogabbr='git log --oneline --pretty=format:"%h|%ad|%s|by %an" --date=short'
+alias glast='git diff --name-only HEAD..HEAD~'

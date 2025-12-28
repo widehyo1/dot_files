@@ -1,0 +1,2 @@
+# psql
+alias ptarget='source ~/env/.targetenv && psql'

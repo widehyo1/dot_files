@@ -1,0 +1,23 @@
+pwd="$HOME/.config/bash"
+source "$pwd/.env"
+source "$pwd/securityenv"
+source "$pwd/keymapsrc"
+
+# custom
+customdir="$pwd/custom"
+source "$customdir/.env"
+source "$customdir/keymapsrc"
+
+clidir="$pwd/cli"
+# source "$clidir/ctagsrc"
+# source "$clidir/curlrc"
+# source "$clidir/difftrc"
+# source "$clidir/dockerrc"
+source "$clidir/gitenv"
+source "$clidir/gitrc"
+# source "$clidir/gnuplotrc"
+# source "$clidir/httpyacrc"
+# source "$clidir/jqrc"
+# source "$clidir/psqlrc"
+# source "$clidir/starshiprc"
+source "$clidir/vimrc"

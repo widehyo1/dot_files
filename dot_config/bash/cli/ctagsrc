@@ -1,0 +1,3 @@
+# ctags
+alias pyctags='ctags -R --languages=Python --exclude=".venv" -f .tags .'
+alias javactags='ctags -R --languages=Java -f .tags .'

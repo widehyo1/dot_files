@@ -1,0 +1,4 @@
+# alacritty(wsl)
+alias cdalacritty='cd /mnt/c/Users/$USERNAME/AppData/Roaming/alacritty'
+alias vialacritty='vi /mnt/c/Users/$USERNAME/AppData/Roaming/alacritty/alacritty.toml'
+# & "C:\Program Files\Alacritty\alacritty.exe" --config-file "C:\Users\$USERNAME\AppData\Roaming\alacritty\alacritty-pwsh.toml"

@@ -1,0 +1,2 @@
+# difft
+alias difft="difft --skip-unchanged"

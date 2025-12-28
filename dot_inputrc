@@ -10,6 +10,9 @@
                                       # it overrides default action: clear
 # "\C-h": backward-delete-char        # Ctrl-H: Delete next character(i <C-h>)
 
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+
 ###############################################################
 # all other commands can be found by
 # 1. bind -p | grep -v "^#" | cut -d":" -f2 | sort | uniq

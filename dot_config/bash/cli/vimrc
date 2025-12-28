@@ -1,0 +1,15 @@
+# prompt display
+export PS1='\[\033]133;A\007\]\[\033[01;34m\]\w\[\033[00m\] $ '
+
+# sync vim pwd
+__osc7_prev_pwd=""
+_setosc7dir() {
+  if [[ "$PWD" != "$__osc7_prev_pwd" ]]; then
+    printf '\033]7;file://%s%s\007' "$HOSTNAME" "$PWD" # for neovim term request
+    printf '\e]51;["call","Tapi_SetOsc7_Dir","%s"]\x07' "$PWD" # for vim terminal api
+    __osc7_prev_pwd="$PWD"
+  fi
+}
+alias setosc7dir="_setosc7dir"
+
+export PROMPT_COMMAND='setosc7dir; '"$PROMPT_COMMAND"
