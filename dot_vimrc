@@ -1,28 +1,53 @@
+" =========================
+" helpers
+" =========================
+
+function! SourceIfFile(path) abort
+  if filereadable(expand(a:path))
+    execute 'source' a:path
+  endif
+endfunction
+
+function! SourceIfCmd(cmd, path) abort
+  if executable(a:cmd) && filereadable(expand(a:path))
+    execute 'source' a:path
+  endif
+endfunction
+
 " mapleader
-let mapleader=","
+let mapleader = ","
+
 filetype plugin indent on
 
-" load custom script
-source ~/.vim/common.vim
-source ~/.vim/utils/buffer.vim
-source ~/.vim/autocmd/terminal.vim
-source ~/.vim/utils/terminal.vim
-source ~/.vim/utils/snake_camel.vim
-source ~/.vim/utils/popup.vim
-source ~/.vim/custom/keymaps.vim
-source ~/.vim/custom/settings.vim
+" core scripts
+call SourceIfFile('~/.vim/common.vim')
+call SourceIfFile('~/.vim/utils/buffer.vim')
+call SourceIfFile('~/.vim/autocmd/terminal.vim')
+call SourceIfFile('~/.vim/utils/terminal.vim')
+call SourceIfFile('~/.vim/utils/snake_camel.vim')
+call SourceIfFile('~/.vim/utils/popup.vim')
 
-" machine specific
-" source ~/.vim/machine/wsl.vim
-" source ~/.vim/machine/jellybeans.vim
-" source ~/.vim/machine/nerdtree.vim
+" custom
+call SourceIfFile('~/.vim/custom/keymaps.vim')
+call SourceIfFile('~/.vim/custom/settings.vim')
 
-" cli specific
-" source ~/.vim/cli/black.vim
-" source ~/.vim/cli/ctags.vim
-" source ~/.vim/cli/curl.vim
-" source ~/.vim/cli/gnuplot.vim
-" source ~/.vim/cli/gvpr.vim
-" source ~/.vim/cli/httpyac.vim
-" source ~/.vim/cli/jq.vim
-" source ~/.vim/cli/sqlparse.vim
+
+" =========================
+" CLI specific
+" =========================
+
+call SourceIfCmd('black', '~/.vim/cli/black.vim')
+call SourceIfCmd('ctags', '~/.vim/cli/ctags.vim')
+call SourceIfCmd('curl', '~/.vim/cli/curl.vim')
+call SourceIfCmd('gnuplot', '~/.vim/cli/gnuplot.vim')
+call SourceIfCmd('gvpr', '~/.vim/cli/gvpr.vim')
+call SourceIfCmd('httpyac', '~/.vim/cli/httpyac.vim')
+call SourceIfCmd('jq', '~/.vim/cli/jq.vim')
+call SourceIfCmd('sqlparse', '~/.vim/cli/sqlparse.vim')
+
+" for rc in glob('~/.vim/cli/*.vim', 0, 1)
+"   let cmd = fnamemodify(rc, ':t:r')
+"   if executable(cmd)
+"     execute 'source' rc
+"   endif
+" endfor

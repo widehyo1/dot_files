@@ -1,24 +1,50 @@
-pwd="$HOME/.config/bash"
-source "$pwd/.env"
-source "$pwd/securityenv"
-source "$pwd/keymapsrc"
+# base directory
+BASH_DIR="$HOME/.config/bash"
 
-# custom
-customdir="$pwd/custom"
-source "$customdir/.env"
-source "$customdir/keymapsrc"
+# -------------------------
+# helpers
+# -------------------------
+source_if_file() {
+  [ -f "$1" ] && source "$1"
+}
 
-clidir="$pwd/cli"
-# source "$clidir/ctagsrc"
-# source "$clidir/curlrc"
-# source "$clidir/difftrc"
-# source "$clidir/dockerrc"
-source "$clidir/gitenv"
-source "$clidir/gitrc"
-# source "$clidir/gnuplotrc"
-# source "$clidir/httpyacrc"
-# source "$clidir/jqrc"
-# source "$clidir/psqlrc"
-# source "$clidir/starshiprc"
-source "$clidir/sqlite3rc"
-source "$clidir/vimrc"
+source_if_cmd() {
+  command -v "$1" >/dev/null || return
+  [ -f "$2" ] && source "$2"
+}
+
+# -------------------------
+# core configs
+# -------------------------
+source_if_file "$BASH_DIR/.env"
+source_if_file "$BASH_DIR/securityenv"
+source_if_file "$BASH_DIR/keymapsrc"
+
+# -------------------------
+# custom overrides
+# -------------------------
+CUSTOM_DIR="$BASH_DIR/custom"
+source_if_file "$CUSTOM_DIR/.env"
+source_if_file "$CUSTOM_DIR/keymapsrc"
+
+# -------------------------
+# CLI configs (conditional)
+# -------------------------
+CLI_DIR="$BASH_DIR/cli"
+
+# git (almost always available)
+source_if_cmd git "$CLI_DIR/gitenv"
+source_if_cmd git "$CLI_DIR/gitrc"
+
+# common tools
+source_if_cmd ctags "$CLI_DIR/ctagsrc"
+source_if_cmd curl "$CLI_DIR/curlrc"
+source_if_cmd diff "$CLI_DIR/difftrc"
+source_if_cmd docker "$CLI_DIR/dockerrc"
+source_if_cmd gnuplot "$CLI_DIR/gnuplotrc"
+source_if_cmd httpyac "$CLI_DIR/httpyacrc"
+source_if_cmd jq "$CLI_DIR/jqrc"
+source_if_cmd psql "$CLI_DIR/psqlrc"
+source_if_cmd sqlite3 "$CLI_DIR/sqlite3rc"
+source_if_cmd starship "$CLI_DIR/starshiprc"
+source_if_cmd vim "$CLI_DIR/vimrc"

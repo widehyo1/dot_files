@@ -1,11 +1,11 @@
 " buffers
 nnoremap <silent> <leader><leader><leader> <cmd>call BufferMenu()<CR>
-command -nargs=1 BufferMenu <cmd>call BufferMenu(<f-args>)
-nnoremap <leader><leader>s <cmd>BufferMenu 
+command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
+nnoremap <leader><leader>s :BufferMenu 
 
 " search across files
-command -nargs=1 SearchAcrossFiles <cmd>call SearchAcrossFiles(<f-args>)
-nnoremap <leader><leader><C-F> <cmd>SearchAcrossFiles 
+command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
+nnoremap <leader><leader><C-F> :SearchAcrossFiles 
 
 " snake camel
 nnoremap <F5> <cmd>call ToggleSnakeCamel()<CR>
