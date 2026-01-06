@@ -4,7 +4,7 @@ command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
 
 " search across files
-command -nargs=1 SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
+command -nargs=? SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossFiles 
 
 " snake camel

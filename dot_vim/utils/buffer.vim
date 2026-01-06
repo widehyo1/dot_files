@@ -55,8 +55,18 @@ function! BufferTabline()
   return bufNameStr
 endfunction
 
-function! SearchAcrossFiles(search_text)
-  let grep_result = system('grep -Irn ' . a:search_text)
+function! SearchAcrossFiles(search_text = '')
+
+  let search_text = empty(a:search_text) ? @/ : a:search_text
+
+  " search_text가 직전 검색 패턴(@/)이면 \< \> 제거
+  if search_text ==# '@/'
+    let search_text = @/
+  endif
+
+  let search_text = substitute(search_text, '\\<\|\\>', '', 'g')
+
+  let grep_result = system('grep -Irn ' . search_text)
   let search_results = grep_result->split('\n')
   let s:search_info_list = []
   for search_result in search_results
