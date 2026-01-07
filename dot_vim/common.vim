@@ -21,5 +21,6 @@ set cursorline
 set list
 set listchars=tab:>-,trail:«,space:␣,lead:»
 set showtabline=2
+set grepprg=grep\ -Irn\ $*\ /dev/null
 
 source ~/.vim/keymaps.vim

@@ -36,3 +36,7 @@ nnoremap <leader>autocmd <cmd>call OpenExcommandPopup('autocmd')<CR>
 
 nnoremap <leader>af <cmd>call OpenSystemPopup('awk -f ~/script.awk ~/temp.txt')<CR>
 nnoremap <leader>jf <cmd>call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<CR>
+
+" Lgrep local-list
+command -nargs=? Lgrep :call Lgrep(<f-args>)
+nnoremap <leader>lg :Lgrep 
