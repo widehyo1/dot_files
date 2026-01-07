@@ -44,6 +44,7 @@ call SourceIfCmd('gvpr', '~/.vim/cli/gvpr.vim')
 call SourceIfCmd('httpyac', '~/.vim/cli/httpyac.vim')
 call SourceIfCmd('jq', '~/.vim/cli/jq.vim')
 call SourceIfCmd('sqlparse', '~/.vim/cli/sqlparse.vim')
+call SourceIfCmd('rg', '~/.vim/cli/rg.vim')
 
 " for rc in glob('~/.vim/cli/*.vim', 0, 1)
 "   let cmd = fnamemodify(rc, ':t:r')

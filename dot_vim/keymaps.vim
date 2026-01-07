@@ -96,3 +96,7 @@ nnoremap <leader>pp <cmd>let @+ = expand('%:p')<bar>echo @+<CR>
 " highlight off
 nnoremap <leader>h <cmd>set nohlsearch<cr>
 
+" local list
+nnoremap <leader>lg :lgrep 
+nnoremap <leader>lo :lopen<CR>
+nnoremap <leader>lc :lclose<CR>
