@@ -72,6 +72,9 @@ vim.api.nvim_create_user_command(
 )
 vim.keymap.set('n', '<leader>fws', ':FloatingSystemCommand ')
 
+vim.keymap.set('n', '<leader>jump', common.open_jumplist_popup)
+vim.keymap.set('n', '<leader>jump', common.open_changelist_popup)
+
 vim.keymap.set('n', '<space>`', 'yiwcw``"0P')
 vim.keymap.set('v', '<space>`', 'ygvc``"0P')
 vim.keymap.set('n', '<space>"', 'yiwcw"""0P')

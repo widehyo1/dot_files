@@ -98,6 +98,85 @@ function M.search_across_files(search_text)
   buf_util.add_floating_window_callback(win, buf, callback_opt)
 end
 
+
+function M.open_jumplist_popup()
+  local lines = vim.split(vim.fn.execute('jumps', 'silent'), '\n')
+
+  local jump_items = {}
+
+  -- Skip last empty line
+  for i = 1, #lines - 1 do
+    local line = lines[i]
+
+    -- jumps output: id line col file...
+    local parts = vim.split(line, '%s+')
+    local linenr = parts[3]
+    local file_text = table.concat(parts, ' ', 5)
+
+    if file_text ~= '' and vim.fn.findfile(file_text) ~= '' then
+      table.insert(jump_items, {
+        text = line,
+        cmd = string.format('edit +%s %s', linenr, vim.fn.fnameescape(file_text)),
+      })
+    end
+  end
+
+  if #jump_items == 0 then
+    return
+  end
+
+  local callback_opt = {
+    pre_callback = function()
+      return jump_items[vim.fn.line(".")]
+    end,
+    post_callback = function(item)
+      vim.cmd(item.cmd)
+    end
+  }
+
+  local win, buf = buf_util.floating_window(jump_items, 'text')
+  buf_util.add_floating_window_callback(win, buf, callback_opt)
+end
+
+
+function M.open_changelist_popup()
+  local lines = vim.split(vim.fn.execute('changes', 'silent'), '\n')
+
+  local change_items = {}
+
+  for i = 1, #lines - 1 do
+    local line = lines[i]
+
+    -- changes output: id line col ...
+    local parts = vim.split(line, '%s+')
+    local linenr = parts[3]
+
+    if linenr then
+      table.insert(change_items, {
+        text = line,
+        cmd = string.format('normal! %sG', linenr),
+      })
+    end
+  end
+
+  if #change_items == 0 then
+    return
+  end
+
+  local callback_opt = {
+    pre_callback = function()
+      return change_items[vim.fn.line(".")]
+    end,
+    post_callback = function(item)
+      vim.cmd(item.cmd)
+    end
+  }
+
+  local win, buf = buf_util.floating_window(change_items, 'text')
+  buf_util.add_floating_window_callback(win, buf, callback_opt)
+
+end
+
 function M.command_menu(hist_size)
   if hist_size then
     hist_size = tonumber(hist_size)
