@@ -13,12 +13,24 @@ vim.api.nvim_create_user_command(
     common.buffer_menu(search_text)
   end,
   {
-    nargs = 1,
+    nargs = "?",
     desc = "Open buffer menu with optional search text"
   }
 )
 vim.keymap.set('n', '<leader><leader>s', ':BufferMenu ')
--- vim.keymap.set('n', 'q:', common.command_menu)
+
+vim.api.nvim_create_user_command(
+  'SearchAcrossFiles',
+  function(opts)
+    local search_text = opts.fargs[1]
+    common.search_across_files(search_text)
+  end,
+  {
+    nargs = "?",
+    desc = "Open search results in the project with optional search text(default `last search`)"
+  }
+)
+vim.keymap.set('n', '<leader><leader><C-F>', ':SearchAcrossFiles ')
 
 vim.api.nvim_create_user_command(
   'CopyToPwd',

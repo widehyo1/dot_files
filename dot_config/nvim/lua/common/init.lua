@@ -46,6 +46,57 @@ function M.buffer_menu(search_text)
 
 end
 
+function M.search_across_files(search_text)
+  -- ripgrep command
+  local cmd = {
+    'rg',
+    '--no-heading',
+    '--with-filename',
+    '--line-number',
+    '--fixed-strings'
+  }
+
+  if vim.fn.empty(search_text) == 1 then
+    search_text = vim.fn.getreg('/')
+    if search_text:find('\\<') and search_text:find('\\>') then
+      search_text = search_text
+        :gsub('\\<', '')
+        :gsub('\\>', '')
+      table.insert(cmd, '--word-regexp')
+    end
+  end
+
+  if search_text == nil or search_text == '' then
+    return
+  end
+
+  table.insert(cmd, search_text)
+  local items = vim.fn.systemlist(cmd)
+
+  if vim.v.shell_error ~= 0 or #items == 0 then
+    local empty_msg = "No matches found content matching <" .. search_text .. ">"
+    local win, buf = buf_util.floating_window({empty_msg})
+    buf_util.add_floating_window_callback(win, buf)
+    return
+  end
+
+  local callback_opt = {
+    pre_callback = function()
+      return items[vim.fn.line(".")]
+    end,
+    post_callback = function(item)
+     local filename, linenumber, text = item:match('^([^:]+):(%d+):(.*)$')
+      vim.cmd(string.format(
+        'edit +%s %s',
+        linenumber,
+        vim.fn.fnameescape(filename)
+      ))
+    end
+  }
+
+  local win, buf = buf_util.floating_window(items)
+  buf_util.add_floating_window_callback(win, buf, callback_opt)
+end
 
 function M.command_menu(hist_size)
   if hist_size then
