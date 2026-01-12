@@ -55,6 +55,45 @@ function! BufferTabline()
   return bufNameStr
 endfunction
 
+
+function! FindFile(search_text = '')
+  let search_text = empty(a:search_text) ? @/ : a:search_text
+
+  " search_text가 직전 검색 패턴(@/)이면 \< \> 제거
+  if search_text ==# '@/'
+    let search_text = @/
+  endif
+
+  let search_text = substitute(search_text, '\\<\|\\>', '', 'g')
+  let search_text = '*' . search_text . '*'
+
+  let fd_results = system('find . -type f -name ' . shellescape(search_text))->split('\n')
+
+  if len(fd_results) == 0
+    let popup_config = #{
+    \   time: 3000,
+    \   cursorline: 0,
+    \   highlight: 'WarningMsg'
+    \ }
+    let empty_msg = 'there is no buffer with name matching ' . a:search_text
+    call popup_menu(empty_msg, popup_config)
+    return
+  endif
+
+  let s:fd_info_list = fd_results
+
+  let popup_config = #{
+  \   callback: 'EditBuffer'
+  \ }
+  call popup_menu(s:fd_info_list, popup_config)
+endfunction
+
+function! EditBuffer(id, result)
+  let target = s:fd_info_list[a:result - 1]
+  execute 'edit! ' . target
+endfunction
+
+
 function! SearchAcrossFiles(search_text = '')
 
   let search_text = empty(a:search_text) ? @/ : a:search_text

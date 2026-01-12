@@ -7,6 +7,10 @@ nnoremap <leader><leader>s :BufferMenu
 command -nargs=? SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossFiles 
 
+" find file
+command -nargs=? FindFile :call FindFile(<f-args>)
+nnoremap <leader><leader>f :FindFile 
+
 " snake camel
 nnoremap <F5> <cmd>call ToggleSnakeCamel()<CR>
 
