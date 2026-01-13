@@ -92,6 +92,7 @@ nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
 " buffer pwd helper
 nnoremap <leader>cd <cmd>cd %:h<bar>pwd<CR>
 nnoremap <leader>pp <cmd>let @+ = expand('%:p')<bar>echo @+<CR>
+nnoremap <leader>up <cmd>cd ..<bar>pwd<CR>
 
 " highlight off
 nnoremap <leader>h <cmd>set nohlsearch<cr>
