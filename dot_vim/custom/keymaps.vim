@@ -22,6 +22,7 @@ nnoremap <space><space>0 <cmd>call SelectOpenTerminalMode(0)<CR>
 nnoremap <space><space>1 <cmd>call SelectOpenTerminalMode(1)<CR>
 nnoremap <space><space>2 <cmd>call SelectOpenTerminalMode(2)<CR>
 nnoremap <space><space>3 <cmd>call SelectOpenTerminalMode(3)<CR>
+nnoremap <space><space>p <cmd>call PrintOpenTerminalMode()<CR>
 
 " terminal-esc
 tnoremap <C-Q> <C-W>N
