@@ -16,4 +16,6 @@ iabbrev <buffer> \common; @include "common.awk"
 iabbrev <buffer> \csv; @include "csv.awk"
 vnoremap <buffer> gcc :s/^/# /<CR>
 
+iabbrev <buffer> \procinfo; old_procinfo = PROCINFO["sorted_in"]<CR>PROCINFO["sorted_in"] = "@val_num_asc"<CR><CR>PROCINFO["sorted_in"] = old_procinfo
+
 nnoremap <buffer> <leader>rr :!awk -f %<CR>
