@@ -56,18 +56,23 @@ function! BufferTabline()
 endfunction
 
 
-function! FindFile(search_text = '')
+" if given search text is empty, use last searched pattern instead
+function! ProcessSearchText(search_text = '')
   let search_text = empty(a:search_text) ? @/ : a:search_text
+  " 직전 검색 패턴(@/) \< \> 제거
+  return substitute(search_text, '\\<\|\\>', '', 'g')
+endfunction
 
-  " search_text가 직전 검색 패턴(@/)이면 \< \> 제거
-  if search_text ==# '@/'
-    let search_text = @/
+
+function! FindFile(search_text = '')
+  let search_text = ProcessSearchText(a:search_text)
+
+  if executable('fd')
+    let fd_results = system('fd ' . shellescape(search_text))->split('\n')
+  else
+    let search_text = '*' . search_text . '*'
+    let fd_results = system('find . -type f -name ' . shellescape(search_text))->split('\n')
   endif
-
-  let search_text = substitute(search_text, '\\<\|\\>', '', 'g')
-  let search_text = '*' . search_text . '*'
-
-  let fd_results = system('find . -type f -name ' . shellescape(search_text))->split('\n')
 
   if len(fd_results) == 0
     let popup_config = #{
@@ -88,28 +93,26 @@ function! FindFile(search_text = '')
   call popup_menu(s:fd_info_list, popup_config)
 endfunction
 
+
+""" Popup handler start
 function! EditBuffer(id, result)
   let target = s:fd_info_list[a:result - 1]
   execute 'edit! ' . target
 endfunction
 
 
-function! SearchAcrossFiles(search_text = '')
+function! GoSelectedFile(id, result)
+  let target_dict = s:search_info_list[a:result-1]
+  execute target_dict['cmd']
+  normal zz
+endfunction
+""" Popup handler end
 
-  let search_text = empty(a:search_text) ? @/ : a:search_text
 
-  " search_text가 직전 검색 패턴(@/)이면 \< \> 제거
-  if search_text ==# '@/'
-    let search_text = @/
-  endif
-
-  let search_text = substitute(search_text, '\\<\|\\>', '', 'g')
-
-  let grep_result = system('grep -Irn ' . search_text)
-  let search_results = grep_result->split('\n')
+function! ContentSearch(search_results)
   let s:search_info_list = []
 
-  if len(search_results) == 0
+  if len(a:search_results) == 0
     let popup_config = #{
     \   time: 3000,
     \   cursorline: 0,
@@ -120,7 +123,7 @@ function! SearchAcrossFiles(search_text = '')
     return
   endif
 
-  for search_result in search_results
+  for search_result in a:search_results
     let info_dict = {}
     let length = len(search_result)
     let index = search_result->match(":", 0, 2)
@@ -141,8 +144,33 @@ function! SearchAcrossFiles(search_text = '')
   call popup_menu(s:search_info_list, popup_config)
 endfunction
 
-function! GoSelectedFile(id, result)
-  let target_dict = s:search_info_list[a:result-1]
-  execute target_dict['cmd']
-  normal zz
+
+function! SearchAcrossFiles(search_text = '')
+  let search_text = ProcessSearchText(a:search_text)
+
+  if executable('rg')
+    let grep_result = system('rg --no-heading --with-filename --line-number ' . shellescape(search_text))
+  else
+    let grep_result = system('grep -Irn ' . shellescape(a:search_text))
+  endif
+
+  call ContentSearch(grep_result->split('\n'))
+endfunction
+
+
+function! SearchAcrossBuffers(search_text = '')
+  let search_text = ProcessSearchText(a:search_text)
+
+  let buf_files = map(filter(getbufinfo(), 'v:val.listed'), 'fnamemodify(expand(v:val.name), ":.:~")')
+  let buf_files_str = buf_files->join(' ')
+
+  if executable('rg')
+    let cmd = 'rg --no-heading --with-filename --line-number ' . shellescape(search_text) . ' ' . buf_files_str
+    let grep_result = system(cmd)
+  else
+    let cmd = 'grep -Irn ' . shellescape(a:search_text) . ' ' . buf_files_str
+    let grep_result = system(cmd)
+  endif
+
+  call ContentSearch(grep_result->split('\n'))
 endfunction

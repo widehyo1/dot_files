@@ -6,6 +6,9 @@ nnoremap <leader><leader>s :BufferMenu
 " search across files
 command -nargs=? SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossFiles 
+" search across buffers
+command -nargs=? SearchAcrossBuffers :call SearchAcrossBuffers(<f-args>)
+nnoremap <leader><leader><C-F> :SearchAcrossBuffers 
 
 " find file
 command -nargs=? FindFile :call FindFile(<f-args>)
