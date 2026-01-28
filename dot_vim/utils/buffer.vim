@@ -109,7 +109,7 @@ endfunction
 """ Popup handler end
 
 
-function! ContentSearch(search_results)
+function! ContentSearch(search_results, search_text)
   let s:search_info_list = []
 
   if len(a:search_results) == 0
@@ -151,10 +151,10 @@ function! SearchAcrossFiles(search_text = '')
   if executable('rg')
     let grep_result = system('rg --no-heading --with-filename --line-number ' . shellescape(search_text))
   else
-    let grep_result = system('grep -Irn ' . shellescape(a:search_text))
+    let grep_result = system('grep -Irn ' . shellescape(search_text))
   endif
 
-  call ContentSearch(grep_result->split('\n'))
+  call ContentSearch(grep_result->split('\n'), search_text)
 endfunction
 
 
@@ -168,9 +168,9 @@ function! SearchAcrossBuffers(search_text = '')
     let cmd = 'rg --no-heading --with-filename --line-number ' . shellescape(search_text) . ' ' . buf_files_str
     let grep_result = system(cmd)
   else
-    let cmd = 'grep -Irn ' . shellescape(a:search_text) . ' ' . buf_files_str
+    let cmd = 'grep -Irn ' . shellescape(search_text) . ' ' . buf_files_str
     let grep_result = system(cmd)
   endif
 
-  call ContentSearch(grep_result->split('\n'))
+  call ContentSearch(grep_result->split('\n'), search_text)
 endfunction
