@@ -1,38 +1,3 @@
-function! PopupFilter(winid, key) abort
-    if a:key ==# "j"
-        call win_execute(a:winid, "normal! j")
-    elseif a:key ==# "k"
-        call win_execute(a:winid, "normal! k")
-    elseif a:key ==# "\<c-d>"
-        call win_execute(a:winid, "normal! \<c-d>")
-    elseif a:key ==# "\<c-u>"
-        call win_execute(a:winid, "normal! \<c-u>")
-    elseif a:key ==# "\<c-f>"
-        call win_execute(a:winid, "normal! \<c-f>")
-    elseif a:key ==# "\<c-b>"
-        call win_execute(a:winid, "normal! \<c-b>")
-    elseif a:key ==# "\<space>"
-        call win_execute(a:winid, "normal! \<c-f>")
-    elseif a:key ==# "u"
-        call win_execute(a:winid, "normal! \<c-b>")
-    elseif a:key ==# "v"
-        call win_execute(a:winid, "normal! v")
-    elseif a:key ==# "V"
-        call win_execute(a:winid, "normal! V")
-    elseif a:key ==# "y"
-        call win_execute(a:winid, "normal! y")
-    elseif a:key ==# "G"
-        call win_execute(a:winid, "normal! G")
-    elseif a:key ==# "g"
-        call win_execute(a:winid, "normal! gg")
-    elseif a:key ==# 'q'
-        call popup_close(a:winid)
-    else
-        return v:false
-    endif
-    return v:true
-endfunction
-
 function! OpenExcommandPopup(excommand, lseek = v:false)
   let pop_width = float2nr(&columns * 0.8)
   let pop_height = float2nr(&lines * 0.8)
@@ -98,6 +63,7 @@ function! OpenJumplistPopup()
         \ minheight: pop_height,
         \ maxwidth: pop_width,
         \ minwidth: pop_width,
+        \ filter: 'PopupFilter',
         \ callback: 'GoJumplist'
         \ }
 
@@ -131,6 +97,7 @@ function! OpenChangelistPopup()
         \ minheight: pop_height,
         \ maxwidth: pop_width,
         \ minwidth: pop_width,
+        \ filter: 'PopupFilter',
         \ callback: 'GoChangelist'
         \ }
 

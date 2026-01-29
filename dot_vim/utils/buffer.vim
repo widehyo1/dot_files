@@ -25,6 +25,7 @@ function! BufferMenu(search_text = '')
   endif
 
   let popup_config = #{
+  \   filter: 'PopupFilter',
   \   callback: 'LoadBuffer'
   \ }
   call popup_menu(s:buf_dict, popup_config)
@@ -88,6 +89,7 @@ function! FindFile(search_text = '')
   let s:fd_info_list = fd_results
 
   let popup_config = #{
+  \   filter: 'PopupFilter',
   \   callback: 'EditBuffer'
   \ }
   call popup_menu(s:fd_info_list, popup_config)
@@ -136,6 +138,7 @@ function! ContentSearch(search_results, search_text)
   endfor
 
   let popup_config = #{
+        \ filter: 'PopupFilter',
         \ callback: 'GoSelectedFile',
         \ scrollbar: 1,
         \ maxheight: 20

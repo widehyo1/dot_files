@@ -1,6 +1,6 @@
 " buffers
 nnoremap <silent> <leader><leader><leader> <cmd>call BufferMenu()<CR>
-command -nargs=1 BufferMenu :call BufferMenu(<f-args>)
+command -nargs=? BufferMenu :call BufferMenu(<f-args>)
 nnoremap <leader><leader>s :BufferMenu 
 
 " search across files

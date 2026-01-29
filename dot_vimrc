@@ -21,6 +21,7 @@ filetype plugin indent on
 
 " core scripts
 call SourceIfFile('~/.vim/common.vim')
+call SourceIfFile('~/.vim/utils/popup_filter.vim')
 call SourceIfFile('~/.vim/utils/buffer.vim')
 call SourceIfFile('~/.vim/autocmd/terminal.vim')
 call SourceIfFile('~/.vim/utils/terminal.vim')
