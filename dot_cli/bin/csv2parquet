@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euo pipefail
+
+usage() {
+    echo "Usage: $(basename "$0") <input.csv>" >&2
+    exit 1
+}
+
+# argument count check
+if [ "$#" -ne 1 ]; then
+    usage
+fi
+
+csvfile="$1"
+
+# basic validation
+if [ ! -f "$csvfile" ]; then
+    echo "Error: file not found: $csvfile" >&2
+    exit 1
+fi
+
+if [[ "$csvfile" != *.csv ]]; then
+    echo "Error: input file must have .csv extension" >&2
+    exit 1
+fi
+
+parquetfile="${csvfile%.csv}.parquet"
+
+echo "Input CSV    : $csvfile"
+echo "Output Parquet: $parquetfile"
+
+duckdb -c "COPY (SELECT * FROM read_csv_auto('$csvfile', delim=',')) TO '$parquetfile' (FORMAT PARQUET);"
