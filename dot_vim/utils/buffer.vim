@@ -61,7 +61,8 @@ endfunction
 function! ProcessSearchText(search_text = '')
   let search_text = empty(a:search_text) ? @/ : a:search_text
   " 직전 검색 패턴(@/) \< \> 제거
-  return substitute(search_text, '\\<\|\\>', '', 'g')
+  " `gD`검색 대응, `gD`는 @/ 레지스터를 \V\<{search_text}\> 로 지정. \V제거
+  return substitute(search_text, '\\<\|\\>\|\\V', '', 'g')
 endfunction
 
 
