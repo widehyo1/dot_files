@@ -1,0 +1,37 @@
+set datafile missing "null"
+set datafile separator ","
+set key autotitle columnhead
+
+set title "asset trend with factors"
+set xlabel "Month"
+set ylabel "Won"
+set grid
+set xtic rotate by -45
+
+# 왼쪽 축 (asset)
+set ylabel "Asset (Won)"
+set yrange [0:180000000]
+
+# 오른쪽 축 (factors)
+set y2label "Factors (Won)"
+set y2range [0:10000000]
+set y2tics
+
+set style data histograms
+set style histogram clustered gap 1
+set style fill solid border -1
+set boxwidth 0.7
+
+set style line 1 lc rgb "#2ca02c"  # net_income
+set style line 2 lc rgb "#1f77b4"  # score
+set style line 3 lc rgb "#ff7f0e"  # expanse
+set style line 4 lc rgb "black"    # asset
+
+set terminal pdfcairo size 18cm,10cm enhanced font "Helvetica,10"
+set output "~/asset_with_score.pdf"
+
+
+plot '~/temp.dat' using 3:xtic(1) axes x1y2 with histogram title col ls 1, \
+     '' using 4 axes x1y2 with histogram ti col ls 2, \
+     '' using 5 axes x1y2 with histogram ti col ls 3, \
+     '' using 2 axes x1y1 with lines ti col ls 4
