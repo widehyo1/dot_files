@@ -1,0 +1,2 @@
+# redis
+alias redis='redis-cli'

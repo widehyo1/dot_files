@@ -2,9 +2,13 @@
 alias cdg="cd $GITDIR"
 alias cdplay="cd $PLAYDIR"
 alias cdblog="cd $BLOGDIR"
+alias cdpost="cd $POSTDIR"
+alias cdtask="cd $TASKDIR"
 alias cddot="cd $DOTDIR"
 alias cdtoday="cd $TODAY"
 alias startplay="mkdir -p $TODAY/ && touch $TODAYMD"
+alias startpost="touch $TODAYPOST"
+alias vitask="vi $BACKLOGFILE"
 alias catg="echo $GTOKEN"
 
 alias ginfo='git branch -avv'

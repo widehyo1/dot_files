@@ -1,1 +1,3 @@
 alias startplay="mkdir -p $TODAY/ && touch $TODAYMD && recorddf"
+alias slfi="sqlite3 ~/finance.db"
+alias slmc="sqlite3 ~/machine.db"

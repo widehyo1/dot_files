@@ -39,6 +39,7 @@ nnoremap <leader>bdf <cmd>1,.-1bd!<CR>
 nnoremap <leader>bdl <cmd>.+1,$bd!<CR>
 nnoremap <leader>bonly <cmd>1,.-1bd!<Bar>.+1,$bd!<CR>
 nnoremap <leader>ls <cmd>ls<CR>
+nnoremap <leader>. <cmd>e %:h<CR>
 nnoremap H <cmd>bp!<CR>
 nnoremap L <cmd>bn!<CR>
 
@@ -50,8 +51,11 @@ nnoremap <leader>L L
 nnoremap <leader>rc <cmd>e ~/.vimrc<CR>
 nnoremap <leader>brc <cmd>e ~/.bashrc<CR>
 nnoremap <leader>common <cmd>e ~/.vim/common.vim<CR>
-nnoremap <leader>play <cmd>e ~/.vim/playground.vim <CR>
+nnoremap <leader>play <cmd>e ~/.vim/playground.vim<CR>
 nnoremap <leader>md <cmd>e $TODAYMD<CR>
+nnoremap <leader>post <cmd>e $TODAYPOST<CR>
+nnoremap <leader>task <cmd>e $BACKLOG<CR>
+
 
 " awk
 nnoremap <leader>as <cmd>e ~/script.awk<CR>

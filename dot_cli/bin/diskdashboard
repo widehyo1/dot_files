@@ -1,0 +1,37 @@
+#!/bin/bash
+# ===== SQLITE DISK DASHBOARD =====
+
+recorddf 1>/dev/null
+
+DB="$HOME/machine.db"
+TODAY=$(date +%F)
+
+ROW=$(sqlite3 "$DB" "
+SELECT blocks, used, use
+FROM df
+WHERE created_at = '$TODAY'
+  AND filesystem = 'C:\\'
+LIMIT 1;
+")
+
+if [ -n "$ROW" ]; then
+    TOTAL=$(echo "$ROW" | cut -d'|' -f1)
+    USED=$(echo "$ROW" | cut -d'|' -f2)
+    PERCENT=$(echo "$ROW" | cut -d'|' -f3 | tr -d '%')
+
+    BAR_WIDTH=40
+    FILLED=$((PERCENT * BAR_WIDTH / 100))
+    EMPTY=$((BAR_WIDTH - FILLED))
+
+    BAR=$(printf "%0.s#" $(seq 1 $FILLED))
+    SPACE=$(printf "%0.s-" $(seq 1 $EMPTY))
+
+    echo ""
+    echo "===== DISK DASHBOARD ====="
+    echo "C Drive Usage ($TODAY)"
+    printf "[%s%s] %s%%\n" "$BAR" "$SPACE" "$PERCENT"
+    printf "Used: %.1fGB / %.1fGB\n" \
+        "$(echo "$USED / 1024 / 1024" | bc -l)" \
+        "$(echo "$TOTAL / 1024 / 1024" | bc -l)"
+    echo ""
+fi
