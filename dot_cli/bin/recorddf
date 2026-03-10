@@ -4,18 +4,18 @@ today=$(date '+%F')
 tmpfile=$(mktemp)
 
 sqlite3 ~/machine.db -cmd " CREATE TABLE IF NOT EXISTS df(
-    created_at TEXT,
-    filesystem TEXT,
-    blocks INTEGER,
-    used INTEGER,
-    available INTEGER,
-    use TEXT,
-    mounted TEXT
+date text,
+source text,
+size text,
+used text,
+avail text,
+pcent text,
+target text
 ) " ".quit"
-sqlite3 ~/machine.db -cmd "delete from df where created_at = '$today'" ".quit"
+sqlite3 ~/machine.db -cmd "delete from df where date = '$today'" ".quit"
 df | awk -f "$df_to_csv_file" > "$tmpfile"
 sqlite3 ~/machine.db \
     -cmd ".mode csv" \
     -cmd ".import --skip 1 $tmpfile df" \
     ".quit"
-sqlite3 ~/machine.db -cmd "select count(1) from df where created_at = '$today'" ".quit"
+sqlite3 ~/machine.db -cmd "select count(1) from df where date = '$today'" ".quit"
