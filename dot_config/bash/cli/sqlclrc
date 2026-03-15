@@ -1,0 +1,6 @@
+export ORACLE_HOME=/opt/oracle/instantclient_23_26
+export LD_LIBRARY_PATH=$ORACLE_HOME
+export PATH=$PATH:$ORACLE_HOME 
+
+export PATH='/opt/sqlcl/bin':$PATH
+export PATH="$HOME/.cli/bin:$PATH"

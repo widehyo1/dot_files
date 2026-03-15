@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eo pipefail
+
+env_file="$1"
+start_file="$2"
+
+source "$env_file"
+
+export SQLPATH="$PWD"
+
+if [ $# -eq 1 ]; then
+    sql "$ORA_USERNAME/$ORA_PASSWORD@//$ORA_HOST:$ORA_PORT/$ORA_SERVICE_NAME"
+elif [ $# -eq 2 ]; then
+    sql "$ORA_USERNAME/$ORA_PASSWORD@//$ORA_HOST:$ORA_PORT/$ORA_SERVICE_NAME" "@$start_file"
+fi
