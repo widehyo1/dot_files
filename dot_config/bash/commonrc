@@ -13,6 +13,31 @@ source_if_cmd() {
   [ -f "$2" ] && source "$2"
 }
 
+add_prompt_command() {
+  local cmd="$1"
+
+  [[ "$PROMPT_COMMAND" == *"$cmd"* ]] && return
+
+  # prepend only if it does not contain the $cmd
+  if [[ -z "$PROMPT_COMMAND" ]]; then
+    PROMPT_COMMAND="$cmd"
+  else
+    PROMPT_COMMAND="$cmd; $PROMPT_COMMAND"
+  fi
+}
+
+# check background jobs
+jobs_prompt() {
+  set -- $(jobs -p)
+  (( $# > 0 )) && printf "#%d " "$#"
+}
+
+_jobs_prompt() {
+  local n=0
+  for _ in $(jobs -p); do ((n++)); done
+  ((n > 0)) && printf "#%d " "$n"
+}
+
 # -------------------------
 # core configs
 # -------------------------

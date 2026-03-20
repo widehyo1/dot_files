@@ -1,5 +1,6 @@
 # prompt display
 export PS1='\[\033]133;A\007\]\[\033[01;34m\]\w\[\033[00m\] $ '
+[[ "$PS1" != *'$(jobs_prompt)'* ]] && export PS1='$(jobs_prompt) '"$PS1"
 
 # sync vim pwd
 __osc7_prev_pwd=""
@@ -12,4 +13,4 @@ _setosc7dir() {
 }
 alias setosc7dir="_setosc7dir"
 
-export PROMPT_COMMAND='setosc7dir; '"$PROMPT_COMMAND"
+add_prompt_command "setosc7dir"
