@@ -1,10 +1,21 @@
+function join(arr, sep) {
+  acc = arr[1]
+  for (i = 2; i <= length(arr); i++) {
+    acc = acc sep arr[i]
+  }
+  return acc
+}
+
 NR == 1 {
-  cmd = "date +'%F'"
-  cmd | getline created_at
+  cmd = "date -I"
+  cmd | getline date
   close(cmd)
-  print "created_at,filesystem,blocks,used,available,use,mounted_on"
+  print "date,source,size,used,avail,pcent,target"
   next
 }
+
 {
-  printf "%s,%s,%s,%s,%s,%s,%s\n",created_at,$1,$2,$3,$4,$5,$6
+  split($0, arr)
+  str = join(arr, ",")
+  printf "%s,%s\n",date,str
 }

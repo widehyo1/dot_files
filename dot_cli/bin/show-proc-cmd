@@ -1,0 +1,3 @@
+#!/bin/bash
+proc_cmd_path="/proc/$1/cmdline"
+cat "$proc_cmd_path" | tr '\0' '\n' 

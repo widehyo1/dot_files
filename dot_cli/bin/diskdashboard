@@ -19,6 +19,7 @@ WHERE date = '$TODAY'
 AND source in ('C:\\', 'D:\\');
 ")
 
+echo "===== DISK DASHBOARD ====="
 cat <<< $ROWS | while IFS='|' read -r TOTAL USED PERCENT SOURCE; do
   PERCENT=$(tr -d '%' <<< $PERCENT)
   BAR_WIDTH=40
@@ -29,7 +30,6 @@ cat <<< $ROWS | while IFS='|' read -r TOTAL USED PERCENT SOURCE; do
   SPACE=$(printf "%0.s-" $(seq 1 $EMPTY))
 
   echo ""
-  echo "===== DISK DASHBOARD ====="
   echo "$SOURCE Usage ($TODAY)"
   printf "[%s%s] %s%%\n" "$BAR" "$SPACE" "$PERCENT"
   printf "Used: %.1fGB / %.1fGB\n" \
