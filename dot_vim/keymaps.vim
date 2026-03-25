@@ -47,6 +47,12 @@ nnoremap L <cmd>bn!<CR>
 nnoremap <leader>H H
 nnoremap <leader>L L
 
+# utils
+nnoremap <leader>so :so %<CR>
+nnoremap <leader>term <CMD>term<CR>
+nnoremap <leader>date <CMD>r! date -Isecond<CR>
+nnoremap <leader>yester :e $YESTERDAYMD<CR>
+
 " rc
 nnoremap <leader>rc <cmd>e ~/.vimrc<CR>
 nnoremap <leader>brc <cmd>e ~/.bashrc<CR>
