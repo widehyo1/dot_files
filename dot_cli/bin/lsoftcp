@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo lsof -nP -i TCP -s TCP:LISTEN
