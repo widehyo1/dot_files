@@ -95,6 +95,14 @@ vnoremap <space>< ygvc<>"0P
 nnoremap <space>{ yiwcw{}"0P
 vnoremap <space>{ ygvc{}"0P
 
+" quick paste
+nnoremap <space>as i```awk<cr>```k<cmd>r! cat ~/script.awk<cr>
+nnoremap <space>at i```awk<cr>```k<cmd>r! cat ~/temp.txt<cr>
+nnoremap <space>cs i```curl<cr>```k<cmd>r! cat ~/script.curl<cr>
+nnoremap <space>ct i```curl<cr>```k<cmd>r! cat ~/request.json<cr>
+nnoremap <space>js i```jq<cr>```k<cmd>r! cat ~/script.jq<cr>
+nnoremap <space>jt i```jq<cr>```k<cmd>r! cat ~/temp.json<cr>
+
 " backtick
 nnoremap <leader>`v /`/-1<CR>V?`?+1<CR>
 nnoremap <leader>`y /`/-1<CR>V?`?+1<CR>y
