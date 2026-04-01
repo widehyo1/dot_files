@@ -1,4 +1,4 @@
-@include "csv.awk"
+@load "/home/widehyo/.cli/awk/lib/csv.awk"
 
 BEGIN {
   CSVMODE = 1

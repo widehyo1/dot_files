@@ -47,7 +47,7 @@ nnoremap L <cmd>bn!<CR>
 nnoremap <leader>H H
 nnoremap <leader>L L
 
-# utils
+" utils
 nnoremap <leader>so :so %<CR>
 nnoremap <leader>term <CMD>term<CR>
 nnoremap <leader>date <CMD>r! date -Isecond<CR>
