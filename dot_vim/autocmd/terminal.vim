@@ -18,6 +18,8 @@ function! s:SetupTerminalKeymaps() abort
   setlocal nonumber
   setlocal nolist
   setlocal nowrap
+
+  setlocal termwinkey=<C-_>
   " <C-D> : 이전 버퍼로 전환
   execute 'nnoremap <buffer> <C-D> :buffer! #<CR>'
 
