@@ -12,6 +12,8 @@ alias rp='realpath'
 alias catn='cat -n'
 alias trcmd="tr '\0' '\n'"
 alias trcolon="tr ':' '\n'"
+alias sl='ls'
+alias lks='ls'
 
 # tar
 alias tarc='tar -czvf'
