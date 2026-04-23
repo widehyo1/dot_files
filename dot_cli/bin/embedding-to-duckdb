@@ -1,0 +1,9 @@
+#!/bin/bash
+cat bulk_*.jsonl | jq -c 'select(.content != null) | {content, embedding: .content_embedding}' | duckdb embeddings.duckdb "
+CREATE TABLE embedding_cache AS
+SELECT
+  md5(content) AS content_hash,
+  content,
+  embedding
+FROM read_json_auto('/dev/stdin');
+"
