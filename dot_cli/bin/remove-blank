@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+usage() {
+  echo "Usage: $0 <filename>"
+  exit 1
+}
+
+if [ $# -ne 1 ]; then
+  usage
+fi
+
+filename=$1
+tempfile=$(mktemp)
+
+realpath $filename
+echo "[before]"
+wc $filename
+awk '{ gsub(/\s+$/, "", $0); if (length($0)) print }' $filename > $tempfile
+mv $tempfile $filename
+echo "[after]"
+wc $filename
