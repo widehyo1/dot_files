@@ -1,0 +1,3 @@
+#!/bin/bash
+ls *.csv | awk '{ printf "echo %s; csvstat --count %s\n", $0, $0 }' | bash
+

@@ -5,6 +5,7 @@ alias cdblog="cd $BLOGDIR"
 alias cdpost="cd $POSTDIR"
 alias cdtask="cd $TASKDIR"
 alias cddot="cd $DOTDIR"
+alias cddotbin='cd $DOTDIR/dot_cli/bin'
 alias cdtoday="cd $TODAY"
 alias startplay="mkdir -p $TODAY/ && touch $TODAYMD"
 alias startpost="touch $TODAYPOST"
