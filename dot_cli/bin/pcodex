@@ -1,0 +1,7 @@
+#!/bin/bash
+ps -eo pid,comm \
+    | awk -v self=$$ '$1 != self && $2 ~ /codex$/ { printf "pwdx %s\n", $1 }' \
+    | bash \
+    | awk 'NR==1 { print $2 }' \
+    | tee /dev/stderr \
+    | xclip -selection clipboard
