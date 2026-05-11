@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+session_id="${1:-}"
+codex_path="$HOME/.codex/sessions"
+
+if [[ -z "$session_id" ]]; then
+  echo "usage: $(basename "$0") <session-id-or-pattern>" >&2
+  exit 2
+fi
+
+match="$(
+  fd -e jsonl "$session_id" "$codex_path" -x stat -c '%Y %n' \
+    | sort -nr \
+    | head -1 \
+    | cut -d' ' -f2-
+)"
+
+echo $match
+
+if [[ -z "$match" ]]; then
+  echo "no matching codex session: $session_id" >&2
+  exit 1
+fi
+
+codex-replay-tui "$match"
