@@ -21,6 +21,50 @@ function! SelectOpenTerminalMode(mode)
   call PrintOpenTerminalMode()
 endfunction
 
+function! IsListedBuffer(idx, val)
+  return a:val.listed
+endfunction
+
+function! IsTerminalBuffer(idx, val)
+  return getbufvar(a:val.bufnr, '&buftype') ==# 'terminal'
+endfunction
+
+function! GetListedTerminalBuffers()
+    return getbufinfo()
+          \ ->filter(function('IsListedBuffer'))
+          \ ->filter(function('IsTerminalBuffer'))
+endfunction
+
+
+function! OpenTerminalBuffer(bufnr)
+  if g:open_terminal_mode == 3 && len(getwininfo()) == 1
+    execute 'vsplit'
+  endif
+  execute 'buffer! ' .. a:bufnr
+  if g:open_terminal_mode == 1
+    let pwd = getcwd()
+    " sync vim pwd
+    call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
+  endif
+  if g:open_terminal_mode == 3 && mode() == 'n'
+    call feedkeys("i\<C-u>")
+  endif
+endfunction
+
+
+function! ConvertTerminalBufferInfo(idx, val) abort
+  let buf = a:val
+  return { 'text': buf.name, 'cmd': 'call OpenTerminalBuffer(' .. a:val.bufnr .. ')' }
+endfunction
+
+function! GoSelectedTerminalBuffer(id, result)
+  if a:result <= 0
+    return
+  endif
+  let target_dict = s:terminal_buffer_info_list[a:result-1]
+  execute target_dict['cmd']
+endfunction
+
 function! OpenTerminal()
   call PrintOpenTerminalMode()
   if g:open_terminal_mode == 0
@@ -29,40 +73,42 @@ function! OpenTerminal()
   endif
 
   if g:open_terminal_mode > 0
-    for listed_buffer in filter(getbufinfo(), 'v:val.listed')
-      let bufnr = listed_buffer.bufnr
-      let buftype = getbufvar(bufnr, '&buftype')
-      let buftype = (buftype == '' ? 'normal' : buftype)
-      if buftype == 'terminal'
-        let term_winid = getbufvar(bufnr, 'winid')
-        if win_id2win(term_winid) != 0
-          " terminal buffer window is opened
-          " move cursor to the window
-          call win_gotoid(term_winid)
-        endif
 
-        if g:open_terminal_mode == 3 && len(getwininfo()) == 1
-          execute 'vsplit'
-        endif
-        execute 'buffer! ' .. bufnr
-        if g:open_terminal_mode == 1
-          let pwd = getcwd()
-          " sync vim pwd
-          call feedkeys("i\<C-u>cd " .. pwd .. "\<CR>")
-        endif
-        if g:open_terminal_mode == 3 && mode() == 'n'
-          call feedkeys("i\<C-u>")
-        endif
-        return
+    let listed_terminal_buffers = GetListedTerminalBuffers()
+    let listed_terminal_buffers_count = len(listed_terminal_buffers)
+
+    if listed_terminal_buffers_count == 0
+
+      if g:open_terminal_mode == 3
+        execute 'vsplit'
       endif
-    endfor
 
-    if g:open_terminal_mode == 3
-      execute 'vsplit'
+      execute 'terminal! ++curwin'
+      let term_bufnr = bufnr()
+      call setbufvar(term_bufnr, 'winid', bufwinid(term_bufnr)) " save window id
+
+      return
+
+    elseif listed_terminal_buffers_count == 1
+      let term_bufnr = listed_terminal_buffers[0].bufnr
+      call OpenTerminalBuffer(term_bufnr)
+
+      return
+
+    else
+      let s:terminal_buffer_info_list = copy(listed_terminal_buffers)
+            \ ->map(function('ConvertTerminalBufferInfo'))
+
+      let popup_config = #{
+            \ callback: 'GoSelectedTerminalBuffer',
+            \ filter: 'PopupFilter',
+            \ scrollbar: 1,
+            \ maxheight: 20
+            \ }
+      call popup_menu(s:terminal_buffer_info_list, popup_config)
+
     endif
-    execute 'terminal! ++curwin'
-    let term_bufnr = bufnr()
-    call setbufvar(term_bufnr, 'winid', bufwinid(term_bufnr)) " save window id
+
   endif
 
 endfunction
