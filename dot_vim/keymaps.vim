@@ -69,6 +69,7 @@ nnoremap <leader>at <cmd>e ~/temp.txt<CR>
 nnoremap <leader>ay <cmd>let @+ = system('awk -f ~/script.awk ~/temp.txt')<CR>
 nnoremap <leader>ap <cmd>r ! awk -f ~/script.awk ~/temp.txt<CR>
 vnoremap <leader>ap <cmd>! awk -f ~/script.awk<CR>
+vnoremap <leader>auniq :<C-U>'<,'>!awk '{ if(\!arr[$0]++) print }'<CR>
 
 " sql
 nnoremap <leader>ss <cmd>e ~/script.sql<CR>
@@ -120,3 +121,8 @@ nnoremap <leader>h <cmd>set nohlsearch<cr>
 nnoremap <leader>lg :lgrep 
 nnoremap <leader>lo :lopen<CR>
 nnoremap <leader>lc :lclose<CR>
+
+" uniq, sort
+vnoremap <leader>sort :<C-U>'<,'>!sort<CR>
+vnoremap <leader>uniq :<C-U>'<,'>!uniq<CR>
+vnoremap <leader>uniqc :<C-U>'<,'>!uniq -c<CR>
