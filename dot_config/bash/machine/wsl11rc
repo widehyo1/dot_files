@@ -24,3 +24,5 @@ alias cdr9='cd /home/widehyo/gitclone/playground/reading/9_Command_Line_Rust'
 alias cdr10='cd /home/widehyo/gitclone/playground/reading/10_Kotlin_Programming'
 
 export WORK='/mnt/c/Users/UserK/work'
+
+alias scs='select-codex-session'

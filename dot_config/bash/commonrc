@@ -77,6 +77,8 @@ source_if_cmd uv "$CLI_DIR/uvrc"
 source_if_cmd redis-cli "$CLI_DIR/redis-clirc"
 source_if_cmd node "$CLI_DIR/noderc"
 source_if_cmd lxc-ls "$CLI_DIR/lxcrc"
+source_if_cmd just "$CLI_DIR/justrc"
+source_if_cmd perl "$CLI_DIR/perlrc"
 
 # machine specific
 MACHINE_DIR="$BASH_DIR/machine"
