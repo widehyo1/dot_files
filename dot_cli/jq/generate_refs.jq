@@ -1,5 +1,10 @@
+def path_segment:
+  tostring
+  | gsub("%"; "%25")
+  | gsub("/"; "%2F");
+
 def reference_path($outdir; $segments):
-  "\($outdir)/\($segments | join("/"))";
+  "\($outdir)/\($segments | map(path_segment) | join("/"))";
 
 def canonical_json:
   to_entries | sort_by(.key) | from_entries | tojson;
@@ -58,12 +63,12 @@ def schema_for_values($outdir; $segments; $objects):
               ([$values[] | .[] | type] | unique | sort) as $member_types
               | if ($member_types | index("object")) != null then
                   if ($member_types | any(. != "object")) then
-                    error("mixed object/non-object array at \(($segments + [$key]) | join("/"))")
+                    error("mixed object/non-object array at \(($segments + [$key]) | ("/"))")
                   else
                     reference_path($outdir; $segments + [$key]) + ".json"
                   end
                 elif ($member_types | index("array")) != null then
-                  error("nested array value at \(($segments + [$key]) | join("/"))")
+                  error("nested array value at \(($segments + [$key]) | ("/"))")
                 else
                   primitive_array_label($values; $total)
                 end
@@ -72,7 +77,7 @@ def schema_for_values($outdir; $segments; $objects):
             elif ($types | index("array")) != null then
               ([$values[] | select(type == "array") | .[] | type] | unique | sort) as $member_types
               | if ($member_types | index("object")) != null and ($member_types | any(. != "object")) then
-                  error("mixed object/non-object array at \(($segments + [$key]) | join("/"))")
+                  error("mixed object/non-object array at \(($segments + [$key]) | ("/"))")
                 else
                   $types | join("|")
                 end
@@ -111,23 +116,48 @@ def array_records($outdir; $items):
      | map(. + {canonical: (.schema | canonical_json)})
      | group_by(.canonical)) as $groups
   | if ($groups | length) == 1 then
-      {schema_path: ($array_base + ".json"),
-       object_paths: [($array_base + ".json")],
-       schema: $groups[0][0].schema,
-       array_parent: ($array_base + ".json"),
-       array_indexes: ([$schemas[].index] | sort | unique)}
+      {
+        schema_path: ($array_base + ".json"),
+        object_paths: [($array_base + ".json")],
+        schema: $groups[0][0].schema
+      }
     else
-      {schema_path: ($array_base + ".json"),
-       object_paths: [($array_base + ".json")],
-       schema: {"$refs_mut": ($array_base + "/")}},
-      ($groups[]
-       | . as $same
-       | ([$same[].index] | min) as $first_index
-       | {schema_path: ($array_base + "/" + ($first_index | tostring) + ".json"),
-          object_paths: [($array_base + "/" + ($first_index | tostring) + ".json")],
-          schema: $same[0].schema,
-          array_parent: ($array_base + ".json"),
-          array_indexes: ([$same[].index] | sort | unique)})
+      {
+        schema_path: ($array_base + ".json"),
+        object_paths: [($array_base + ".json")],
+        schema: {"$refs_mut": ($array_base + "/")}
+      },
+      (
+        $groups
+        | map(
+            . as $same
+            | {
+                first_index: ([$same[].index] | min),
+                same: $same
+              }
+          )
+        | group_by(.first_index)
+        | .[]
+        | to_entries[]
+        | . as $entry
+        | ($entry.value.first_index) as $first_index
+        | ($entry.key) as $collision_index
+        | ($entry.value.same) as $same
+        | (
+            if $collision_index == 0 then
+              ($first_index | tostring)
+            else
+              "\($first_index)_\($collision_index)"
+            end
+          ) as $file_stem
+        | {
+            schema_path: ($array_base + "/" + $file_stem + ".json"),
+            object_paths: [($array_base + "/" + $file_stem + ".json")],
+            schema: $same[0].schema,
+            array_parent: ($array_base + ".json"),
+            array_indexes: ([$same[].index] | sort | unique)
+          }
+      )
     end;
 
 def root_collection_records($outdir; $items):

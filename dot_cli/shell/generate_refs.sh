@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  printf 'Usage: %s [--outdir DIR|--outdir=DIR] [input-file]\n' "${0##*/}"
+  printf 'Usage: %s [--outdir DIR|--outdir=DIR] [--jqfile FILE|--jqfile=FILE] [input-file]\n'  "${0##*/}"
 }
 
 die() {
@@ -16,8 +16,24 @@ command -v realpath >/dev/null || die 'realpath is required'
 
 outdir=refs
 input_file=
+jqfile=
+jsonl_mode=0
+
 while (($#)); do
   case $1 in
+    --jsonl)
+      jsonl_mode=1
+      shift
+      ;;
+    --jqfile)
+      (($# >= 2)) || die '--jqfile requires a file'
+      jqfile=$2
+      shift 2
+      ;;
+    --jqfile=*)
+      jqfile=${1#*=}
+      shift
+      ;;
     --outdir)
       (($# >= 2)) || die '--outdir requires a directory'
       outdir=$2
@@ -78,7 +94,7 @@ records=$(mktemp)
 sql_file=$(mktemp)
 temporary_files+=("$normalized" "$records" "$sql_file")
 
-if [[ $source_file == *.jsonl ]]; then
+if [[ $jsonl_mode -eq 1 || $source_file == *.jsonl ]]; then
   root_key=$([ "$file_mode" -eq 1 ] && printf '%s_ref' "$base" || printf 'root_item')
   jq -cs --arg root "$root_key" '
     if length == 0 then
@@ -119,7 +135,10 @@ rm -rf -- "$outdir"
 mkdir -p -- "$outdir"
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-jq -c --arg outdir "$outdir" -f "$script_dir/generate_refs.jq" "$normalized" >"$records" \
+: "${jqfile:=$script_dir/generate_refs.jq}"
+[ -r "$jqfile" ] || die "cannot read jq file: $jqfile"
+
+jq -c --arg outdir "$outdir" -f "$jqfile" "$normalized" >"$records" \
   || die 'schema generation failed'
 
 cat "$records"
