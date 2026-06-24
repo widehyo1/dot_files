@@ -1,0 +1,3 @@
+alias cfmt="cargo fmt --verbose"
+alias ctest="cargo test"
+alias cbuild="cargo build"

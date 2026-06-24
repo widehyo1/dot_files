@@ -79,6 +79,7 @@ source_if_cmd node "$CLI_DIR/noderc"
 source_if_cmd lxc-ls "$CLI_DIR/lxcrc"
 source_if_cmd just "$CLI_DIR/justrc"
 source_if_cmd perl "$CLI_DIR/perlrc"
+source_if_cmd cargo "$CLI_DIR/cargorc"
 
 # machine specific
 MACHINE_DIR="$BASH_DIR/machine"

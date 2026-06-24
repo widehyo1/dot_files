@@ -37,8 +37,8 @@ awk '
 BEGIN {
   for (i = 1; i < ARGC; i++) {
     terms[i] = ARGV[i]
-    ARGV[i] = ""
   }
+  delete ARGV
 }
 
 {
