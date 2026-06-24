@@ -1,0 +1,52 @@
+#!/bin/bash
+# all-terms: filter stdin lines containing all given terms
+
+set -eu
+
+show_help() {
+    cat <<'EOF'
+Filter stdin lines containing all given terms
+
+Usage: all-terms <TERMS>...
+
+Arguments:
+  <TERMS>...  Terms that must all be present in each input line
+
+Options:
+  -h, --help  Print help
+
+Examples:
+  history | all-terms docker build docker.io
+  cat temp.txt | all-terms http year hwp
+EOF
+}
+
+case "${1:-}" in
+    -h|--help)
+        show_help
+        exit 0
+        ;;
+esac
+
+if [ "$#" -eq 0 ]; then
+    show_help >&2
+    exit 2
+fi
+
+awk '
+BEGIN {
+  for (i = 1; i < ARGC; i++) {
+    terms[i] = ARGV[i]
+    ARGV[i] = ""
+  }
+}
+
+{
+  for (key in terms) {
+    if (index($0, terms[key]) == 0) {
+      next
+    }
+  }
+  print
+}
+' "$@"
