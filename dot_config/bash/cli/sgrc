@@ -1,0 +1,2 @@
+alias sgpy='sg -l py -p'
+alias sgscan='sg scan -r'

@@ -1,0 +1,5 @@
+#!/bin/bash
+jq -r '
+.[]
+| "\(.file):\(.range.start.line)\n\(.text)\n"
+'
