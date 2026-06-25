@@ -1,2 +1,4 @@
 alias sgpy='sg -l py -p'
 alias sgscan='sg scan -r'
+alias runsg='sg scan -r ~/script.yaml'
+alias runsgv='sg scan -r ~/script.yaml --json | jqrsg'
