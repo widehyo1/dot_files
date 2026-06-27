@@ -1,4 +1,2 @@
-alias sgpy='sg -l py -p'
-alias sgscan='sg scan -r'
-alias runsg='sg scan -r ~/script.yaml'
-alias runsgv='sg scan -r ~/script.yaml --json | jqrsg'
+alias runsg='sg scan -r ~/script.yml'
+alias ressg='sg scan -r ~/script.yml --json | jq -r -f ~/.cli/jq/extract_sg_result.jq'
