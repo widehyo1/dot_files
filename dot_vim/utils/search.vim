@@ -8,3 +8,8 @@ function! Lgrep(search_text = '')
     edit #
   endif
 endfunction
+
+function! PasteSearchRegister()
+    let word = substitute(@/, '\\<\|\\>\|\\V', '', 'g')
+    call feedkeys('a' . word . "\<Esc>", 'n')
+endfunction

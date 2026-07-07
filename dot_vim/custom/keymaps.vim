@@ -48,3 +48,6 @@ nnoremap <leader>jf <cmd>call OpenSystemPopup('jq -f ~/script.jq ~/temp.json')<C
 " Lgrep local-list
 command -nargs=? Lgrep :call Lgrep(<f-args>)
 nnoremap <leader>lg :Lgrep 
+
+" search register
+nnoremap <space>/ <cmd>call PasteSearchRegister()<CR>
