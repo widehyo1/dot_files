@@ -1,2 +1,2 @@
-alias runsg='sg scan -r ~/script.yml'
-alias ressg='sg scan -r ~/script.yml --json | jq -r -f ~/.cli/jq/extract_sg_result.jq'
+alias runsg='sg scan -r ~/script.yml --json | jq -r -f ~/.cli/jq/extract_sg_result.jq'
+alias checksg='sg scan -r ~/script.yml'
