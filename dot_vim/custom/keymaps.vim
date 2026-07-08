@@ -51,3 +51,4 @@ nnoremap <leader>lg :Lgrep
 
 " search register
 nnoremap <space>/ <cmd>call PasteSearchRegister()<CR>
+nnoremap <space><space>/ <cmd>call SetSearchRegister()<CR>

@@ -13,3 +13,8 @@ function! PasteSearchRegister()
     let word = substitute(@/, '\\<\|\\>\|\\V', '', 'g')
     call feedkeys('a' . word . "\<Esc>", 'n')
 endfunction
+
+function! SetSearchRegister()
+    let word = substitute(@/, '\\<\|\\>\|\\V', '', 'g')
+    call setreg('+', word)
+endfunction
