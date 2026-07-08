@@ -1,0 +1,75 @@
+```yml
+id: java-any-class-named-sso-service-impl
+language: Java
+rule:
+  all:
+    - kind: class_declaration
+    - has:
+        pattern: SsoServiceImpl
+```
+```yml
+id: java-any-interface-named-sso-service
+language: Java
+rule:
+  all:
+    - kind: interface_declaration
+    - has:
+        pattern: SsoService
+```
+
+```yml
+id: python-class-name-kind
+language: Python
+rule:
+  all:
+    - kind: class_definition
+    - has:
+        pattern: SubsidyNoticeGoldenRow
+```
+```yml
+id: python-function-name-kind
+language: Python
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        pattern: verify
+```
+```yml
+id: python-method-name-kind
+language: Python
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        pattern: verify
+    - inside:
+        kind: class_definition
+```
+
+```yml
+id: python-top-level-function-name
+language: Python
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        pattern: verify
+    - not:
+        inside:
+          kind: class_definition
+```
+```yaml
+language: Python
+rule:
+  pattern: |
+    def changed_dry_run($$$ARGS) -> $RET:
+        $$$BODY
+```
+```yaml
+language: Python
+rule:
+  pattern: |
+    def stream_golden_rows($$$ARGS) -> $RET:
+        $$$BODY
+```
