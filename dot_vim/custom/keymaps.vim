@@ -5,7 +5,7 @@ nnoremap <leader><leader>s :BufferMenu
 
 " search across files
 command -nargs=? SearchAcrossFiles :call SearchAcrossFiles(<f-args>)
-nnoremap <leader><leader><C-F> :SearchAcrossFiles 
+nnoremap <leader><C-F><C-F> :SearchAcrossFiles 
 " search across buffers
 command -nargs=? SearchAcrossBuffers :call SearchAcrossBuffers(<f-args>)
 nnoremap <leader><leader><C-F> :SearchAcrossBuffers 
@@ -52,3 +52,6 @@ nnoremap <leader>lg :Lgrep
 " search register
 nnoremap <space>/ <cmd>call PasteSearchRegister()<CR>
 nnoremap <space><space>/ <cmd>call SetSearchRegister()<CR>
+
+" chdir
+nnoremap <leader>gg <cmd>call ChangeGitDir()<CR>

@@ -1,2 +1,2 @@
 " remove (carriage return) character
-nnoremap <leader>d :%s/\r//g<CR>
+nnoremap <leader>d <cmd>%s/\r//g<CR>

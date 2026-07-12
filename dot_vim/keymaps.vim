@@ -96,9 +96,6 @@ vnoremap <space>< ygvc<>"0P
 nnoremap <space>{ yiwcw{}"0P
 vnoremap <space>{ ygvc{}"0P
 
-" search register
-nnoremap <space>/ i<C-R>/:s/\\<//:s/\\>//q/kkk<C-O>
-
 " quick paste
 nnoremap <space>as i```awk<cr>```k<cmd>r! cat ~/script.awk<cr>
 nnoremap <space>at i```txt<cr>```k<cmd>r! cat ~/temp.txt<cr>

@@ -1,5 +1,6 @@
 alias ccheck="cargo check"
 alias crun="cargo run"
+alias crunr="cargo run --release"
 alias ctest="cargo test"
 alias cfmt="cargo fmt"
 alias cbuild="cargo build"
