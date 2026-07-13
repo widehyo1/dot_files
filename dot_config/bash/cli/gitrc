@@ -16,3 +16,5 @@ alias ginfo='git branch -avv'
 alias glog='git log --oneline --name-status --pretty=format:"%h|%ad|%s|by %an" --date=format:"%Y-%m-%d %H:%M:%S"'
 alias glogabbr='git log --oneline --pretty=format:"%h|%ad|%s|by %an" --date=format:"%Y-%m-%d %H:%M:%S"'
 alias glast='git diff --name-only HEAD..HEAD~'
+
+alias gdr='git-diff-reflog'

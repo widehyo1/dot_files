@@ -1,0 +1,56 @@
+#!/bin/bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: git-diff-reflog [n]" >&2
+    echo "  n must be an integer greater than or equal to 1. Default: 1" >&2
+}
+
+die() {
+    echo "git-diff-reflog: error: $*" >&2
+    exit 1
+}
+
+n="${1:-1}"
+
+if (( $# > 1 )); then
+    usage
+    exit 2
+fi
+
+if [[ ! "$n" =~ ^[0-9]+$ ]]; then
+    die "n must be an integer: '$n'"
+fi
+
+if (( n < 1 )); then
+    die "n must be greater than or equal to 1: '$n'"
+fi
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 \
+    || die "current directory is not inside a Git working tree"
+
+reflog_line=$((n + 1))
+
+hash="$(
+    git reflog --format='%H' |
+        sed -n "${reflog_line}p"
+)"
+
+if [[ -z "$hash" ]]; then
+    die "reflog entry NR==$reflog_line does not exist; cannot compare n=$n with HEAD"
+fi
+
+git cat-file -e "${hash}^{commit}" 2>/dev/null \
+    || die "failed to resolve reflog entry NR==$reflog_line as a commit: '$hash'"
+
+range="${hash}..HEAD"
+
+if command -v difft >/dev/null 2>&1; then
+    # Equivalent to the following ~/.gitconfig alias:
+    #
+    # difft = -c diff.external=difft diff --ext-diff
+    exec git -c diff.external=difft diff --ext-diff "$range"
+else
+    exec git diff "$range"
+fi
