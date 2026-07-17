@@ -1,0 +1,2 @@
+alias cc='claude --dangerously-skip-permissions'
+alias cdmanref='cd /home/widehyo/.claude/skills/cli-manref'
