@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+import os
+import sqlite3
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+MAX_ENTRIES = 10
+
+
+def get_db_path() -> Path:
+    data_home = Path(
+        os.environ.get(
+            "XDG_DATA_HOME",
+            Path.home() / ".local" / "share",
+        )
+    )
+    return data_home / "clipboard-history" / "history.sqlite3"
+
+
+def read_clipboard() -> str:
+    try:
+        result = subprocess.run(
+            ["xclip", "-selection", "clipboard", "-out"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except FileNotFoundError:
+        sys.exit("clip-save: xclip command not found")
+    except subprocess.CalledProcessError as error:
+        message = error.stderr.decode(errors="replace").strip()
+        sys.exit(f"clip-save: failed to read clipboard: {message}")
+
+    return result.stdout.decode("utf-8", errors="surrogateescape")
+
+
+def initialize_database(connection: sqlite3.Connection) -> None:
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS clipboard_history (
+            id           INTEGER PRIMARY KEY,
+            content      TEXT NOT NULL UNIQUE,
+            saved_at_ns  INTEGER NOT NULL
+        )
+        """
+    )
+
+
+def save_clipboard(
+    connection: sqlite3.Connection,
+    content: str,
+) -> None:
+    saved_at_ns = time.time_ns()
+
+    connection.execute(
+        """
+        INSERT INTO clipboard_history (
+            content,
+            saved_at_ns
+        )
+        VALUES (?, ?)
+        ON CONFLICT(content) DO UPDATE SET
+            saved_at_ns = excluded.saved_at_ns
+        """,
+        (content, saved_at_ns),
+    )
+
+    connection.execute(
+        """
+        DELETE FROM clipboard_history
+        WHERE id IN (
+            SELECT id
+            FROM clipboard_history
+            ORDER BY saved_at_ns DESC
+            LIMIT -1 OFFSET ?
+        )
+        """,
+        (MAX_ENTRIES,),
+    )
+
+
+def main() -> None:
+    content = read_clipboard()
+
+    if content == "":
+        sys.exit("clip-save: clipboard is empty")
+
+    db_path = get_db_path()
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with sqlite3.connect(db_path) as connection:
+        initialize_database(connection)
+        save_clipboard(connection, content)
+
+        rows = connection.execute(
+            """
+            SELECT
+                ROW_NUMBER() OVER (
+                    ORDER BY saved_at_ns DESC
+                ) AS sequence,
+                content
+            FROM clipboard_history
+            ORDER BY saved_at_ns DESC
+            """
+        ).fetchall()
+
+
+if __name__ == "__main__":
+    main()

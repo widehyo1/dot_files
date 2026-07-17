@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+
+import os
+import sqlite3
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+PREVIEW_LENGTH = 120
+
+
+def get_db_path() -> Path:
+    data_home = Path(
+        os.environ.get(
+            "XDG_DATA_HOME",
+            Path.home() / ".local" / "share",
+        )
+    )
+    return data_home / "clipboard-history" / "history.sqlite3"
+
+
+def make_preview(content: str) -> str:
+    preview = (
+        content
+        .replace("\\", "\\\\")
+        .replace("\t", "\\t")
+        .replace("\r", "\\r")
+        .replace("\n", "\\n")
+    )
+
+    if len(preview) > PREVIEW_LENGTH:
+        preview = preview[: PREVIEW_LENGTH - 3] + "..."
+
+    return preview
+
+
+def select_entry(
+    entries: list[tuple[int, str]],
+) -> int | None:
+    lines = [
+        f"{position}\t{entry_id}\t{make_preview(content)}"
+        for position, (entry_id, content) in enumerate(entries, start=1)
+    ]
+
+    try:
+        result = subprocess.run(
+            [
+                "fzf",
+                "--delimiter=\t",
+                "--with-nth=1,3",
+                "--nth=1,3",
+                "--prompt=clipboard> ",
+                "--header=Enter: copy  Esc: cancel",
+                "--no-multi",
+            ],
+            input="\n".join(lines),
+            text=True,
+            stdout=subprocess.PIPE,
+        )
+    except FileNotFoundError:
+        sys.exit("clip-pick: fzf command not found")
+
+    if result.returncode == 130:
+        return None
+
+    if result.returncode != 0:
+        sys.exit(f"clip-pick: fzf exited with status {result.returncode}")
+
+    selected = result.stdout.rstrip("\n")
+
+    if not selected:
+        return None
+
+    fields = selected.split("\t", maxsplit=2)
+
+    if len(fields) < 2:
+        sys.exit("clip-pick: invalid fzf selection")
+
+    try:
+        return int(fields[1])
+    except ValueError:
+        sys.exit(f"clip-pick: invalid entry id: {fields[1]!r}")
+
+
+def write_clipboard(content: str) -> None:
+    try:
+        subprocess.run(
+            ["xclip", "-selection", "clipboard", "-in"],
+            input=content.encode("utf-8", errors="surrogateescape"),
+            check=True,
+        )
+    except FileNotFoundError:
+        sys.exit("clip-pick: xclip command not found")
+    except subprocess.CalledProcessError as error:
+        sys.exit(f"clip-pick: xclip exited with status {error.returncode}")
+
+
+def main() -> None:
+    db_path = get_db_path()
+
+    if not db_path.exists():
+        sys.exit(f"clip-pick: database not found: {db_path}")
+
+    with sqlite3.connect(db_path) as connection:
+        entries = connection.execute(
+            """
+            SELECT id, content
+            FROM clipboard_history
+            ORDER BY saved_at_ns DESC
+            """
+        ).fetchall()
+
+        if not entries:
+            sys.exit("clip-pick: clipboard history is empty")
+
+        entry_id = select_entry(entries)
+
+        if entry_id is None:
+            return
+
+        row = connection.execute(
+            """
+            SELECT content
+            FROM clipboard_history
+            WHERE id = ?
+            """,
+            (entry_id,),
+        ).fetchone()
+
+        if row is None:
+            sys.exit(f"clip-pick: entry not found: {entry_id}")
+
+        content = row[0]
+
+        write_clipboard(content)
+
+        connection.execute(
+            """
+            UPDATE clipboard_history
+            SET saved_at_ns = ?
+            WHERE id = ?
+            """,
+            (time.time_ns(), entry_id),
+        )
+
+
+if __name__ == "__main__":
+    main()
