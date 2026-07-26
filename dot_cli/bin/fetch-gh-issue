@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+usage(){ echo "usage: fetch-gh-issue <number> [--repo OWNER/REPO] [--owner OWNER]" >&2; exit 2; }
+[[ $# -ge 1 && $1 != -h && $1 != --help ]] || usage
+n=$1; shift; spec=; oo=
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --repo) [[ $# -ge 2 ]] || usage; spec=$2; shift 2;;
+    --owner) [[ $# -ge 2 ]] || usage; oo=$2; shift 2;;
+    -h|--help) usage;;
+    *) usage;;
+  esac
+done
+if [[ -n $spec ]]; then
+  if [[ $spec == */* ]]; then owner=${spec%%/*}; repo=${spec#*/};
+  else repo=$spec; owner=${oo:-$(gh repo view --json owner --jq .owner.login)}; fi
+else
+  full=$(gh api repos/{owner}/{repo} --jq .full_name)
+  owner=${oo:-${full%%/*}}; repo=${full#*/}
+fi
+b="repos/$owner/$repo"
+issue=$(gh api "$b/issues/$n")
+comments=$(gh api --paginate --slurp "$b/issues/$n/comments"|jq 'add')
+timeline=$(gh api --paginate --slurp -H 'Accept: application/vnd.github+json' "$b/issues/$n/timeline"|jq 'add')
+echo "Repository: $owner/$repo"
+jq -r '"Issue #\(.number): \(.title)\nURL: \(.html_url)\nState: \(.state)\nAuthor: \(.user.login)\nCreated: \(.created_at) Updated: \(.updated_at)\nLabels: "+([.labels[].name]|join(", "))+"\nAssignees: "+([.assignees[].login]|join(", "))+"\n\nBody:\n"+(.body//"")' <<<"$issue"
+echo $'\nComments:'; jq -r '.[]|"- \(.user.login) (\(.created_at))\n  \(.html_url)\n  \(.body)"' <<<"$comments"
+echo $'\nTimeline:'; jq -r '.[]|"- \(.event // "event") by \(.actor.login // .user.login // "unknown") at \(.created_at // "") \(.commit_url // .html_url // "")"' <<<"$timeline"

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+usage(){ echo "usage: fetch-gh-pr <number> [--repo OWNER/REPO] [--owner OWNER]" >&2; exit 2; }
+[[ $# -ge 1 && $1 != -h && $1 != --help ]] || usage
+n=$1; shift; spec=; oo=
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --repo) [[ $# -ge 2 ]] || usage; spec=$2; shift 2;;
+    --owner) [[ $# -ge 2 ]] || usage; oo=$2; shift 2;;
+    -h|--help) usage;;
+    *) usage;;
+  esac
+done
+if [[ -n $spec ]]; then
+  if [[ $spec == */* ]]; then owner=${spec%%/*}; repo=${spec#*/};
+  else repo=$spec; owner=${oo:-$(gh repo view --json owner --jq .owner.login)}; fi
+else
+  full=$(gh api repos/{owner}/{repo} --jq .full_name)
+  owner=${oo:-${full%%/*}}; repo=${full#*/}
+fi
+b="repos/$owner/$repo"
+pr=$(gh api "$b/pulls/$n"); sha=$(jq -r .head.sha <<<"$pr")
+comments=$(gh api --paginate --slurp "$b/issues/$n/comments" | jq 'add')
+reviews=$(gh api --paginate --slurp "$b/pulls/$n/reviews" | jq 'add')
+inline=$(gh api --paginate --slurp "$b/pulls/$n/comments" | jq 'add')
+files=$(gh api --paginate --slurp "$b/pulls/$n/files" | jq 'add')
+status=$(gh api "$b/commits/$sha/status")
+checks=$(gh api "$b/commits/$sha/check-runs")
+gql=$(gh api graphql -f query='query($owner:String!, $repo:String!, $number:Int!) { repository(owner:$owner,name:$repo) { pullRequest(number:$number) { reviewDecision mergeStateStatus closingIssuesReferences(first:100) { nodes { number title url } } } } }' -F owner="$owner" -F repo="$repo" -F number="$n")
+echo "Repository: $owner/$repo"
+jq -r '"PR #\(.number): \(.title)\nURL: \(.html_url)\nState: \(.state) Draft: \(.draft) Merged: \(.merged)\nAuthor: \(.user.login)\nBase: \(.base.ref) Head: \(.head.ref) (\(.head.sha))\n\nBody:\n\(.body // "")"' <<<"$pr"
+echo $'\nReview status:'
+jq -r '.data.repository.pullRequest | "Decision: \(.reviewDecision // "UNKNOWN")\nMerge state: \(.mergeStateStatus // "UNKNOWN")"' <<<"$gql"
+echo $'\nReviews:'; jq -r '.[]|" - \(.user.login) [\(.state)] \(.submitted_at // "")\n   \(.html_url)\n   \(.body // "")"' <<<"$reviews"
+echo $'\nIssue comments:'; jq -r '.[]|"- \(.user.login) (\(.created_at))\n  \(.html_url)\n  \(.body)"' <<<"$comments"
+echo $'\nInline review comments:'; jq -r '.[]|"- \(.user.login) [\(.path):\(.line // .original_line // "?")]\n  \(.html_url)\n  \(.body)"' <<<"$inline"
+echo $'\nChanged files:'; jq -r '.[]|"- \(.status) +\(.additions)/-\(.deletions) \(.filename)"' <<<"$files"
+echo $'\nCommit status:'; jq -r '"Overall: \(.state)",(.statuses[]|"- \(.context): \(.state) \(.description // "") \(.target_url // "")")' <<<"$status"
+echo $'\nCheck runs:'; jq -r '.check_runs[]|"- \(.name): \(.status)/\(.conclusion // "") \(.html_url)"' <<<"$checks"
+echo $'\nLinked closing issues:'; jq -r '.data.repository.pullRequest.closingIssuesReferences.nodes[]?|"- #\(.number) \(.title) \(.url)"' <<<"$gql"
+linked=$(jq -r '[.data.repository.pullRequest.closingIssuesReferences.nodes[]?.number]|join(", ")' <<<"$gql")
+echo "Linked issue numbers: ${linked:-none}"
