@@ -1,2 +1,2 @@
 " tabline
-set tabline=%!BufferTabline()
+" set tabline=%!BufferTabline()
