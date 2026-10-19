@@ -3,30 +3,31 @@ function! LoadBuffer(id, result)
   execute 'buffer! ' . target_buffer.bufnr
 endfunction
 
-function! BufferMenu(search_text = '')
+function! BufferMenu(...)
   " show loaded buffers on popup menu and open selected buffer
-  let s:buf_dict = map(filter(getbufinfo(), 'v:val.listed'), '#{
-        \ bufnr: v:val.bufnr,
-        \ text: fnamemodify(expand(v:val.name), ":.:~")
+  let s:buf_dict = map(filter(getbufinfo(), 'v:val.listed'), '{
+        \ "bufnr": v:val.bufnr,
+        \ "text": fnamemodify(expand(v:val.name), ":.:~")
         \ }')
-  if len(a:search_text)
+  let search_text = a:000->get(0, '')
+  if len(search_text)
     " filter buf_dict text with search_text
-    call filter(s:buf_dict, 'v:val.text =~ a:search_text')
+    call filter(s:buf_dict, 'v:val.text =~ search_text')
     if len(s:buf_dict) == 0
-      let popup_config = #{
-      \   time: 3000,
-      \   cursorline: 0,
-      \   highlight: 'WarningMsg'
+      let popup_config = {
+      \ "time": 3000,
+      \ "cursorline": 0,
+      \ "highlight": 'WarningMsg'
       \ }
-      let empty_msg = 'there is no buffer with name matching ' . a:search_text
+      let empty_msg = 'there is no buffer with name matching ' . search_text
       call popup_menu(empty_msg, popup_config)
       return
     endif
   endif
 
-  let popup_config = #{
-  \   filter: 'PopupFilter',
-  \   callback: 'LoadBuffer'
+  let popup_config = {
+  \ "filter": 'PopupFilter',
+  \ "callback": 'LoadBuffer'
   \ }
   call popup_menu(s:buf_dict, popup_config)
 endfunction
@@ -58,16 +59,18 @@ endfunction
 
 
 " if given search text is empty, use last searched pattern instead
-function! ProcessSearchText(search_text = '')
-  let search_text = empty(a:search_text) ? @/ : a:search_text
+function! ProcessSearchText(...)
+  let search_text = a:000->get(0, '')
+  let search_text = empty(search_text) ? @/ : search_text
   " 직전 검색 패턴(@/) \< \> 제거
   " `gD`검색 대응, `gD`는 @/ 레지스터를 \V\<{search_text}\> 로 지정. \V제거
   return substitute(search_text, '\\<\|\\>\|\\V', '', 'g')
 endfunction
 
 
-function! FindFile(search_text = '')
-  let search_text = ProcessSearchText(a:search_text)
+function! FindFile(...)
+  let search_text = a:000->get(0, '')
+  let search_text = ProcessSearchText(search_text)
 
   if executable('fd')
     let fd_results = system('fd ' . shellescape(search_text))->split('\n')
@@ -77,21 +80,21 @@ function! FindFile(search_text = '')
   endif
 
   if len(fd_results) == 0
-    let popup_config = #{
-    \   time: 3000,
-    \   cursorline: 0,
-    \   highlight: 'WarningMsg'
+    let popup_config = {
+    \ 'time': 3000, 
+    \ 'cursorline': 0, 
+    \ 'highlight': 'WarningMsg' 
     \ }
-    let empty_msg = 'there is no buffer with name matching ' . a:search_text
+    let empty_msg = 'there is no buffer with name matching ' . search_text
     call popup_menu(empty_msg, popup_config)
     return
   endif
 
   let s:fd_info_list = fd_results
 
-  let popup_config = #{
-  \   filter: 'PopupFilter',
-  \   callback: 'EditBuffer'
+  let popup_config = {
+  \ 'filter': 'PopupFilter',
+  \ 'callback': 'EditBuffer'
   \ }
   call popup_menu(s:fd_info_list, popup_config)
 endfunction
@@ -116,10 +119,10 @@ function! ContentSearch(search_results, search_text)
   let s:search_info_list = []
 
   if len(a:search_results) == 0
-    let popup_config = #{
-    \   time: 3000,
-    \   cursorline: 0,
-    \   highlight: 'WarningMsg'
+    let popup_config = {
+    \ 'time': 3000,
+    \ 'cursorline': 0,
+    \ 'highlight': 'WarningMsg'
     \ }
     let empty_msg = 'there is no buffer with content matching ' . a:search_text
     call popup_menu(empty_msg, popup_config)
@@ -138,19 +141,20 @@ function! ContentSearch(search_results, search_text)
     call add(s:search_info_list, info_dict)
   endfor
 
-  let popup_config = #{
-        \ filter: 'PopupFilter',
-        \ callback: 'GoSelectedFile',
-        \ scrollbar: 1,
-        \ maxheight: 20
+  let popup_config = {
+        \ 'filter': 'PopupFilter',
+        \ 'callback': 'GoSelectedFile',
+        \ 'scrollbar': 1,
+        \ 'maxheight': 20
         \ }
 
   call popup_menu(s:search_info_list, popup_config)
 endfunction
 
 
-function! SearchAcrossFiles(search_text = '')
-  let search_text = ProcessSearchText(a:search_text)
+function! SearchAcrossFiles(...)
+  let search_text = a:000->get(0, '')
+  let search_text = ProcessSearchText(search_text)
 
   if executable('rg')
     let grep_result = system('rg --no-heading --with-filename --line-number ' . shellescape(search_text))
@@ -162,8 +166,9 @@ function! SearchAcrossFiles(search_text = '')
 endfunction
 
 
-function! SearchAcrossBuffers(search_text = '')
-  let search_text = ProcessSearchText(a:search_text)
+function! SearchAcrossBuffers(...)
+  let search_text = a:000->get(0, '')
+  let search_text = ProcessSearchText(search_text)
 
   let buf_files = map(filter(getbufinfo(), 'v:val.listed'), 'fnamemodify(expand(v:val.name), ":.:~")')
   let buf_files_str = buf_files->join(' ')

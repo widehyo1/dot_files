@@ -99,11 +99,11 @@ function! OpenTerminal()
       let s:terminal_buffer_info_list = copy(listed_terminal_buffers)
             \ ->map(function('ConvertTerminalBufferInfo'))
 
-      let popup_config = #{
-            \ callback: 'GoSelectedTerminalBuffer',
-            \ filter: 'PopupFilter',
-            \ scrollbar: 1,
-            \ maxheight: 20
+      let popup_config = {
+            \ "callback": 'GoSelectedTerminalBuffer',
+            \ "filter": 'PopupFilter',
+            \ "scrollbar": 1,
+            \ "maxheight": 20
             \ }
       call popup_menu(s:terminal_buffer_info_list, popup_config)
 

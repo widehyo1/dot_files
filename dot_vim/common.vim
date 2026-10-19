@@ -1,6 +1,6 @@
 " colorscheme
 set t_Co=256
-" colorscheme desert
+colorscheme desert
 
 " basic config
 set number
@@ -19,7 +19,8 @@ set showcmd
 set autoread
 set cursorline
 set list
-set listchars=tab:>-,trail:«,space:␣,lead:»
+set listchars=tab:>-,space:␣
+" set listchars=tab:>-,trail:«,space:␣,lead:»
 set showtabline=2
 set grepprg=grep\ -Irn\ $*\ /dev/null
 

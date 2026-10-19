@@ -1,41 +1,43 @@
-function! OpenExcommandPopup(excommand, lseek = v:false)
+function! OpenExcommandPopup(excommand, ...)
   let pop_width = float2nr(&columns * 0.8)
   let pop_height = float2nr(&lines * 0.8)
   let lines = split(execute(a:excommand, 'silent'), '\n')
-  let popup_config = #{
-        \ scrollbar: 1,
-        \ maxheight: pop_height,
-        \ minheight: pop_height,
-        \ maxwidth: pop_width,
-        \ minwidth: pop_width,
-        \ filter: 'PopupFilter'
+  let popup_config = {
+        \ 'scrollbar': 1,
+        \ 'maxheight': pop_height,
+        \ 'minheight': pop_height,
+        \ 'maxwidth': pop_width,
+        \ 'minwidth': pop_width,
+        \ 'filter': 'PopupFilter'
         \ }
 
   let winid = popup_menu(lines, popup_config)
 
-  if a:lseek
+  let lseek = a:000->get(0, v:false)
+  if lseek
     call win_execute(winid, 'normal! G')
     call win_execute(winid, 'normal! \<c-b>')
   endif
 endfunction
 
-function! OpenSystemPopup(command, lseek = v:false)
+function! OpenSystemPopup(command, ...)
   let pop_width = float2nr(&columns * 0.8)
   let pop_height = float2nr(&lines * 0.8)
 
   let lines = split(system(a:command, 'silent'), '\n')
-  let popup_config = #{
-        \ scrollbar: 1,
-        \ maxheight: pop_height,
-        \ minheight: pop_height,
-        \ maxwidth: pop_width,
-        \ minwidth: pop_width,
-        \ filter: 'PopupFilter'
+  let popup_config = {
+        \ 'scrollbar': 1,
+        \ 'maxheight': pop_height,
+        \ 'minheight': pop_height,
+        \ 'maxwidth': pop_width,
+        \ 'minwidth': pop_width,
+        \ 'filter': 'PopupFilter'
         \ }
 
   let winid = popup_menu(lines, popup_config)
 
-  if a:lseek
+  let lseek = a:000->get(0, v:false)
+  if lseek
     call win_execute(winid, 'normal! G')
     call win_execute(winid, 'normal! \<c-b>')
   endif
@@ -57,14 +59,14 @@ function! OpenJumplistPopup()
     let info_dict['cmd'] = 'edit +' . linenr . ' ' . file_text
     call add(s:jump_info_list, info_dict)
   endfor
-  let popup_config = #{
-        \ scrollbar: 1,
-        \ maxheight: pop_height,
-        \ minheight: pop_height,
-        \ maxwidth: pop_width,
-        \ minwidth: pop_width,
-        \ filter: 'PopupFilter',
-        \ callback: 'GoJumplist'
+  let popup_config = {
+        \ 'scrollbar': 1,
+        \ 'maxheight': pop_height,
+        \ 'minheight': pop_height,
+        \ 'maxwidth': pop_width,
+        \ 'minwidth': pop_width,
+        \ 'filter': 'PopupFilter',
+        \ 'callback': 'GoJumplist'
         \ }
 
   let winid = popup_menu(s:jump_info_list, popup_config)
@@ -91,14 +93,14 @@ function! OpenChangelistPopup()
     let info_dict['cmd'] = 'normal ' . linenr . 'G'
     call add(s:change_info_list, info_dict)
   endfor
-  let popup_config = #{
-        \ scrollbar: 1,
-        \ maxheight: pop_height,
-        \ minheight: pop_height,
-        \ maxwidth: pop_width,
-        \ minwidth: pop_width,
-        \ filter: 'PopupFilter',
-        \ callback: 'GoChangelist'
+  let popup_config = {
+        \ 'scrollbar': 1,
+        \ 'maxheight': pop_height,
+        \ 'minheight': pop_height,
+        \ 'maxwidth': pop_width,
+        \ 'minwidth': pop_width,
+        \ 'filter': 'PopupFilter',
+        \ 'callback': 'GoChangelist'
         \ }
 
   let winid = popup_menu(s:change_info_list, popup_config)
