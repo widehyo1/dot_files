@@ -1,0 +1,135 @@
+# -------------------------
+# helpers
+# -------------------------
+source_if_file() {
+  [ -f "$1" ] && source "$1"
+}
+
+source_if_cmd() {
+  command -v "$1" >/dev/null || return
+  [ -f "$2" ] && source "$2"
+}
+
+
+
+# sync vim pwd
+__osc7_prev_pwd=""
+setosc7dir() {
+  printf '\033]7;file://%s%s\007' "$HOSTNAME" "$PWD" # for neovim term request
+  printf '\e]51;["call","Tapi_SetOsc7_Dir","%s"]\x07' "$PWD" # for vim terminal api
+  __osc7_prev_pwd="$PWD"
+}
+
+chpwd_functions=("setosc7dir")
+
+export EDITOR=vim
+bindkey -e
+
+export HISTFILE=~/.zsh_history
+export HISTTIMEFORMAT='%F %T '
+export HISTSIZE=999999999
+export SAVEHIST=999999999
+
+setopt EXTENDED_HISTORY       # Write the history file in the ':start:elapsed;command' format.
+setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY          # Share history between all sessions.
+setopt HIST_IGNORE_DUPS       # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS   # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS      # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE      # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS      # Do not write a duplicate event to the history file.
+setopt APPEND_HISTORY         # append to history file
+
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+
+alias virc='vi ~/.zshrc'
+alias catrc='cat ~/.zshrc'
+alias zrc='source ~/.zshrc'
+
+# coreutils
+alias history='history -t "%Y-%m-%d %H:%M:%S " 1'
+alias tarc='tar -czvf'
+alias tarx='tar -xzvf'
+alias rp=realpath
+alias ls='ls -G'
+alias ll='ls -l'
+
+# custom - export
+export WORK="$HOME/work"
+export PROJ="$WORK/documents/projects"
+export GDIR="$HOME/gitclone"
+export TODAY="$WORK/$(date +'%Y/%m/%d')"
+export TODAYMD="$TODAY/$(date +'%Y%m%d').md"
+export YESTERDAY="$WORK/$(date -v -1d +'%Y/%m/%d')"
+export YESTERDAYMD="$YESTERDAY/$(date -v -1d +'%Y%m%d').md"
+export DOWN="$HOME/Downloads"
+
+export PLAY="$HOME/playground"
+export PTODAY="$PLAY/$(date +'%Y/%m/%d')"
+export PTODAYMD="$PTODAY/$(date +'%Y%m%d').md"
+
+export ENVDIR="~/env"
+
+# custom - alias
+
+# SECTION cd
+alias cdw="cd $WORK"
+alias cdg="cd $GDIR"
+alias cddot="cd $GDIR/dot_files"
+alias cdtoday="cd $TODAY"
+alias cdcli="cd ~/.cli"
+alias cdbin="cd ~/.cli/bin"
+alias cddown="cd $DOWN"
+alias cdmdown="cd $MM"
+alias cduv="cd $HOME/uv_toolbox"
+alias cdenv="cd $HOME/env"
+
+alias cdptoday="cd $PTODAY"
+
+# SECTION custom
+alias histf='history | all-terms'
+alias runawk='awk -f ~/script.awk ~/temp.txt'
+alias runjq='jq -f ~/script.jq ~/temp.json'
+alias startwork="mkdir -p $TODAY && touch $TODAYMD && recorddf"
+alias vimd="vi $TODAYMD"
+alias ginfo="git branch -avv"
+alias glog='git log --name-status --oneline --pretty=format:"%h|%ad|%s|%an|%D" --date=short'
+alias glogabbr='git log --oneline --pretty=format:"%h|%ad|%s|%an|%D" --date=short'
+alias psH="pstree -p $$"
+alias catssh="cat ~/.zshrc | grep ssh"
+alias scs="select-codex-session"
+alias x2c="xlsx2csv"
+alias aqd="analyze-qdirstat-diff"
+
+alias startplay="mkdir -p $PTODAY && touch $PTODAYMD && recorddf"
+alias vipmd="vi $PTODAYMD"
+
+# cargo
+. "$HOME/.cargo/env"
+
+# PATH
+export PATH=$PATH:"$HOME/.cli/bin"
+export PATH=$PATH:"$HOME/.duckdb/cli/latest"
+export PATH=$PATH:"$HOME/.local/bin"
+export PATH=$PATH:"$HOME/uv_toolbox/.venv/bin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/widehyo/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# kubectl
+autoload -Uz compinit
+compinit
+
+source <(kubectl completion zsh)
+
+alias k=kubectl
+alias kl='kubectl -n lhai'
+compdef k=kubectl
+compdef kl=kubectl
+
+# https://github.com/malkoG/dotfiles/blob/main/dot_zshrc

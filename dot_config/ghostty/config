@@ -1,0 +1,19 @@
+font-family = "JetBrainsMono Nerd Font Mono"
+shell-integration-features = ssh-terminfo,ssh-env
+
+copy-on-select = clipboard
+
+# 탭 간 빠른 이동
+keybind = ctrl+shift+right=next_tab
+keybind = ctrl+shift+left=previous_tab
+
+# 탭 번호로 다이렉트 이동 (Cmd + 1 ~ 9)
+keybind = cmd+1=goto_tab:1
+keybind = cmd+2=goto_tab:2
+keybind = cmd+3=goto_tab:3
+keybind = cmd+4=goto_tab:4
+keybind = cmd+5=goto_tab:5
+keybind = cmd+6=goto_tab:6
+keybind = cmd+7=goto_tab:7
+keybind = cmd+8=goto_tab:8
+keybind = cmd+9=goto_tab:9
