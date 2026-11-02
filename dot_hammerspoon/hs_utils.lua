@@ -47,6 +47,27 @@ function printKeybindings()
     return formatKeybindingsTsv(getKeybindings())
 end
 
+-- Temporarily use ABC while selected modifier keys are held.
+if modifierEnglishWatcher then modifierEnglishWatcher:stop() end
+local previousInputSource = nil
+local englishSource = "com.apple.keylayout.ABC"
+modifierEnglishWatcher = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function(event)
+    local flags = event:getFlags()
+    local held = flags.fn or flags.ctrl or flags.alt or flags.cmd
+    local current = hs.keycodes.currentSourceID()
+    if held and previousInputSource == nil and current ~= englishSource then
+        if current and hs.keycodes.currentSourceID(englishSource) then
+            previousInputSource = current
+        end
+    elseif not held and previousInputSource then
+        if current == englishSource then
+            hs.keycodes.currentSourceID(previousInputSource)
+        end
+        previousInputSource = nil
+    end
+    return false
+end):start()
+
 -- Reload Hammerspoon configuration.
 if reloadConfigHotkey then reloadConfigHotkey:delete() end
 reloadConfigHotkey = hs.hotkey.bind({"ctrl", "shift"}, "r", "reload config", hs.reload)
