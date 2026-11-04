@@ -25,6 +25,8 @@ chpwd_functions=("setosc7dir")
 export EDITOR=vim
 bindkey -e
 
+export PS1="[%n %1~] "
+
 export HISTFILE=~/.zsh_history
 export HISTTIMEFORMAT='%F %T '
 export HISTSIZE=999999999
@@ -54,6 +56,9 @@ alias rp=realpath
 alias ls='ls -G'
 alias ll='ls -l'
 
+bindkey '^P' history-beginning-search-backward
+bindkey '^N' history-beginning-search-forward
+
 # custom - export
 export WORK="$HOME/work"
 export PROJ="$WORK/documents/projects"
@@ -71,6 +76,14 @@ export PTODAYMD="$PTODAY/$(date +'%Y%m%d').md"
 export ENVDIR="~/env"
 
 # custom - alias
+alias copyg="echo $GTOKEN | pbcopy"
+alias pb="pbcopy"
+alias pbpwd="pwd | pbcopy"
+alias showlast="fc -ln -1"
+alias copylast="fc -ln -1 | pbcopy"
+
+alias ae="aerospace list-windows --all --format '%{monitor-name} | %{workspace} | %{app-name} | %{window-layout} | %{window-title}'"
+alias aer="aerospace reload-config"
 
 # SECTION cd
 alias cdw="cd $WORK"
@@ -83,6 +96,7 @@ alias cddown="cd $DOWN"
 alias cdmdown="cd $MM"
 alias cduv="cd $HOME/uv_toolbox"
 alias cdenv="cd $HOME/env"
+alias cdtamp="cd /Users/widehyo/gitclone/tauri-md-preview/"
 
 alias cdptoday="cd $PTODAY"
 
@@ -100,6 +114,8 @@ alias catssh="cat ~/.zshrc | grep ssh"
 alias scs="select-codex-session"
 alias x2c="xlsx2csv"
 alias aqd="analyze-qdirstat-diff"
+alias mpd="markdown-preview-desktop"
+alias llr="ls-lr-analyzer"
 
 alias startplay="mkdir -p $PTODAY && touch $PTODAYMD && recorddf"
 alias vipmd="vi $PTODAYMD"
@@ -131,5 +147,6 @@ alias k=kubectl
 alias kl='kubectl -n lhai'
 compdef k=kubectl
 compdef kl=kubectl
+
 
 # https://github.com/malkoG/dotfiles/blob/main/dot_zshrc

@@ -1,6 +1,6 @@
 -- Launch an application, or focus it if it is already running.
 local M = {}
-local modifiers = {"ctrl", "shift"}
+local modifiers = {"ctrl", "alt"}
 local hotkeys = {}
 
 local function bindApplication(key, bundleID, name)

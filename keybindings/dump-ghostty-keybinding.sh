@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ghostty +list-keybinds --plain | python3 -c '
+silent=false
+for arg in "$@"; do
+    case "$arg" in
+        --silent) silent=true ;;
+        -h|--help) echo "Usage: $0 [--silent]"; exit 0 ;;
+        *) echo "Unknown option: $arg" >&2; exit 2 ;;
+    esac
+done
+# Keep writing output files while suppressing only stdout.
+if "$silent"; then
+    exec > /dev/null
+fi
+
+ghostty +list-keybinds --plain | "$HOME/uv_toolbox/.venv/bin/python" -c '
 import csv
 import re
 import sys

@@ -11,3 +11,7 @@ aerospaceUtil.start()
 if missionControl then missionControl.stop() end
 missionControl = dofile(hs.configdir .. "/mission_control.lua")
 
+
+if configDumpWatchers then configDumpWatchers.stop() end
+configDumpWatchers = dofile(hs.configdir .. "/config_dump_watchers.lua")
+configDumpWatchers.start()
