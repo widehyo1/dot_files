@@ -1,0 +1,6 @@
+monitor_id=$(aerospace list-monitors --focused --format '%{monitor-id}') # focused monitor id
+workspace_id=$(aerospace list-workspaces --focused) # focused workspace id
+window_id=$(aerospace list-windows --focused --format '%{window-id}') # focused window id
+app_name=$(aerospace list-windows --focused --format '%{app-name}') # focused app-name
+aerospace list-windows --all --format '%{monitor-name} | %{workspace} | %{app-name} | %{window-layout} | %{window-title}'
+echo "*${monitor_id} *${workspace_id} *<${app_name}>"

@@ -82,7 +82,6 @@ alias pbpwd="pwd | pbcopy"
 alias showlast="fc -ln -1"
 alias copylast="fc -ln -1 | pbcopy"
 
-alias ae="aerospace list-windows --all --format '%{monitor-name} | %{workspace} | %{app-name} | %{window-layout} | %{window-title}'"
 alias aer="aerospace reload-config"
 
 # SECTION cd
