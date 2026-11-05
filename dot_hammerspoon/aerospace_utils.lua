@@ -39,6 +39,24 @@ function M.moveNextMonitor()
     end
 end
 
+function M.swapMonitor()
+    local task = hs.task.new(
+        hs.configdir .. "/swap_monitor.sh",
+        function(exitCode, stdout, stderr)
+            if exitCode ~= 0 then
+                hs.alert.show(
+                    "Monitor swap failed: "
+                    .. (stderr ~= "" and stderr or stdout)
+                )
+            end
+        end
+    )
+
+    if not task or not task:start() then
+        hs.alert.show("Failed to launch AeroSpace.")
+    end
+end
+
 function M.stop()
     for _, hotkey in ipairs(hotkeys) do
         hotkey:delete()
@@ -65,6 +83,12 @@ function M.start()
         "n",
         "move next monitor",
         M.moveNextMonitor
+    )
+    hotkeys[#hotkeys + 1] = hs.hotkey.bind(
+        {"ctrl", "shift"},
+        "s",
+        "swap monitor",
+        M.swapMonitor
     )
 end
 
